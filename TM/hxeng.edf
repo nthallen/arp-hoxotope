@@ -1,44 +1,44 @@
-spreadsheet hxeng_1 61
+spreadsheet hxeng_1 60
   1 A0SPt %5.1lf
   2 A1SPt %5.1lf
   3 A2SPt %5.1lf
-  4 A3SPt %5.1lf
-  5 A4SPt %5.1lf
-  6 A5SPt %5.1lf
-  7 A6SPt %5.1lf
-  8 A7SPt %5.1lf
-  9 Anemo %5.1lf
-  10 DLH_P %5.1lf
-  11 DL_TP %5.1lf
-  12 DL_X %5.1lf
-  13 DL_Y %5.1lf
-  14 DLooT %5.1lf
-  15 DStt2 %5.1lf
-  16 DTEST %5.1lf
-  17 DetT2 %5.1lf
-  18 DucT1 %5.1lf
-  19 DucT2 %5.1lf
-  20 GrnP1 %5.1lf
-  21 HVPSP %5.1lf
-  22 HtXT2 %5.1lf
-  23 Inl_T %5.1lf
-  24 KDP_H %5.1lf
-  25 L12AV %5.1lf
-  26 L12BV %5.1lf
-  27 L12CV %5.1lf
-  28 LSD1T %5.1lf
-  29 LSD2T %5.1lf
-  30 LTEST %5.1lf
-  31 Lab_1 %5.1lf
-  32 Lab_2 %5.1lf
-  33 Lab_3 %5.1lf
-  34 Lab_6 %5.1lf
-  35 Lab_7 %5.1lf
-  36 Lab_8 %5.1lf
-  37 PAltP %5.1lf
-  38 PVPos %5.1lf
-  39 PVStat %5.1lf
-  40 PVStep %5.1lf
+  4 A5SPt %5.1lf
+  5 A6SPt %5.1lf
+  6 Anemo %5.1lf
+  7 DLH_P %5.1lf
+  8 DL_TP %5.1lf
+  9 DL_X %5.1lf
+  10 DL_Y %5.1lf
+  11 DLooT %5.1lf
+  12 DStt2 %5.1lf
+  13 DTEST %5.1lf
+  14 DetT2 %5.1lf
+  15 DucT1 %5.1lf
+  16 DucT2 %5.1lf
+  17 GrnP1 %5.1lf
+  18 HVPSP %5.1lf
+  19 HtXT2 %5.1lf
+  20 Inl_T %5.1lf
+  21 KDP_H %5.1lf
+  22 L12AV %5.1lf
+  23 L12BV %5.1lf
+  24 L12CV %5.1lf
+  25 LSD1T %5.1lf
+  26 LSD2T %5.1lf
+  27 LTEST %5.1lf
+  28 Lab_1 %5.1lf
+  29 Lab_2 %5.1lf
+  30 Lab_3 %5.1lf
+  31 Lab_6 %5.1lf
+  32 Lab_7 %5.1lf
+  33 Lab_8 %5.1lf
+  34 PAltP %5.1lf
+  35 PVPos %5.1lf
+  36 PVStat %5.1lf
+  37 PVStep %5.1lf
+  38 PV_Gi %5.1lf
+  39 PV_Gp %5.1lf
+  40 PV_SetP %5.1lf
   41 PhoT2 %5.1lf
   42 PumpT %5.1lf
   43 RDiode_On %5.1lf
@@ -46,19 +46,18 @@ spreadsheet hxeng_1 61
   45 RLSD1T %5.1lf
   46 RLSD2I %5.1lf
   47 RLSD2T %5.1lf
-;  48 SD_DP %5.1lf
-  49 SD_P2 %5.1lf
-  50 SD__P %5.1lf
-  51 TopazSecs %5.1lf
-  52 UV_1V %5.1lf
-  53 UV_2V %5.1lf
-  54 V28I1 %5.1lf
-  55 V28I2 %5.1lf
-  56 V28_V %5.1lf
-  57 V300I %5.1lf
-  58 XL_TP %5.1lf
-  59 XL_X %5.1lf
-  60 XL_Y %5.1lf
+  48 SD_P2 %5.1lf
+  49 SD__P %5.1lf
+  50 TopazSecs %5.1lf
+  51 UV_1V %5.1lf
+  52 UV_2V %5.1lf
+  53 V28I1 %5.1lf
+  54 V28I2 %5.1lf
+  55 V28_V %5.1lf
+  56 V300I %5.1lf
+  57 XL_TP %5.1lf
+  58 XL_X %5.1lf
+  59 XL_Y %5.1lf
 spreadsheet hxeng_1_16 43
   1 A_RgT %5.1lf
   2 AirHP %5.1lf
