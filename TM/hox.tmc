@@ -212,6 +212,6 @@ Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
   BmPsS = (sbwa(BmPsS.address)>>4) & 0xFFF;
   BmPsE = (sbwa(BmPsE.address)>>4) & 0xFFF;
   BmPsW = (sbwa(BmPsW.address)>>4) & 0xFFF;
-  /* DigSelect( 52, (1-BmPsMux)*0xFFFF ); */
-  /* DigSelect( 52, 0 * 0xFFFF ); */
+  DigSelect( 52, (1-BmPsMux)*0xFFFF ); 
+/*  DigSelect( 52, 0 * 0xFFFF ); */
 }
