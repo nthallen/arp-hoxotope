@@ -1,0 +1,46 @@
+DetAxes {
+  HBox{ +=+; Title: "Detection Axes"; +=+ };
+  Header:
+    ""     {>SX1<}   {>SX2<}   {>LAB<};
+  Fixed: (SX1FG,5) (SX2FG,5) (LABFG,5);
+  Adjst: (SX1AG,5) (SX2AG,5) (LABAG,5);
+  Bkgnd: (SX1BG,6) (SX2BG,6) (LABBG,6);
+  "X*FAT:" (X1FAT,5) (X2FAT,5) >"øC";
+  "X*Las:" (XL_TP,5) (X2Las,6) >Std;
+  HBox { "("; (XL_X,4); ","; (XL_Y,4); ") " };
+}
+LabAna {
+  HBox{ +=+; Title: "Analog Outputs"; +=+ };
+  A0SPt: (A0SPt,5);
+  A1SPt: (A1SPt,5);
+  NOSPt: (NOSPt,5);
+  A3SPt: (A3SPt,5);
+  A4SPt: (A4SPt,5);
+  A5SPt: (A5SPt,5);
+  A6SPt: (A6SPt,5);
+  A7SPt: (A7SPt,5);
+}
+AnaLab {
+  HBox{ +=+; Title: "Analog Inputs"; +=+ };
+  L12AV: (L12AV,5);
+  L12BV: (L12BV,5);
+  L12CV: (L12CV,5);
+  Lab_1: (Lab_1,5);
+  Lab_2: (Lab_2,5);
+  Lab_3: (Lab_3,5);
+  Lab_4: (Lab_4,5);
+  Lab_5: (Lab_5,5);
+  Lab_6: (Lab_6,5);
+  Lab_7: (Lab_7,5);
+  Lab_8: (Lab_8,5);
+}
+MFCtr {
+  HBox{ +=+; Title: "MFCtr"; +=+ };
+  HBox { (flttime,9); HGlue 0+1; (MFCtr,5) }
+}
+{ HBox { ||+; [LabAna]; ||+; [AnaLab]; ||+;
+   { [DetAxes];
+	 [MFCtr] }; ||+ };
+  =;
+  (%CLIENT,0+1,1);
+}
