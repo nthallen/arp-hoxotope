@@ -1,6 +1,9 @@
 %{
   /* no.cmd
    * $Log$
+   * Revision 1.1  1997/02/25 19:07:38  nort
+   * Initial revision
+   *
 # Revision 1.1  1994/02/17  01:17:04  nort
 # Initial revision
 #
@@ -15,7 +18,7 @@
 	static void NO_Flow_Set(unsigned short value) {
 	  if (value > 0x7FF) value = 0x7FF;
 	  NO_Flow = value;
-	  sbwr(0xE44, value);
+	  sbwr(0xE84, value);
 	}
 	static void NO_Set_Preset(unsigned short Peak, unsigned short Spread) {
 	  int i;
