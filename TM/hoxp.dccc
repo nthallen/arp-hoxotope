@@ -31,8 +31,8 @@
   SPARE,  1, 0x02   ;Digio0 1C 5 9 OH AIR SOLENOID LOOP INJECTOR OFF
   SPARE,  1, 0x04   ;Digio0 1C 4 10 H2O Wet Air On
   SPARE,  1, 0x08   ;Digio0 1C 3 11 H2O Wet Air Off
-  SPARE,  1, 0x10   ;Digio0 1C 2 12 OH Injector Back ON
-  SPARE,  1, 0x20   ;Digio0 1C 1 13 OH Injector Back OFF
+  STRB,   1, 0x10   ;Digio0 1C 2 12 Pump Open (OH Injector Back ON)
+  STRB,   1, 0x20   ;Digio0 1C 1 13 Pump Close (OH Injector Back OFF)
   SPARE,  1, 0x40   ;Digio0 1C 0 14 OH Injector Front ON
   SPARE,  1, 0x80   ;Digio0 1C 7 15 OH Injector Front OFF
   STRB,   2, 0x0100 ;Digio0 2A 0 16 OH SECONDARY CLOSURE VLV OPEN ON

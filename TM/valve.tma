@@ -52,7 +52,9 @@ State Pinch_Valve_Close2 {
      { if ( AC_S ) Validate Pinch_Valve_Closed; }
  +1  Hold until valid (ABOVE_CLOUDS);
  +1  Hold until ( convert(PumpT) < 60 && convert(PumpT) >= 25 );
-     > AC On
+ +1  > Pump Close
+ +2  > AC On
+ +15 > Pump Open
      Validate Pinch_Valve_Closed;
 }
 

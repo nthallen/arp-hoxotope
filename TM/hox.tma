@@ -451,8 +451,8 @@ PARTITION
 %{ /* Altitude definitions */
     TORR P_ground_up = 580.;
     TORR P_ground_dn = 650.;
-    TORR P_clouds_up = 350.;
-    TORR P_clouds_dn = 500.;
+    TORR P_clouds_up = 200.;
+    TORR P_clouds_dn = 400.;
     int using_swp = 0;
 %}
 

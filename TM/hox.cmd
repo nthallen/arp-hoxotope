@@ -25,6 +25,8 @@
 	: DYE PUMP ON * { send_dascmd(DCT_SCDC, 32, 0); }
 #	: Injector Back OFF * { send_dascmd(DCT_SCDC, 13, 0); }
 #	: Injector Back ON * { send_dascmd(DCT_SCDC, 12, 0); }
+	: Pump Open * { send_dascmd(DCT_SCDC, 12, 0); }
+	: Pump Close * { send_dascmd(DCT_SCDC, 13, 0); }
 #	: Injector Front OFF * { send_dascmd(DCT_SCDC, 15, 0); }
 #	: Injector Front ON * { send_dascmd(DCT_SCDC, 14, 0); }
 	: LASER POWER OFF * { send_dascmd(DCT_SCDC, 35, 0); }

@@ -267,7 +267,7 @@ State laser_diodes_turn_on {
           else Validate laser_reboot;
         "Warmup Time...";
    +60  > Topaz Current 15.0 Amps
-   +60  > Topaz Current 19.0 Amps
+   +60  > Topaz Current 18.0 Amps
    +30  Validate laser_diodes_on;
 }
 
