@@ -2,6 +2,9 @@
   #include "nortlib.h"
   static unsigned long old_mean, new_mean;
   static unsigned short old_pos, old_count, new_pos, new_count, PrevPos;
+  static unsigned long old_alt_mean, new_alt_mean;
+  static unsigned short old_alt_pos, old_alt_count;
+  static unsigned short new_alt_pos, new_alt_count, PrevAltPos;
   static int last_drive_out;
 %}
 
@@ -17,7 +20,7 @@ validate etn_is_offline;
 
 depending on (etn_is_offline once) {
   if (new_count > 0) {
-	int drive_out;
+	int drive_out, drive_alt_out;
 
 	new_mean /= new_count;
 	if (old_count > 0 && new_pos != old_pos) {
@@ -32,6 +35,24 @@ depending on (etn_is_offline once) {
 	old_mean = new_mean;
 	new_mean = 0;
 	new_count = 0;
+	if ( new_alt_count > 0 ) {
+	  new_alt_mean /= new_alt_count;
+	  if ( old_alt_count > 0 && new_alt_pos != old_alt_pos ) {
+		drive_alt_out = new_alt_pos > old_alt_pos;
+		if ( new_alt_mean <= old_alt_mean )
+		  drive_alt_out = !drive_alt_out;
+		if ( drive_alt_out != drive_out ) {
+		  if (drive_alt_out)
+			ci_sendcmd("OH Increase Etalon Altline Delta\n", 0);
+		  else ci_sendcmd("OH Decrease Etalon Altline Delta\n", 0);
+		}
+	  }
+	  old_alt_count = new_alt_count;
+	  old_alt_pos = new_alt_pos;
+	  old_alt_mean = new_alt_mean;
+	  new_alt_mean = 0;
+	  new_alt_count = 0;
+	}
   }
 }
 
@@ -45,5 +66,23 @@ depending on (etn_is_online, Ratio once) {
 	}
 	new_mean += Ratio;
 	new_count++;
+  }
+}
+
+/* depending on (RepRate2, UVMon, SX2FG) { */
+if (EtnFlg == IXFLAG_ALTLINE) {
+  unsigned long int AltRatio;
+  if ( EtnPs != PrevAltPos ) PrevAltPos = EtnPs;
+  else {
+	if (EtnPs != new_alt_pos) {
+	  new_alt_pos = EtnPs;
+	  new_alt_mean = 0;
+	  new_alt_count = 0;
+	}
+	AltRatio = 0x100000;
+	AltRatio /= ((UVMon>>4) + (5<<4));
+	AltRatio *= SX2FG;
+	new_alt_mean += AltRatio;
+	new_alt_count++;
   }
 }
