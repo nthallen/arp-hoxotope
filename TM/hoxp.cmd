@@ -8,21 +8,37 @@
 	static send_id CmdData_id;
 	static CmdData_t CmdData;
 
+	static struct {
+	  unsigned short addr;
+	  unsigned short value;
+	} AdjGates[] = {
+	  /* 1A */ 0x604, 0x0000,
+	  /* 1B */ 0x606, 0x0000,
+	  /* 2A */ 0x644, 0x0000,
+	  /* 2B */ 0x646, 0x0000
+	};
+	typedef enum { Gt1A, Gt1B, Gt2A, Gt2B };
+
 	static void Set_AdjGate( unsigned short gate, unsigned short dly,
 			  int inc, int val ) {
 	  unsigned short data;
 	  int width, delay, *dp;
 	  
-	  data = sbw( gate );
-	  width = data & 0xFF;
-	  delay = (data>>8) & 0xFF;
-	  dp = dly ? &delay : &width;
-	  if ( inc ) *dp += val;
-	  else *dp = val;
-	  if ( *dp < 0 ) *dp = 0;
-	  else if( *dp > 255 ) *dp = 255;
-	  data = ( delay << 8 ) + width;
-	  sbwr( gate, data );
+	  if ( gate <= Gt2B ) {
+		data = AdjGates[gate].value;
+		width = data & 0xFF;
+		delay = (data>>8) & 0xFF;
+		dp = dly ? &delay : &width;
+		if ( inc ) *dp += val;
+		else *dp = val;
+		if ( *dp < 0 ) *dp = 0;
+		else if( *dp > 255 ) *dp = 255;
+		data = ( delay << 8 ) + width;
+		AdjGates[gate].value = data;
+		sbwr( AdjGates[gate].addr, data );
+	  } else {
+		msg( 1, "Set_AdjGate(%d) out of range", gate );
+	  }
 	}
 	static void DitherGate( void ) {
 	  static unsigned char rdelay = 0;
@@ -33,7 +49,7 @@
 		rdly >>= 1;
 	  }
 	  rdelay++;
-	  Set_AdjGate( 0x646, 1, 0, delay );
+	  Set_AdjGate( Gt2B, 1, 0, delay );
 	}
   #endif
 %}
@@ -109,10 +125,10 @@
 	;
 
 &AdjGate <unsigned short>
-	: 1A { $0 = 0x604; }
-	: 1B { $0 = 0x606; }
-	: 2A { $0 = 0x644; }
-	: 2B { $0 = 0x646; }
+	: 1A { $0 = Gt1A; }
+	: 1B { $0 = Gt1B; }
+	: 2A { $0 = Gt2A;; }
+	: 2B { $0 = Gt2B; }
 	;
 &WdDly <unsigned short>
 	: Width { $0 = 0; }
