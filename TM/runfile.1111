@@ -26,5 +26,5 @@
 
  Launch cmdinterp     hoxpsrvr -v -c0
 
- Launch -             peakalgo -v -c0 -b0 -i1 -H45000 -L25000
+ Launch -             peak2algo -v -c0 -b0 -i1 -H45000 -L25000
  Launch -             hoxalgo -v -c0 -b0 -i1
