@@ -58,7 +58,8 @@ State initialize {
   +1  Validate Pinch_Valve_Close;
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
-      > Drive etalon out 0
+      > Drive etalon out 10000
+  +3  > Preset Etalon Position to 24000
   +1  > Drive etalon to 31000
   +1  Hold until ( EtnPs == 31000 ) or 10;
   +3  { double bastep;
@@ -118,7 +119,8 @@ State flight    {
   +1  Hold until valid (laser_diodes_on);
       Validate bellows_eval;
  +55  > Drive etalon to 25000
-  +2  > Scan etalon out 10000 by 50
+  +1  > Peakup Off
+  +1  > Scan etalon out 10000 by 50
  +60  > Drive etalon in 10000
   +5  > Drive etalon to 28000
   +3  > Peakup On
@@ -205,7 +207,7 @@ State etalon_defaults {
 #----------------------------------------------------------------
 # Record mode.
 #----------------------------------------------------------------
-State record NoLog  {
+State record {
       depending on (ON_GROUND) { Validate shutdown; }
       depending on (1 Hz) {
         depending on (laser_diodes_on ) {}
@@ -244,17 +246,21 @@ PARTITION
 # PARTITION 2: Etalon data taking
 #----------------------------------------------------------------
 State Etalon_Hold {
-    Hold until (Etalon_Scanmode_Requested);
-    Validate Etalon_Scanmode;
+    depending on (1 Hz) {
+      if (Etalon_Scanmode_Requested) {
+	msg( 0, "Entering Etalon_Scanmode" );
+	Validate Etalon_Scanmode;
+      }
+    }
 }
 
 State Etalon_Scanmode NoLog {
-    > Drive Etalon Online
-    > Scan Etalon In 75 by 5
-    > Drive Etalon Offline
+    > _Drive Etalon Online
+    > _Scan Etalon In 75 by 5
+    > _Drive Etalon Offline
     Resume Lab_read;
- +6 > Drive Etalon Altline
-    > Scan Etalon Out 75 by 5
+ +6 > _Drive Etalon Altline
+    > _Scan Etalon Out 75 by 5
  +4 Hold until (EtnFlg == 0);
     { if (Etalon_Scanmode_Requested) Validate Etalon_Scanmode;
       else Validate Etalon_Hold;
@@ -332,8 +338,8 @@ PARTITION
 %{ /* Bellows constants. Dye_P_Low/High are specified here as
         Volts times a conversion factor.
     */
-  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.05 * .1 * 65536.);
-  AD12_uGg Dye_P_High = (AD12_uGg) (5.05 * .1 * 65536.);
+  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.15 * .1 * 65536.);
+  AD12_uGg Dye_P_High = (AD12_uGg) (5.15 * .1 * 65536.);
   IndxrPos Bellows_Drive_Low = 5000;
   IndxrPos Bellows_Drive_High = 61000;
 %}

@@ -49,7 +49,7 @@ AirFlow {
   VGlue 0+1;
   HBox { -; Title: Pinch; - };
   #VGlue 0+1;
-  >{(PVStep,5)     (PVPos,5);
+  >{(PVStep,5)     (PVPos,6);
     (PVStatFlag,5) (PVScan,4);
   }<;
   Gp: (PV_Gp,5);

@@ -75,9 +75,9 @@
         sum_x_sum_y *= sum_x;
         sum_x_sum_y += (sum_x * (sum_y % sum_count))/sum_count;
         if (sum_xy > sum_x_sum_y)
-          ci_sendcmd("OH Drive Bellows Out " BF_NSTEPS "\n", 0);
+          ci_sendcmd("Drive Bellows Out " BF_NSTEPS "\n", 0);
         else
-          ci_sendcmd("OH Drive Bellows In " BF_NSTEPS "\n", 0);
+          ci_sendcmd("Drive Bellows In " BF_NSTEPS "\n", 0);
       }
       Reset_counts = 1;
     }

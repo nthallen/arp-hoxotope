@@ -13,6 +13,7 @@ channel 1 Etalon
   status   4 Hz EtnSt Diagram EtnStFlag
   scanstat EtnFlg
   invert direction
+  disable zeroref
   scan
   chop
 channel 2 Attenuator

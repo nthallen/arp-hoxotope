@@ -95,7 +95,7 @@ Pressure {
   +=+;
   SD__P: (SD__P,5);
   SD_P2: (SD_P2,6);
-  PaltP: (PaltP,6);
+  PaltP: (PaltP,5);
 }
 Gates {
   "" "1A" "1B" "2A" "2B";

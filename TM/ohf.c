@@ -1,5 +1,8 @@
 /* ohf.c OH filter functions
  * $Log$
+ * Revision 1.3  2002/04/01 17:39:46  nort
+ * Guard against negative scans
+ *
  * Revision 1.2  2001/05/08 13:31:24  nort
  * Doc
  *
@@ -233,15 +236,15 @@ void ohf_another_scan(step_t from, step_t length, step_t by) {
   msg(MSG, "Recommend scan from %u out %u by %u", from, length, by);
   if (from > 100) scanstrt = from - 100;
   else scanstrt = 0;
-  ci_sendfcmd(2, "OH Drive Etalon to %u\n", scanstrt);
-  ci_sendfcmd(2, "OH Drive Etalon to %u\n", from);
-  ci_sendfcmd(2, "OH Scan Etalon out %u by %u\n", length, by);
+  ci_sendfcmd(0, "Drive Etalon to %u\n", scanstrt);
+  ci_sendfcmd(0, "Drive Etalon to %u\n", from);
+  ci_sendfcmd(0, "Scan Etalon out %u by %u\n", length, by);
 }
 
 void ohf_set_position(step_t steps) {
-  ci_sendfcmd(0, "OH Set Etalon Online Position %u\n", steps);
-  ci_sendfcmd(0, "OH Drive Etalon Offline\n");
-  ci_sendfcmd(0, "OH Soldrv Select Mode 1\n");
+  ci_sendfcmd(0, "Set Etalon Online Position %u\n", steps);
+  ci_sendfcmd(0, "Drive Etalon Offline\n");
+  /* ci_sendfcmd(0, "Soldrv Select Mode 1\n"); */
 }
 
 /* scan options adds -L <low_scan_limit> and -H <high_scan_limit>

@@ -28,8 +28,8 @@ depending on (etn_is_offline once) {
 	  if (new_mean <= old_mean) drive_out = !drive_out;
 	} else drive_out = !last_drive_out;
 	last_drive_out = drive_out;
-	if (drive_out) ci_sendcmd("OH Move Etalon Online Position Out\n", 2);
-	else ci_sendcmd("OH Move Etalon Online Position In\n", 2);
+	if (drive_out) ci_sendcmd("Move Etalon Online Position Out\n", 2);
+	else ci_sendcmd("Move Etalon Online Position In\n", 2);
 	old_count = new_count;
 	old_pos = new_pos;
 	old_mean = new_mean;
@@ -43,8 +43,8 @@ depending on (etn_is_offline once) {
 		  drive_alt_out = !drive_alt_out;
 		if ( drive_alt_out != drive_out ) {
 		  if (drive_alt_out)
-			ci_sendcmd("OH Increase Etalon Altline Delta\n", 0);
-		  else ci_sendcmd("OH Decrease Etalon Altline Delta\n", 0);
+			ci_sendcmd("Increase Etalon Altline Delta\n", 0);
+		  else ci_sendcmd("Decrease Etalon Altline Delta\n", 0);
 		}
 	  }
 	  old_alt_count = new_alt_count;
