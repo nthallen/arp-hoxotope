@@ -195,12 +195,16 @@ State scanning_line {
 		PkStd = sqrt(sx2/n_scan);
 	  }
 	  newstart = PkPos - (etdata[n_scan-1]-etdata[0])/2;
-	  if ( which_line == IXFLAG_ONLINE || lamps_on ) {
-	    if ( newstart != line_start ) {
-	      ci_sendfcmd( 2, "Set Etalon %s Position %u\n",
-		which_line == IXFLAG_ONLINE ? "Online" : "Altline",
-		newstart );
-	    }
+      if ( newstart > low_limit && newstart < high_limit ) {
+		if ( which_line == IXFLAG_ONLINE || lamps_on ) {
+		  if ( newstart != line_start ) {
+			ci_sendfcmd( 2, "Set Etalon %s Position %u\n",
+		  which_line == IXFLAG_ONLINE ? "Online" : "Altline",
+		  newstart );
+		  }
+		}
+	  } else {
+		msg( 2, "Line peak found beyond soft limit" );
 	  }
 	  Validate PkHeight;
 	  Validate PkPos;

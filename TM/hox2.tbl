@@ -21,7 +21,7 @@ Temps {
   Inl_T: (Inl_T,5) C;
   HtXT2: (HtXT2,5) C;
   PhoT2: (PhoT2,5) C;
-  DetT2: (DetT2,6) V;
+  DetT2: (DetT2,5) C;
   VGlue 0+1;
   HBox{ -+; Title: "Etc."; +- };
   PaltP: (PaltP,5) T;
