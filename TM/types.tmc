@@ -141,6 +141,12 @@ TM typedef UINT AD12 {
 	65536, 10.0
   }
 
+TM typedef AD12 AD12_EtPos { convert UINT; text "%5u"; }
+  Calibration (AD12_EtPos, UINT) {
+    45875, 32188,
+    47841, 30020
+  }
+
 TM typedef signed short AD12_PSD {
   collect x = (sbwa(x.address) >> 4) & 0xFFF;
   text "%4d";

@@ -44,7 +44,7 @@ LasIdx {
   Header:
 	>Etn<         >Atn<        >Blw<;
   (EtnPs,5)     (AtnPs,5)     (BlwPs,5);
-  (EtPos,6)     (AtPos,4)     (BAPos,4);
+  (EtPos,5)     (AtPos,4)     (BAPos,4);
   (EtnStFlag,5) (AtnStFlag,5) (BlwStFlag,5);
   (EtnFlg,4)    (AtnFlg,4)    (ID0Flg,4);
 }
