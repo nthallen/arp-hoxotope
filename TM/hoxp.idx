@@ -34,5 +34,6 @@ channel 4 Pinch Valve
   status   1 Hz PVStat Diagram PVStatFlag
   scanstat PVScan
   scan
+  invert direction
   disable zeroref
   speed 1067 Hz

@@ -12,6 +12,6 @@ TM 4 Hz IndxrPos  EtnPs;  Address EtnPs 0xA14;
 TM 4 Hz IndxrStat EtnSt;  Address EtnSt 0xA16;
 TM 4 Hz IndxrPos  AtnPs;  Address AtnPs 0xA1C;
 TM 4 Hz IndxrStat AtnSt;  Address AtnSt 0xA1E;
-TM 1/4 Hz IndxrPos  PVStep;  Address PVStep 0xA2C;
-TM 1/4 Hz IndxrStat PVStat;  Address PVStat 0xA2E;
+TM 1 Hz IndxrPos  PVStep;  Address PVStep 0xA2C;
+TM 1 Hz IndxrStat PVStat;  Address PVStat 0xA2E;
 TM 4 Hz IndxrPos  IXStt;
