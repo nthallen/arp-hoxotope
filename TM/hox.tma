@@ -186,27 +186,13 @@ State record	{
 			  depending on (laser_diodes_on ) {}
 			  else Validate scan;
 			}
-		+1	> OH soldrv select mode 0
-		+1	{
-				msg(1,"UVMon = %f",convert(UVMon));	
-			 	msg(1,"X1Las = %f",convert(XL_TP));
-				msg(1,"X2Las = %f",convert(X2Las));
-				msg(1,"PhotoMon = %f",convert(WVLPV));
-			}
-		+1	> OH soldrv select mode 4
-		+6	> OH soldrv select mode 5
-			Hold until (SW_St == 22); # or 43:55;
-#  Soldrv mode IV - 5 seconds before the end of the last cycle (#22@120sec)
-#  Normally use 43:55.  21:55 for test flights
-			> OH soldrv select mode 4
-# The following delay can effectively be done using Hold until
-# on the Sol Stat word.
-# Validate add_c3f6 OR scan OR record.  Allow 8 sec to
-# ensure mode 0 is called. Use 100 torr in Stratosphere.
-		+8	{ if (Adding_C3F6) validate add_c3f6; }
-		+1	{ if (convert(SD__P) < 100. || Scan_Mode_Always)
-				Validate scan;
-			  else Validate record;	}
+			> OH Drive Etalon Online
+			> OH Scan Etalon In 75 by 5
+			> OH Drive Etalon Offline
+			Resume Lab_read;
+		+6	> OH Drive Etalon Altline
+			> OH Scan Etalon Out 75 by 5
+		+4	Validate record;
 }
 
 #----------------------------------------------------------------
@@ -258,9 +244,9 @@ State scan	{
 		+1	> OH topaz diode 2 temperature 27.0 C
 	   	+1	Hold until valid (laser_diodes_on);
 		+1  { if (DL_TP < 6500) 
-				ci_sendcmd("OH Topaz current 18.5 amps\n",0);}
+				ci_sendcmd("OH Topaz current 17.5 amps\n",0);}
 	   +10  { if (convert(UVMon) > 5.0)
-				ci_sendcmd("OH Topaz current 18.0 amps\n",0);}  
+				ci_sendcmd("OH Topaz current 17.0 amps\n",0);}  
 		+1	> OH drive etalon to 36700
 		+5	{ if (convert(EtPos) > 3.40 || convert(EtPos) < 2.80)
 				Validate etalon_init;
