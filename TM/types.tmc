@@ -13,7 +13,7 @@ TM typedef unsigned long int TMLONG { text "%8ld"; }
 
 /* Input types */
 TM typedef unsigned char AD8 {
-  collect x = sbb(x.address);
+  collect x = sbba(x.address);
   convert VOLTS;
   text "%4.2lf";
 }
@@ -21,6 +21,14 @@ TM typedef unsigned char AD8 {
 	  0,  0,
 	256, 10
   }
+
+TM typedef signed short PSD_t { text "%3d"; }
+TM typedef unsigned char AD8_PSD {
+  collect x = sbba(x.address);
+  convert PSD_t;
+  text "%3u";
+}
+Calibration (AD8_PSD, PSD_t) { 0, 0, 256, 256 }
 
 TM typedef AD8 AD8_5V;
   calibration (AD8_5V, VOLTS) {
@@ -97,26 +105,42 @@ TM typedef AD8 AD8_30A { convert AMPS; text "%4.1lf"; }
 	256, 30
   }
 
-TM typedef AD8 AD8_TFRI { convert AMPS; text "%4.1lf"; }
-  Calibration (AD8_TFRI, AMPS) {
-	  0, 0,
-	256, 25
-  }
-
-TM typedef AD8 AD8_TFRT { convert CELCIUS; text "%5.1lf"; }
-  Calibration (AD8_TFRT, CELCIUS) {
-	  0,  0,
-	256, 50
-  }
-
 TM typedef AD8 AD8_KV;
   Calibration (AD8_KV, VOLTS) {
 	  0,  0,
 	768, 10
   }
 
+/* AD8_T10K75 is a type for a 10K thermistor pulled up by 75K.
+   This is not the ideal pullup for a 10K, but there it is.
+*/
+TM typedef AD8 AD8_T10K75 {
+  convert CELCIUS;
+  text "%5.1lf";
+}
+  Calibration ( AD8_T10K75, CELCIUS ) {
+	 0.0, 126.8,
+	 2.6,  96.4,
+	17.9,  36.1,
+	32.0,  21.5,
+	43.0,  14.6,
+	53.3,   7.7,
+	63.2,   1.7,
+	113.7, -20.8,
+	161.5, -36.0,
+	210.3, -53.1,
+	232.7, -65.7,
+	244.3, -75.6,
+	248.1, -81.4,
+	250.6, -87.0,
+	252.9, -95.8,
+	254.5, -106.4,
+	255.2, -116.1,
+	255.6, -122.4
+  }
+
 TM typedef UINT AD12 {
-  collect x = sbw(x.address);
+  collect x = sbwa(x.address);
   convert VOLTS;
   text "%6.4lf";
 }
@@ -166,22 +190,28 @@ TM typedef AD12 AD12_T30K { convert CELCIUS; text "%5.1lf"; }
 	65280,  -77.1000
   }
 
-TM typedef AD12 AD12_KTORR;
 TM typedef AD12 AD12_DTORR;
 TM typedef AD12 AD12_uGg;
 
-TM typedef AD12 AD12_1KTORR { convert TORR; text "%5.1lf"; }
-  Calibration (AD12_1KTORR, TORR) {
+TM typedef AD12 AD12_KTORR { convert TORR; text "%5.1lf"; }
+  Calibration (AD12_KTORR, TORR) {
 		0,      0,
 	65536, 1000.0
   }
 
-TM typedef UINT Ct16 { collect x = sbw(x.address); }
-TM typedef UINT DA_SPt { collect x = 0xFFF & sbw(x.address); text "%4d"; }
+TM typedef AD12 AD12_CTORR { convert TORR; text "%5.1lf"; }
+  Calibration (AD12_CTORR, TORR) {
+		0,      0,
+	65536,  200.0
+  }
+
+TM typedef UINT Ct16 { collect x = sbwa(x.address); }
+TM typedef UINT DA_SPt { collect x = 0xFFF & sbwa(x.address); text "%4d"; }
 TM typedef unsigned char DStat {
-  collect x = sbb(x.address);
+  collect x = sbba(x.address);
   text "%08b";
 }
+TM typedef DStat UCHAR { text "%3u"; }
 
 %{
   #define Cvt_Ct24_TMLONG(x) (0xFFFFFF & *(TMLONG *)&(x))
@@ -216,6 +246,60 @@ TM typedef unsigned short NAV_Knots { convert Knots; text "6.1lf"; }
 	0, 0,
 	65536, 1000
   }
+
+%{
+  char * On_Off_text[2] = { "Off", " On" };
+  char * OK_Fail_text[2] = { "  OK", "Fail" };
+%}
+TM typedef unsigned char Bit_On_Off { text "%3d" On_Off_text[]; }
+TM typedef unsigned char Bit_OK_Fail { text "%4d" OK_Fail_text[]; }
+
+/* Type for Laser Diode Temps intercepted enroute to the laser 
+   control board and read on an A/D. Calibrated against the 
+   temperatures reported by the laser control board software.
+*/
+TM typedef AD8 AD8_LSDT { convert CELCIUS; text "%4.1lf"; }
+Calibration ( AD8_LSDT, CELCIUS ) {
+   14,  37.180,
+   15,  35.833,
+   16,  34.505,
+   17,  33.198,
+   18,  31.911,
+   19,  30.644,
+   20,  29.397,
+   21,  28.170,
+   22,  26.963,
+   23,  25.776,
+   24,  24.610,
+   25,  23.463,
+   26,  22.337,
+   27,  21.231,
+   28,  20.144,
+   29,  19.078,
+   30,  18.032,
+   31,  17.006,
+   32,  16.001,
+   33,  15.015,
+   34,  14.049,
+   35,  13.104,
+   36,  12.178,
+   37,  11.273,
+   38,  10.388,
+   39,   9.523,
+   40,   8.678,
+   41,   7.853,
+   42,   7.048,
+   43,   6.263,
+   44,   5.499,
+   45,   4.754,
+   46,   4.030,
+   47,   3.325,
+   48,   2.641,
+   49,   1.977,
+   50,   1.333,
+   51,   0.709,
+   52,   0.105
+}
 
 TM 0 Hz UINT  MFCtr;
 TM 0 Hz UINT  Synch;
