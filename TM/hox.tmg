@@ -26,6 +26,8 @@ RTG_REPORT( NOFlw, dtime(), convert(NOFlw) );
 RTG_REPORT( WVLPV, dtime(), convert(WVLPV) );
 RTG_REPORT( WVBKV, dtime(), convert(WVBKV) );
 RTG_REPORT( Et_LW, dtime(), convert(Et_LW) );
+RTG_REPORT( SD__P, dtime(), convert(SD__P) );
+RTG_REPORT( SD_P2, dtime(), convert(SD_P2) );
 RTG_REPORT( BmPsN, dtime(), convert(BmPsN) );
 RTG_REPORT( BmPsS, dtime(), convert(BmPsS) );
 RTG_REPORT( BmPsE, dtime(), convert(BmPsE) );
