@@ -10,8 +10,10 @@ Partition
   #define GP_SMALL_DP 0.03
   #define GP_ENABLE 23
   #define GP_DISABLE 24
+  #define GP_DELAY_PTS 20
+  #define GP_AVERAGE_PTS 10
   static double GP_Sum;
-  static int GP_Count;
+  static int GP_Count, GP_Delay;
 %}
 
 State GreenPeakInit {
@@ -33,13 +35,16 @@ State GreenPeak_Restart {
 }
 
 State GreenPeak {
-		{ GP_Sum = 0; GP_Count = 0; }
+		{ GP_Sum = 0; GP_Count = 0; GP_Delay = 0; }
 		{ if ( SW_St == GP_ENABLE ) Validate GreenPeak_Start; }
 		{ if ( SW_St == GP_DISABLE ) Validate GreenPeak_Stop; }
-		{ GP_Sum += convert(GrnP1);
-		  GP_Count++;
+		{ if ( GP_Delay < GP_DELAY_PTS ) GP_Delay++;
+		  else {
+			GP_Sum += convert(GrnP1);
+			GP_Count++;
+		  }
 		}
-		{ if ( GP_Count >= 30 ) {
+		{ if ( GP_Count >= GP_AVERAGE_CTS ) {
 			int GP_new_DubT, new_dir;
 			double GP_new_GrnPw, dP_dT;
 			double prev_step;
