@@ -161,6 +161,7 @@ State flight	{
 #		+3	> OH Stop Etalon
 #		+1	> OH Peakup On
 		+1  > OH set etalon online delta 5
+		+1	> OH soldrv select mode 0
 	   	+1	> OH SW Status Green Peakup Enable
 		+1	Validate limbo;
 }
@@ -187,12 +188,13 @@ State record	{
 			  else Validate scan;
 			}
 			> OH Drive Etalon Online
-			> OH Scan Etalon In 75 by 5
+			> OH Scan Etalon In 70 by 5
 			> OH Drive Etalon Offline
 			Resume Lab_read;
 		+6	> OH Drive Etalon Altline
-			> OH Scan Etalon Out 75 by 5
-		+4	Validate record;
+			> OH Scan Etalon Out 70 by 5
+		+4	Hold until (EtnFlg = 0);
+			Validate record;
 }
 
 #----------------------------------------------------------------
