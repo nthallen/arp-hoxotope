@@ -1,0 +1,54 @@
+%{
+  extern char *Paz_strings[];
+%}
+TM "Receive" Paz_data 0;
+TM "proxy" PAZ_proxy 6;
+
+TM typedef unsigned short TOPAZ_100 { text "%6.2lf"; }
+TM typedef unsigned short TOPAZ_10 { text "%6.1lf"; }
+TM typedef unsigned short TOPAZ_1 { text "%4u"; }
+TM typedef unsigned char TOPAZ_HISTORY { text "%3d" Paz_strings[]; }
+
+TM 1 Hz TOPAZ_100 RLSD1I;
+TM 1 Hz TOPAZ_100 RLSD2I;
+TM 1 Hz TOPAZ_100 RLSD1T;
+TM 1 Hz TOPAZ_100 RLSD2T;
+TM 1 Hz AD8_LSDT LSD1T; Address LSD1T 0xC3A; /* Was TFR1T */
+TM 1 Hz AD8_LSDT LSD2T; Address LSD2T 0xC38; /* Was TFR2T */
+TM 1 Hz Bit_On_Off RDiode_On;
+TM 1/16 Hz TOPAZ_100 RLSD1ISP;
+TM 1/16 Hz TOPAZ_100 RLSD2ISP;
+TM 1/16 Hz TOPAZ_100 RLSD1TSP;
+TM 1/16 Hz TOPAZ_100 RLSD2TSP;
+TM 1/4  Hz TOPAZ_1 RKDPTSP;
+TM 1/16 Hz TOPAZ_10 RLSD1OpHours;
+TM 1/16 Hz TOPAZ_10 RLSD2OpHours;
+TM 1/16 Hz Ct16 RepRtSP;
+TM 1/2  Hz TOPAZ_HISTORY RLHist0, RLHist1, RLHist2;
+TM 1    Hz UCHAR TopazSecs;
+
+Collect RLSD1I {
+  if ( Paz_data.d1_cur[0] == 0 ) secs_since_hearing++;
+  else {
+	RLSD1I = Topaz( d1_cur, 2 );
+	Paz_data.d1_cur[0] = 0;
+	secs_since_hearing = 0;
+  }
+  if ( PAZ_proxy != 0 ) Trigger(PAZ_proxy);
+}
+Collect RLSD2I = Topaz( d2_cur, 2 );
+Collect RLSD1T = Topaz( d1_temp, 2 );
+Collect RLSD2T = Topaz( d2_temp, 2 );
+Collect RLSD1ISP = Topaz( d1_cur_setpt, 0 );
+Collect RLSD2ISP = Topaz( d2_cur_setpt, 0 );
+Collect RLSD1TSP = Topaz( d1_temp_setpt, 1 );
+Collect RLSD2TSP = Topaz( d2_temp_setpt, 1 );
+Collect RKDPTSP = Topaz( d4_temp_setpt, 0 );
+Collect RLSD1OpHours = Topaz( d1_op_hrs, 1 );
+Collect RLSD2OpHours = Topaz( d2_op_hrs, 1 );
+Collect RLHist0 = Paz_data.paz_status[0];
+Collect RLHist1 = Paz_data.paz_status[1];
+Collect RLHist2 = Paz_data.paz_status[2];
+Collect RDiode_On = Topaz( diode_event, 0 );
+Collect RepRtSP = Topaz( rep_rate_setpt, 0 );
+Collect TopazSecs = secs_since_hearing;
