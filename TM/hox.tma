@@ -1,508 +1,498 @@
-# hox.tma for flight.
-# Modified for Strat HOx/H2O 10/9/95
-# Add time before state scan to ensure mode 4 before scanning.
-# 10/22/95 Change throttle_fast from 4000 to 3500.
-# Move h2o heater/lamp off to h2o warmup.
-# Change AdjG0 delay from 11 to 16.
-# Add mode 4 to wet air. Open valve before throttle in wet air.
-# 10/25/95 Shut throttle and gat valve for 20 sec during throttle scan.
-# 10/26/95 Add 20 sec delay before throttle close in throttle_init.
-# 10/28/95 Add c3f6 mode at the end of record.
-# Change scan pressure from 100 to 350 torr to scan all the time.
-# Change dye laser press to 4.91.  Increase velocity to around 60 m/s
-# by increasing ratio_setpoint from 9000 (50 m/s) to 11000.
-# edited 1/25/96 for Strat III test flight with only one TFR laser.
-# edited 1/28/96 for Strat III flight - lasers fixed
-# 2/12/96 remove the throttle scan 
-# 7/1/96 change dye laser press to 4.98V
-# 7/17/96 change altline from +225 to -250 because etalon drive shows shmtz
-# Etalon online=32700, dyelaser=4.90V
-# 7/23/96 Set scan pressure cutoff to 350; Set above_clouds_P to 300 torr
-# 7/27 add etalon checking subroutines.
-# 7/29 set scan P to 100 torr, below the clouds P to 400 torr.
-[ tma_hold(!(IOSwS & 2)); ]
-[ depending on (shutoff)	{
-}	else if (!(IOSwS & 8)) validate shutoff; ]
+# Flight tma for HOx/H2O
+# Modified 04/22/97 to scan at cruise
+# Modified 04/29/97 to remove doubler scans
+# 05/01/97 Remove Topaz Current 18 Amps;
+# Change Dye_laser_P = 4.88, Close Gate Valve during Scan;
+# Modified 5/12/97 after change of Gate Valve Command: "C3F6 on = closure on"
+# Modified 6/24/97 to include software control of WV lamp heater setpoint
+# 6/25/97 Dye_laser_P = 4.90;
+# Terminate STV_regulate if SD_DP < 0.03 V
+# 6/30/97 REBoot topaz if GrnP < 2.0.
+# 9/4/97 Replace laser head.  Realign pre-dyelaser.  
+#  Set new parameters for Grn P, Diode currents.
+# 9/2/99 Modify gate valve commands for new gate valve.
+# 10/12/99 Modify to use beam position monitor in place of GrnP.
+#  Using VERSION 1.3
+#
+{ tma_hold((IOSwS & 3) == 1); }
+{ depending on (shutdown) {
+  } else {
+	if ( (IOSwS & 3) == 0 || SW_St == 255 )
+	  validate shutdown;
+  }
+}
 
+# Need the following controlled by SW_St
+# Adding_C3F6 (was SW_St & 0x10 bit 4)
+# Scan_Mode_Always (was SW_St & 0x2 bit 2)
+%{
+  int Adding_C3F6 = 0;
+  int Scan_Mode_Always = 1;
+  int H2O_Lamp_Enable = 1;
+%}
+#
+# Review use of valve_open state: appears to be automatic and
+# totally defined, yet there are several commands which attempt
+# to define it...
 ################################################################
 # Initialize power supplies & set gates
 ################################################################
+%{
+  #include <math.h> /* for floor */
+%}
 State initialize {
 			> telemetry start
 		+1	> fail 0
-			> log Laser Rep. Rate 6000 Hz
+		+1  > OH PsD select dye laser
 		+1	> OH power solenoids and steppers off
-		+1	> OH laser 1 diode off
-		+1	> OH laser 2 diode off
 		+1	> OH power solenoids and steppers on
-		+1	> OH laser 1 power off
-		+1	> OH laser 2 power off
 		+1	> OH power 28V switched off
-		+1	> OH Adjustable Gate 0 Delay 6 Width 255
-		+2	> OH Adjustable Gate 1 Delay 0 Width 100
-		+1	> OH set etalon online position 32700
+		+1	> OH set etalon online position 31500
 		+1	> OH set etalon online delta 20
-		+1	> OH set etalon offline delta -400
+		+1	> OH set etalon offline delta 250
 		+1	> OH set etalon altline delta -250
-		+1  > OH NO FLOW PEAK 1300
+		# A is fixed, B is adjustable, so to speak.
+		+1  > OH adjGate 1a delay set 0
+		+1  > OH adjGate 1a width set 205
+		+1  > OH adjGate 1b delay set 100
+		+1  > OH adjgate 1b width set 60
+		+1  > OH adjGate 2a delay set 0
+		+1  > OH adjGate 2a width set 255
+		+1  > OH adjGate 2b delay set 0
+		+1  > OH adjgate 2b width set 20
+		+1  > OH NO FLOW PEAK 1200
 		+1  > OH NO FLOW SPREAD 150
-# Set SW status bit 3 to skip h2o addition.
-# Set SW status bit 4 to add c3f6
-			> OH SW status bit 3 set
-			> OH SW status bit 4 clear
-		+3  [ validate interlock_wait; validate cool_pump_start; ]
-}
-#################################################################
-#  Initialize dye pump and tfr coolant pumps                    #
-#################################################################
-state cool_pump_start {
-
-		 +1 > OH tfr coolant pump on
-
-		 +5 [ if ((DStt1 & 0x80)==0) msg(1, "TFR pump not observed");
-		      else validate dye_pump_start;	]
-		 +1 > OH tfr coolant pump off
-		 +5 [ validate cool_pump_start; ]
+		+3	{ double bastep;
+			  unsigned short ubastep;
+			  bastep = 65209 * ((convert(BAPos) - 3.05)/(8.55-3.05));
+			  if (bastep < 0) bastep = 0;
+			  else if (bastep > 65535) bastep = 65535;
+			  ubastep = floor(bastep);
+			  ci_sendfcmd( 0, "OH Preset Bellows Position to %u\n",
+				ubastep );
+			  Validate instrument_start;
+			}
 }
 
-state dye_pump_start {
-		 +1 > OH dye pump on
-		 +5 [ if ((DStt1 & 0x01)==0) msg(1, "Dye pump not observed");
-		      else validate laser_start;	]
-		 +1 > OH dye pump off
-		 +5 [ validate dye_pump_start; ]
-}
 ################################################################
 # Initialize lasers, solenoids and drives                      #
 ################################################################
-state laser_start {
-
-		+1  [ validate interlock_check; ]
-		+3	> OH laser 1 power on
-		+3	> OH laser 2 power on
+state instrument_start {
+			{ laser_on_requested = 1; }
 		+1	> OH NO flow closed off
 		+1	> OH NO flow closed on
-		+1	[ if ((DStt0 & 0x02)==0) msg(1, "NO closed not observed");	]
+		+1	{ if (NOFlowStat != 1) msg(1, "NO closed not observed"); }
 		+1	> OH air solenoid loop injector on
 		+1	> OH injector front on
-		+1	[ if ((DStt0 & 0x10)==0) msg(1, "Air solenoid not observed");	]
-		+1	[ if ((DStt0 & 0x80)==0) msg(1, "Front NO injector not observed");	]
+		+1	{ if (AirSolStat==0) msg(1, "Air solenoid not observed"); }
+		+1	{ if (InjStat!=2) msg(1, "Front NO injector not observed"); }
 		+1	> OH air solenoid loop injector off
 		+1	> OH injector front off
-	  2:10	> OH axis 1 filter in on
+		+1	> OH axis 1 filter in on
 		+3	> OH axis 1 filter in off
-	  2:20	> OH axis 1 filter out on
+		+1	> OH axis 1 filter out on
 		+3	> OH axis 1 filter out off
-		+1	[ if ((DStt1 & 0x08)==0) msg(1, "Axis 1 Out not observed"); ]
-	  2:30	> OH axis 1 filter in on
+		+1	{ if (X1_S != 2) msg(1, "Axis 1 Out not observed"); }
+		+1	> OH axis 1 filter in on
 		+3	> OH axis 1 filter in off
-		+1	[ if ((DStt1 & 0x10)==0) msg(1, "Axis 1 In not observed"); ]
-	  2:40	> OH axis 2 filter in on
+		+1	{ if (X1_S != 1) msg(1, "Axis 1 In not observed"); }
+		+1	> OH axis 2 filter in on
 		+3	> OH axis 2 filter in off
-	  2:50	> OH axis 2 filter out on
+		+1	> OH axis 2 filter out on
 		+3	> OH axis 2 filter out off
-		+1	[ if ((DStt1 & 0x02)==0) msg(1, "Axis 2 Out not observed"); ]
-	  3:00	> OH axis 2 filter in on
+		+1	{ if (X2_S != 2) msg(1, "Axis 2 Out not observed"); }
+	  	+1	> OH axis 2 filter in on
 		+3	> OH axis 2 filter in off
-		+1	[ if ((DStt1 & 0x04)==0) msg(1, "Axis 2 In not observed"); ]
+		+1	{ if (X2_S != 1) msg(1, "Axis 2 In not observed"); }
 		+1	> OH drive attenuator in 6500
 		+3	> OH drive attenuator out 320
 		+3  > OH drive attenuator to 3600
-		+14	[ if ((AtPos<(6.2*.1*256)) || (AtPos>(6.4*.1*256)))
-			msg(1,"Attenuator zero position out of range");	]
-		+1  > OH drive attenuator to 4000
+	   +14	{ if (convert(AtPos)<6.2 || convert(AtPos)>6.4)
+			  msg(1,"Attenuator zero position out of range"); }
+#		+1  > OH drive attenuator to 4000
 #
 # Validate etalon_init.  One init cycle takes 27 seconds, maximum
 # 3 cycles.  Do not issue etalon commands for 90 seconds after
 # calling etalon_init.  Call etalon_sit to make sure the initialization
 # is disabled after 2 minutes.
 #
-		+5	[ validate etalon_init;	]
-	  +2:00	[ validate etalon_sit;	]
-		+5	[ validate bellows_eval;	]
-	  10:00	> 
-			[ validate sit_and_wait;	]
+		+5	Validate etalon_init;
+			"Etalon Initialization";
+	 +2:00	Validate etalon_sit;
+		+5	Validate bellows_eval;
+			"Bellows Initialization";
+			depending on (BELOW_CLOUDS) { Validate flight; }
+			depending on (ABOVE_CLOUDS) { Validate flight; }
 }
 
-State sit_and_wait	{
-}
-[ depending on (sit_and_wait, off_the_ground)
-	validate flight;	]
 ################################################################
 # Turn on laser diodes and peakup.  Only
 # accessible after 10 min. run time and off_the ground
 # are achieved.
 ################################################################
-
 State flight	{
+		depending on (ON_GROUND) { Validate shutdown; }
 
 		+1	> OH power oh cell on
 		+1	> OH power 28V switched on
-		+5	> OH laser 1 diode on
-		+5	> OH laser 2 diode on
-	   +120 [validate bellows_eval; ]
-		+55	> OH scan etalon out 45000 by 200
-		+60	> OH Drive etalon in 10000
-		+5	> OH Drive etalon to 30500
+			{ diodes_on_requested = 1; }
+		+1	Hold until valid (laser_diodes_on);
+			Validate bellows_eval;
+	   +55	> OH scan etalon out 45000 by 200
+	   +60	> OH Drive etalon in 10000
+		+5	> OH Drive etalon to 30000
 		+3	> OH Peakup On
-		+10	> OH scan etalon out 4000 by 20
-	   +300	> OH Peakup Off
+	   +10	> OH scan etalon out 4000 by 20
+	  +300	> OH Peakup Off
 		+3	> OH Stop Etalon
 		+1	> OH Peakup On
-		+1  > OH set etalon online delta 15
-		+1	[ depending on (above_the_clouds) validate record;
-			else validate limbo; ]				
+		+1  > OH set etalon online delta 20
+	   	+1	> OH SW Status Green Peakup Enable
+		+1	Validate limbo;
 }
-# 
-# Initialize throttle valve & open gate valve.
-[ depending on (above_the_clouds once) validate throttle_init; ]
-[ depending on (above_the_clouds once) validate valve_open;	]
-#
+ 
 ################################################################
 # Limbo.  Intermediate state between off_the_ground
 # and above_the_clouds for record, and between
 # below_the_clouds and on_the ground for shutdown.
 ################################################################
 
-State limbo { } 
-
-[ depending on (limbo, above_the_clouds)
-	validate record;	]
-[ depending on (limbo, on_the_ground)
-	validate shutoff;	]
+State limbo {
+  depending on (ABOVE_CLOUDS) { Validate record; }
+  depending on (ON_GROUND) { Validate shutdown; }
+}
 
 ################################################################
-# Record mode. Accessible from limbo or flight.
+# Record mode. Accessible from limbo.
 ################################################################
 State record	{
+			depending on (BELOW_CLOUDS) { Validate purgatory; }
+			depending on (ON_GROUND) { Validate purgatory; }
+			depending on (1 Hz) {
+			  depending on (laser_diodes_on ) {}
+			  else Validate scan;
+			}
 		+1	> OH soldrv select mode 0
+		+1	{
+				msg(1,"UVMon = %f",convert(UVMon));	
+			 	msg(1,"X1Las = %f",convert(X1Las));
+				msg(1,"X2Las = %f",convert(X2Las));
+				msg(1,"PhotoMon = %f",convert(WVLPV));
+			}
 		+1	> OH soldrv select mode 4
 		+6	> OH soldrv select mode 5
+			Hold until (SW_St == 22) or 43:55;
 #  Soldrv mode IV - 5 seconds before the end of the last cycle (#22@120sec)
-	+43:55	> OH soldrv select mode 4
+#  Normally use 43:55.  21:55 for test flights
+			> OH soldrv select mode 4
+# The following delay can effectively be done using Hold until
+# on the Sol Stat word.
 # Validate add_c3f6 OR scan OR record.  Allow 8 sec to
 # ensure mode 0 is called. Use 100 torr in Stratosphere.
-		+8	[ if (SW_St & 0x10) validate add_c3f6;	]
-		+1	[ if ((SD__P < (100. * .001 * 65536)) || ((SW_St & 0x02) != 0))
-			validate scan;
-		 	else validate record;	]
+		+8	{ if (Adding_C3F6) validate add_c3f6; }
+		+1	{ if (convert(SD__P) < 100. || Scan_Mode_Always)
+				Validate scan;
+			  else Validate record;	}
 }
+
+#----------------------------------------------------------------
 # State add_c3f6 at front axis.  Make sure c3f6 addition
 # is complete before closing gate valve in state scan.
 # Use 350 torr in the troposphere.
+#----------------------------------------------------------------
 State add_c3f6	{
-		+1	[ validate throttle_medium;	]
-	 	+2	> OH soldrv select mode 9
-	   +33	[validate throttle_fast;	]
+			depending on (BELOW_CLOUDS) { Validate purgatory; }
+			depending on (ON_GROUND) { Validate purgatory; }
+			depending on (1 Hz) {
+			  depending on (laser_diodes_on ) {}
+			  else Validate scan;
+			}
+		+1	Validate throttle_medium;
+		+2	> OH soldrv select mode 9
+	   +33	Validate throttle_fast;
 	   +30	> OH soldrv select mode 4
-		+6	[ if ((SD__P < (350. * .001 * 65536)) || ((SW_St & 0x02) != 0))
-			validate scan;
-		 	else validate record;	]
+		+6	{ if (convert(SD__P) < 350. || Scan_Mode_Always)
+				Validate scan;
+			  else Validate record;	}
 }
 
-State scan	{
-#
+#----------------------------------------------------------------
 #  Scan etalon HO2 at axis 2, OH at axis 1
 #
 #  Make sure that scan is longer than throttle_scan !!!!!!
 # Check EtPos vs EtnPs at the beginning of scan.
-# 7/27/96 EtPos = 4.37 at EtnPs = 31000.
-#
-		+1  [ validate valve_close;	]
-		+1	[ validate throttle_scan;	] 
-	   +20	[ validate valve_open;	]
-		+1	> OH drive etalon to 31000
-		+5	[ if ((EtPos > (4.47*.1*65536)) || (EtPos < (4.27*.1*65536)))
-			{	float et_crxn;
-				unsigned int et_crct;
-				et_crxn = EtPos;
-				et_crxn = (et_crxn*10/65536) - 4.37;
-				et_crct = EtnPs + et_crxn*10000;
-				msg(1,"et_crct = %u",et_crct);
-				ci_sendfcmd(0,"OH drive etalon to %u\n", et_crct);
-				}
-			]
+# 4/17/97 EtPos = 3.51 at EtnPs = 29000.
+# 9/4/97  EtPos = 3.52 at EtnPs = 26650.
+# 9/25/97 EtPos = 3.45 at EtnPs = 30000.
+# 2/3/99  EtPos = 3.92 at EtnPs = 25560.
+# 10/5/99 EtPos = 3.20 at EtnPs = 29650
+#----------------------------------------------------------------
+State scan	{
+			depending on (BELOW_CLOUDS) { Validate purgatory; }
+			depending on (ON_GROUND) { Validate purgatory; }
+			Hold until valid (laser_diodes_on);
+		+1  Validate valve_close;	
+		+1	Validate throttle_scan;	
+	   +10  > OH soldrv select mode 0 
+	   +20	Validate valve_open;	
+#  we now do some stuff to check laser performance
+		+1	> OH topaz diode 1 temperature 26.0 C
+		+1	> OH topaz diode 2 temperature 27.0 C
+		+1	> OH topaz diode 2 temperature 27.0 C
+	   	+1	Hold until valid (laser_diodes_on);
+		+1  { if (DL_TP < 13500) 
+				ci_sendcmd("OH Topaz current 18.5 amps\n",0);}
+	   +10  { if (convert(UVMon) > 5.0)
+				ci_sendcmd("OH Topaz current 18.0 amps\n",0);}  
+		+1	> OH drive etalon to 29650
+		+5	{ if (convert(EtPos) > 3.4 || convert(EtPos) < 3.0)
+				Validate etalon_init;
+			}
+		+2	Hold until valid (etalon_sit);
+		+1	> OH Drive Etalon to 30000
 		+1	> OH Peakup on
 		+1	> OH Air solenoid loop injector on
 			> OH NO flow closed off
 			> OH NO solenoid on
 			> OH Injector back on
-			> OH NO flow set 1200
+			> OH NO flow set 1300
 		+1	> OH set etalon online delta 20
 		+1	> OH scan etalon out 3000 by 10
-	   +160	> OH peakup off
+# Make sure scan is longer than throttle scan (3 minutes min.)!
+# Make sure there is enough time to find the line.
+	  +180	> OH peakup off
 		+3	> OH stop etalon
-		+1	> OH peakup on	
-		+1	> OH set etalon online delta 10	
-	 	+2	[ if ((SW_St & 0x08) == 0) validate wet_air; 
-			else validate record;	]
-	}
-
-[ depending on (record, below_the_clouds)
-	validate purgatory; ]
-
-####################################################################
-# For test purposes, wet air addition lasts only ten seconds.  For
-# flight, set to longer times, at least a few minutes.
-# Set software status 3 to bypass wetair addition after 1 cycle.
-# No wet air addition for January 1996 mission.
-#####################################################################
-State wet_air {
-		+1	> OH SW status bit 3 set
-		+1	> OH soldrv select mode 0
-		+1	> OH soldrv select mode 4
-		+5	> OH soldrv select mode 2
-	    +1	[ validate valve_close;	]
-		+2	[ validate throttle_init;	]
-	   +10	[ validate throttle_slow;	]
-	   +30	> h2o wet air on
-	  3:00	[ validate valve_open;	]
-	  3:30	> h2o wet air off
-		+1	[ validate throttle_fast;	]
-	 		[ validate record; ]
+		+1	> OH peakup on
+		+1	> OH set etalon online delta 10
+		+1	> OH drive attenuator to 4000
+		+2	Validate record;
 }
 
-[ depending on (wet_air, below_the_clouds)
-	validate purgatory; ]
-
-
 ################################################################
-# Purgatory.  Prepare system for limbo and either record or shutoff
+# Purgatory.  Prepare system for limbo and either record or shutdown
 ################################################################
 
 State purgatory	{
 		+1	> OH peakup off
 		+1	> OH stop etalon
 		+1	> OH soldrv select mode 4
-		+5 	[ validate throttle_shut;	]
-		+20	> OH peakup on
-			[ validate limbo; ]
+		+5 	Validate throttle_shut;
+	   +20	> OH peakup on
+			Validate limbo;
 }
 
 ################################################################
-# Shutdown.  Accessible from Limbo.
+# shutdown.  Accessible from Limbo.
 ################################################################
 
-State shutoff {
+State shutdown {
 		+1	> OH soldrv select mode 0
 		+2	> OH soldrv select mode 4
-# Turn off interlock check before switching off lasers.
-			[ validate interlock_check_idle; ]
-		+1	> h2o heater off
-		+5	> OH laser 1 diode off
-		+5	> OH laser 2 diode off
-		+5	> OH laser 1 power off
-		+5	> OH laser 2 power off
+		+1	> h2o heater set 0
+			{ diodes_on_requested = 0;
+			  laser_on_requested = 0;
+			}
 		+5	> OH power oh cell off
 		+5	> OH power 28v switched off
-		+1	[ validate throttle_shut;	]
-		+1	[ validate valve_close;	]
-		+5	> OH dye pump off
-		+5	> OH tfr coolant pump off
+		+1	Validate throttle_shut;
+		+1	Validate valve_close;
 		+4	> h2o lamp off
 		+1	> OH power oh cell off
-		+1	> OH secondary closure vlv open off
-			> OH secondary closure vlv closed on
-		+5	> OH secondary closure vlv closed off
+		+1	> OH scan gate Valve in 10000 by 100
+#			> OH secondary closure vlv closed on
+#		+5	> OH secondary closure vlv closed off
 		+2	> OH power solenoids and steppers off
 		+5	> telemetry logging suspend
 			> Fail 1
 		+1	> quit
 }
 
-partition
+PARTITION
+# PARTITION 2: SW_St control
+################################################################
+# SW_St control
+#   Cases handled elsewhere:
+#     1-4   Altitude Control
+#     20-21 Peakup On/Off (scanning.tma)
+#     22    Static Value to advance within record
+#     23-24 Enable/Disable Green Power Peakup (grnpw.tma peakalgo)
+#     25-26 Auto/Off H2O Lamp
+################################################################
+State SW_Stat_Wait {
+  { int reset_it;
+	reset_it = 1;
+	switch (SW_St) {
+	  default:
+	  case 0: reset_it = 0; break;
+	  case 12: Adding_C3F6 = 1; break;
+	  case 13: Adding_C3F6 = 0; break;
+	  case 14: Scan_Mode_Always = 1; break;
+	  case 15: Scan_Mode_Always = 0; break;
+	  case 16: laser_on_requested = 1; break;
+	  case 17: laser_on_requested = 0; break;
+	  case 18: diodes_on_requested = 1; break;
+	  case 19: diodes_on_requested = 0; break;
+	  case 22: break;
+	  case 25: H2O_Lamp_Enable = 1; break;
+	  case 26: H2O_Lamp_Enable = 0; break;
+	  case 200: Validate Lab_read; break;
+	  case 255: Validate shutdown; break;
+	}
+	if (reset_it) Validate SW_Stat_Reset;
+  }
+}
+
+State SW_Stat_Reset {
+  > OH SW Status Value to 0
+  Hold until (SW_St == 0) or 10;
+  Validate SW_Stat_wait;
+}
+
+PARTITION
+# PARTITION 3: Lab File Input
+################################################################
+# Lab file input
+################################################################
+State Lab_idle {
+}
+State Lab_read "hoxp.tmas" {
+  Validate Lab_idle;
+}
+
+PARTITION
+# PARTITION 4: Bellows
 ################################################################
 # Bellows evaluation.  Set Dye_P_Low/High for max online power.
 # Drives bellows up or down until DLH_P is within range.  
 ################################################################
-[
+
 %{ /* Bellows constants. Dye_P_Low/High are specified here as
 		Volts times a conversion factor.
 	*/
-  AD12_uGg Dye_P_Low  = (AD12_uGg) (4.90 * .1 * 65536.);
-  AD12_uGg Dye_P_High = (AD12_uGg) (4.90 * .1 * 65536.);
+  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.1 * .1 * 65536.);
+  AD12_uGg Dye_P_High = (AD12_uGg) (5.1 * .1 * 65536.);
   IndxrPos Bellows_Drive_Low = 5000;
   IndxrPos Bellows_Drive_High = 64000;
 %}
-]
 State bellows_idle { }
 State bellows_eval {
-  [ if (DLH_P < Dye_P_Low) {
-	msg(0, "Dye laser needs to be pumped up");
-	validate bellows_pump_up;
+  { if (DLH_P < Dye_P_Low) {
+	  msg(0, "Dye laser needs to be pumped up");
+	  validate bellows_pump_up;
 	} else if (DLH_P	> Dye_P_High) {
-	msg(0, "Dye laser needs to be pumped out");
-	validate bellows_pump_out;
+	  msg(0, "Dye laser needs to be pumped out");
+	  validate bellows_pump_out;
 	} else {
-	msg(0, "Dye laser pressure within proper range");
-	validate bellows_idle;
+	  msg(0, "Dye laser pressure within proper range");
+	  validate bellows_idle;
 	}
-  ]
+  }
 }
 State bellows_pump_up {
 			> OH Drive bellows out 1000
-		+2	[ if (DLH_P	>= Dye_P_Low) {
-			msg(0, "Dye laser pumped up");
-			validate bellows_idle;
-			} else if (BlwPs	> Bellows_Drive_High) {
-			msg(2, "Bellows out of drive range during pump-up");
-			validate bellows_idle;
+		+2	{ if (DLH_P >= Dye_P_Low) {
+			  msg(0, "Dye laser pumped up");
+			  validate bellows_idle;
+			} else if (BlwPs > Bellows_Drive_High) {
+			  msg(2, "Bellows out of drive range during pump-up");
+			  validate bellows_idle;
 			} else validate bellows_pump_up;
-		]
+		}
 }
 State bellows_pump_out {
 			> OH Drive bellows in 1000
-		+2	[ if (DLH_P <= Dye_P_High) {
-			msg(0, "Dye laser pumped out");
-			validate bellows_idle;
+		+2	{ if (DLH_P <= Dye_P_High) {
+			  msg(0, "Dye laser pumped out");
+			  validate bellows_idle;
 			} else if (BlwPs < Bellows_Drive_Low) {
-			msg(2, "Bellows out of drive range during pump-out");
-			validate bellows_idle;
+			  msg(2, "Bellows out of drive range during pump-out");
+			  validate bellows_idle;
 			} else validate bellows_pump_out;
-		]
+		}
 }
-################################################################
-# Pressure switch.  Set off_ground_P, etc to pressure values
-# in flight.  Use SW_St 250-253 during preflight tests.
-# on/off_the ground toggles experimental startup/shutdown
-# and above/below_the_clouds toggles valve open/shut.
-################################################################
 
-partition
-[
+PARTITION
+# PARTITION 5: Altitude
+#############################################################################
+#############################################################################
+#	This partition converts pressure (altitude) into states (ON_GROUND,
+#	BELOW_CLOUDS, ABOVE_CLOUDS). The threshold pressures each have two
+#	values - one for the flight up and the other for the flight down.
+#	This provides hysteresis and prevents bouncing.  
+#############################################################################
+#############################################################################
+
 %{ /* Altitude definitions */
-  AD12_KTORR off_ground_P		= (AD12_KTORR) (600. * .001 * 65536.);
-  AD12_KTORR on_ground_P		= (AD12_KTORR) (720. * .001 * 65536.);
-  AD12_KTORR above_clouds_P = (AD12_KTORR) (300. * .001 * 65536.);
-  AD12_KTORR below_clouds_P = (AD12_KTORR) (400. * .001 * 65536.);
-  int using_SW_St = 0;
+	AD12 P_ground_up = (AD12) (580. * .001 * 65536.);
+	AD12 P_ground_dn = (AD12) (650. * .001 * 65536.);
+	AD12 P_clouds_up = (AD12) (350. * .001 * 65536.);
+	AD12 P_clouds_dn = (AD12) (500. * .001 * 65536.);
+	int using_swp = 0;
 %}
-]
-[if ((using_SW_St==1) && (SD__P < off_ground_P))
-		using_SW_St=0;]
-State on_the_ground {
-[ if ((SW_St & 0x01) == 1) {
-	 using_SW_St=1;
-	 validate off_the_ground;
+
+# note on 960718 it was 10 min to below the clouds 
+# and +7 min to above the clouds
+
+State ON_GROUND {
+	{ using_swp = 0; }
+    { if ( SW_St == 1 ) {
+		using_swp = 1;
+		Validate SW_Stat_Reset;
+	  }
+	  if (using_swp || (SD__P < P_ground_up))
+		Validate BELOW_CLOUDS;
 	}
-	else	{
-	if (SD__P < off_ground_P)
-		validate off_the_ground;
-	}
-  ]
-}
-State off_the_ground {
-	[ if (using_SW_St)	{
-		if ((SW_St & 0x01) == 0)
-		depending on (below_the_clouds)
-		validate on_the_ground;
-	}	
-	else	{
-		if (SD__P	> on_ground_P)	
-		depending on (below_the_clouds)
-		validate on_the_ground;	
-		
-	}
-  ]
 }
 
-partition
-
-State below_the_clouds {
-[ if (using_SW_St)	{
-		if ((SW_St & 0x02) != 0) 
-		depending on (off_the_ground)
-		validate above_the_clouds;
-	}	
-	else	{
-		if (SD__P < above_clouds_P)	
-		depending on (off_the_ground)
-		validate above_the_clouds;
-		
+State BELOW_CLOUDS {
+	{ if ( using_swp && ( SW_St == 2 || SW_St == 4 ) )
+		Validate SW_Stat_Reset;
+	  if ((using_swp && SW_St == 2) ||
+		  (!using_swp && SD__P < P_clouds_up)) {
+		Validate ABOVE_CLOUDS;
+	  } else if ((using_swp && SW_St == 4) ||
+				 (!using_swp && SD__P > P_ground_dn)) {
+		Validate ON_GROUND;
+	  }
 	}
-  ]
-}
-State above_the_clouds {
-  [ if (using_SW_St)	{
-		if ((SW_St & 0x02) == 0)
-		validate below_the_clouds;
-	}
-	else	{
-		if (SD__P	> below_clouds_P)
-		validate below_the_clouds;
-	}
-  ]
 }
 
+State ABOVE_CLOUDS {
+	{ if ( using_swp && SW_St == 3 )
+		Validate SW_Stat_Reset;
+	  if ( (using_swp && SW_St == 3) ||
+		  (!using_swp && SD__P > P_clouds_dn))
+		Validate BELOW_CLOUDS;
+	}
+}
+
+PARTITION
+# PARTITION 6: Valve Control
 ################################################################
 # Valve control is in idle/open/close depending on the
 # state of the pressure switch.
 ################################################################
 
-Partition
-
-[ depending on (valve_open,below_the_clouds)
-	validate valve_close; ]
-[ depending on (valve_close,above_the_clouds,record)
-	validate valve_open; ]
-
 State valve_close {
-		+5	> OH secondary closure vlv open off
-			> OH secondary closure vlv closed on
-		+10	> OH secondary closure vlv closed off
-	 +20:00	[ validate valve_close; ]
+			depending on (ABOVE_CLOUDS,record) { Validate valve_open; }
+			depending on (ABOVE_CLOUDS,flight) { Validate valve_open; }
+		+5	> OH scan gate Valve in 10000 by 100
+#			> OH secondary closure vlv closed on
+#		+10	> OH secondary closure vlv closed off
+	 +20:00	Validate valve_close;
 }
 
 State valve_open {
-		+5	> OH secondary closure vlv closed off
-			> OH secondary closure vlv open on
-		+10	> OH secondary closure vlv open off
-	 +10:00	[ validate valve_open; ]
+			depending on (BELOW_CLOUDS) { Validate valve_close; }
+			depending on (ON_GROUND) { Validate valve_close; }
+		+5	> OH scan gate Valve out 10000 by 100
+#			> OH c3f6 solenoid on
+#		+10	> OH c3f6 solenoid off
+	 +10:00	Validate valve_open;
 }
 
-################################################################
-# Check dye/tfr flow switch.  Validate shutoff if interlock on.
-# Light fail light in shutoff.
-################################################################
-partition
-[
-%{ /* Interlock constants.
-	*/
-  static int zero_count = 0;
-  /* ZERO_LIMIT is the number of successive online points where
-     both OClUV and UVMon are below their respective _ZERO
-	 thresholds before interlock_fail is asserted.
-  */
-  #define ZERO_LIMIT 16
-  AD8 OClUV_ZERO = (AD8) (0.1 * .1 * 256.);
-  AD12 UVMon_ZERO = (AD12) (0.2 * .1 * 65536.);  
-%}
-]
-
-State interlock_check_idle {  }
-################################################################
-# interlock_wait is simply a timed period to get the
-# pumps going before declaring failure
-#
-# SET INTERLOCK WAIT FOR A GREATER TIME THAN THE COMBINED
-# TIMES OF THE PUMP INITIALIZATION STATES!!!
-################################################################
-State interlock_wait {
-     +5:00  [ validate interlock_fail; ]
-}
-State interlock_check {
-			[if (DStt2 & 0x80) validate interlock_fail; ]
-			[ if (IxStt & 0x04) {
-				if (OClUV <= OClUV_ZERO && UVMon <= UVMon_ZERO) {
-				  if (++zero_count > ZERO_LIMIT) validate interlock_fail;
-				} else zero_count = 0;
-			  }
-			]
-}
-State interlock_fail	{
-		+1	[ validate shutoff; ]
-}
-
+PARTITION
+# PARTITION 7: const V
 ################################################################
 # constv.tma is an algorithm to maintain constant rate of the back
 # reaction of NO2+OH in the secondary duct.
@@ -523,8 +513,6 @@ State interlock_fail	{
 # I will then calculate (DP_sum * 2048)/(((P_sum/(30*16))-P0)^2)
 #  where P0 is the offset in torr * 4096/1000 = 13 torr * 4.096 = 53
 ################################################################
-partition
-[
 %{ /* definitions */
   unsigned short P0 = (unsigned short) (13 * 4.096);
   int n_p_rats = 0;
@@ -532,63 +520,71 @@ partition
   #define RATIO_SETPOINT 11000
   #define STVPs_MIN 2500
 %}
-]
 
-[ IndxrPos STVPs_; ]
-[ STVPs_ = STVPs; ]
+{ IndxrPos STVPs_; }
+{ STVPs_ = STVPs; }
 ################################################################
 # Throttle control subroutine.
 ################################################################
 
-Partition
-
-[ depending on (STV_sit, above_the_clouds, record) validate STV_reset_ct; ]
-
-State STV_Sit {}
-
 State throttle_init	{
+			Hold until valid (ABOVE_CLOUDS);
 	   +20	> OH drive secondary throttle in 10000
 		+5	> OH drive secondary throttle out 2000
 		+5	> OH drive secondary throttle to 4200
-			[ validate STV_Sit; ]
+			Validate STV_Sit;
+}
+
+State STV_Sit {
+  depending on (record) { Validate STV_reset_ct; }
+}
+
+State STV_reset_ct {
+  {	DP_sum = P_sum = n_p_rats = 0;
+	validate STV_regulate;
+  }
+}
+
+#----------------------------------------------------------------
+# These states drive the throttle to a particular position
+# and then go to STV_Sit. STV_Sit will return to regulation
+# as soon we get to state record, so if these are used within
+# record, they will not establish a fixed position, though they
+# may help to reach the regulated velocity more quickly if we
+# have a good guess of the correct position.
+# Usually these are called from scan or add_c3f6 or another
+# non-record full-operational state.
+#----------------------------------------------------------------
+State STV_OFF	{
+			> OH drive secondary throttle to 3500
 }
 State throttle_fast	{
 			> OH drive secondary throttle to 3500
-			[ validate STV_Sit; ]
+			Validate STV_Sit;
 }
 State throttle_medium	{
 			> OH drive secondary throttle to 2500
-			[ validate STV_Sit; ]
+			Validate STV_Sit;
 }
 State throttle_slow	{
-			> OH drive secondary throttle to 100
-			[ validate STV_Sit; ]
+			> OH drive secondary throttle to 1000
+			Validate STV_Sit;
 }
 State throttle_shut	{
 			> OH drive secondary throttle in 65000
-			[ validate STV_Sit; ]
+			Validate STV_Sit;
 }
 State throttle_scan	{
-			> OH drive secondary throttle in 6500
-	   +25  > OH drive secondary throttle out 100
+#			> OH drive secondary throttle in 6500
+#	   +25  > OH drive secondary throttle out 2000
 	    +5  > OH drive secondary throttle to 4200
 	  1:00	> OH drive secondary throttle to 2700
-	  2:00	> OH drive secondary throttle to 3400
-	  3:00	[	validate STV_reset_ct;	]
+	  2:00	> OH drive secondary throttle to 4000
+	  3:00	Validate STV_reset_ct;
 }
 
-State STV_reset_ct {}
-
-[ depending on (STV_reset_ct) {
-	DP_sum = P_sum = n_p_rats = 0;
-	validate STV_regulate;
-  }
-]
-
-State STV_regulate {}
-
-[ depending on (STV_regulate) {
-	n_p_rats++;
+State STV_regulate {
+  { n_p_rats++;
 	DP_sum += SD_DP;
 	P_sum += SD__P;
 	if (n_p_rats >= 30) {
@@ -603,133 +599,225 @@ State STV_regulate {}
 	  DP_sum = P_sum = n_p_rats = 0;
 	}
   }
-]
+  depending on (BELOW_CLOUDS) { Validate STV_sit; }
+  depending on (1 Hz) { if (convert(SD_DP) < 0.03)
+	Validate STV_OFF;	}
+}
 
-[ depending on (STV_regulate, below_the_clouds) validate STV_sit; ]
 
-#
+PARTITION
+# PARTITION 8: Etalon
+#################################################################
 # Partition to initialize the etalon.  Set init_limit to the
 # number of initialization attempts.  Make sure there is enough
 # time in Initialize.  Set voltages for the etalon at 15,000 to
 # control initialization attempts.
-#
-
-partition
-
-
-[
+#################################################################
 %{
-static int init_count=0, init_limit=3;
+  static int init_count=0, init_limit=3;
 %}
-]
 
 state etalon_sit	{	}
 
 state etalon_init	{
-
 		+1  > OH drive etalon out 10000
 		+5	> OH drive etalon in 65000
 		+5	> OH drive etalon in 65000
-		+5	> OH drive etalon out 3200
-		+5	[ if ((EtnPs < 700) || (EtnPs > 2400))	{
+		+5	> OH drive etalon out 6400
+		+5	{ if ((EtnPs < 3900) || (EtnPs > 5600))	{
 				int zero_pos;
 				zero_pos=EtnPs;
-				msg(1,"Etalon zero position out of range EtnPs=%d",zero_pos)	;}]
+				msg(1,"Etalon zero position out of range EtnPs=%d",zero_pos);
+			  }
+			}
 		+5	> OH drive etalon to 15000
 #
-# 7/27/96 etalon_pos at 15,000 is 5.74 V.  Set range to +/- 500 steps
+# 4/26/97 etalon_pos at 15,000 is 4.57 V.  Set range to +/- 1000 steps
+# 6/1499  etalon_pos at 15,000 is 4.53 V.
 #
-		+5	[ if ((EtPos<(5.69*.1*65536)) || (EtPos>(5.79*.1*65536)))	{
+		+5	{ if ((EtPos<(4.35*.1*65536)) || (EtPos>(4.65*.1*65536))) {
 				float etalon_pos;
 				etalon_pos=EtPos;
 				etalon_pos=(etalon_pos*10)/65536;
 				msg(1,"Etalon voltage out of range EtPos=%f",etalon_pos);
 				if (++init_count < init_limit) validate etalon_init;
-				else validate etalon_sit;	}	]
-		+1	[ validate etalon_sit;	]
+				else validate etalon_sit;
+			  }
+			}
+		+1	Validate etalon_sit;
 }
 
 #########################################################################
 #########################################################################
 
 
-partition
-
+PARTITION
+# PARTITION 9: Water Vapor
 # h2o partition for STRAT, for fall 1995.
 ################################################################
 # h2o_init until ER-2 has taken off
 ################################################################
 State h2o_init {
-		 +5 > h2o heater off
+		 +1 Validate lamp_wait;
+		 +5 > h2o heater set 0 
 		 +5 > h2o wet air off
-		+20	> h2o lamp off
-		 +1	[ validate standby; ]
+		+10	> h2o lamp off
+		 +1	Validate standby;
 }
 State standby	{
+  depending on (BELOW_CLOUDS) { Validate warmup; }
+  depending on (ABOVE_CLOUDS) { Validate warmup; }
 }
-[ depending on (standby, off_the_ground) validate warmup;	]
 ################################################################
 # Turns on lamp, heater, etc.
 ################################################################
 State warmup {
+  depending on (1 Hz) {
+	if ( !H2O_Lamp_Enable ) Validate Shutoff_H2O;
+  }
+  depending on (shutdown) { Validate Shutoff_H2O; }
 		 +1 > h2o RF set 4095
 		+10 > h2o lamp on
-		+10 > h2o RF set 2800
-		+10 > h2o heater on
+		 +8 > h2o RF set 3200
+		 +5 > h2o RF set 2800
+		 +1 Validate lamp_control_s;
+		+10 > h2o heater set 1200
 		 +5 > h2o soldrv select mode 2
-		 +1	[ validate wait; ]
+		 +1 Validate lamp_control_a;
+		 +1	Validate wait;
 }
 
 ################################################################
 # Waits for ER-2 to clear "clouds"
 ################################################################
-State wait { }
-[ depending on (wait, above_the_clouds) validate recordw; ]
-[ depending on (wait, on_the_ground) validate Shutdown_H2O; ]
+State wait {
+  depending on (ABOVE_CLOUDS) { Validate recordw; }
+  depending on (shutdown) { Validate Shutoff_H2O; }
+  depending on (1 Hz) {
+	if ( !H2O_Lamp_Enable ) Validate Shutoff_H2O;
+  }
+}
 
 State recordw {
+	depending on (BELOW_CLOUDS) { Validate Shutdown_H2O; }
+	depending on (shutdown) { Validate Shutoff_H2O; }
+	depending on (1 Hz) {
+	  if ( !H2O_Lamp_Enable ) Validate Shutoff_H2O;
+	}
 		 +5 > h2o soldrv select mode 6
+	   1:00	{ Validate lamp_control; }
 #		+30:00 > h2o soldrv select mode 5
 #		 +30   > h2o chopper in on
 #		 +10   > h2o chopper in off
 #		 +4:00 > h2o soldrv select mode 4
 #		+40:00 > h2o soldrv select mode 4
-		+45:00 > h2o soldrv select mode 6
-		+40  [ validate throttle1; ]
+		+23:00 > h2o soldrv select mode 6
+		+40  Validate throttle1;
 }
-[ depending on ( recordw, below_the_clouds ) validate Shutdown_H2O; ]
 
 ####################################################################
 # For test purposes, state throttle 1 was set for only a few minutes.  For
 # flight, set to at least one hour, depending on flight plan/duration.
 #####################################################################
 State throttle1 {
-#		+35:00 > h2o soldrv select mode 1
-		 +5:00 > h2o soldrv select mode 6
-		+45:00  [ validate throttle2; ]
+	depending on (BELOW_CLOUDS) { Validate Shutdown_H2O; }
+	depending on (shutdown) { Validate Shutoff_H2O; }
+	depending on (1 Hz) {
+	  if ( !H2O_Lamp_Enable ) Validate Shutoff_H2O;
+	}
+		+60:00 > h2o soldrv select mode 6
+		+60:00 > h2o soldrv select mode 6
+		+45:00  Validate throttle2;
 }
-[ depending on ( throttle1, below_the_clouds ) validate Shutdown_H2O; ]
-
-####################################################################
-# For test purposes, wet air addition lasts only ten seconds.  For
-# flight, set to longer times, at least a few minutes.
-#####################################################################
 
 State throttle2 {
-		60:00  [ validate throttle2; ]
+	depending on (BELOW_CLOUDS) { Validate Shutdown_H2O; }
+	depending on (shutdown) { Validate Shutoff_H2O; }
+	depending on (1 Hz) {
+	  if ( !H2O_Lamp_Enable ) Validate Shutoff_H2O;
+	}
+		60:00  Validate throttle2;
 }
-
-[ depending on ( throttle2, below_the_clouds ) validate Shutdown_H2O; ]
 
 State Shutdown_H2O {
+  depending on (ABOVE_CLOUDS) { Validate recordw; }
+  depending on (shutdown) { Validate Shutoff_H2O; }
+	depending on (1 Hz) {
+	  if ( !H2O_Lamp_Enable ) Validate Shutoff_H2O;
+	}
 			> h2o wet air off
 }
-[ depending on ( Shutdown_H2O, above_the_clouds ) validate recordw; ]
-[ depending on ( Shutdown_H2O, on_the_ground ) validate Shutoff_H2O; ]
 
 State Shutoff_H2O {
+			Validate lamp_wait;
 			> h2o soldrv select mode 5
-			> h2o heater off
+			> h2o heater set 0
 		+30 > h2o lamp off
+			depending on (1 Hz) {
+			  if ( H2O_Lamp_Enable ) Validate standby;
+			}
 }
 
+
+#################################################################
+PARTITION
+#PARTITION 10: Water vapor lamp control
+#################################################################
+#Waiting for Water Vapor to be in State recordw
+#################################################################
+State lamp_wait {
+}
+
+#################################################################
+#Make sure lamp turns on properly
+#################################################################
+State lamp_control_s {
+    depending on (ON_GROUND) { Validate lamp_wait; }
+			{ if (convert(WVBKV) > 2.0) {
+				Validate h2o_init;
+				}
+			}
+}
+
+#################################################################
+#While lamp is just warming up:
+#################################################################
+State lamp_control_a {
+    depending on (ON_GROUND) { Validate lamp_wait; }
+	Hold until (convert(WVLPV) > 4.5 || convert(WVBKV) > 1.5);
+	{ msg(2, "H2O Heater warning!" ); }
+	> H2O Heater set 0
+	Hold until (convert(WVLPV) < 3.0 && convert(WVBKV) < 1.0);
+	> H2O Heater set 1200
+	Validate lamp_control_a;
+}
+
+#################################################################
+#Make sure lamp is running properly in flight
+#################################################################
+State lamp_control {
+    depending on (BELOW_CLOUDS) { Validate lamp_wait; }
+    depending on (ON_GROUND) { Validate lamp_wait; }
+			{ if (convert(WVBKV) > 2.0 ||
+				  convert(WVLPV) > 4.5) {
+				Validate lamp_reset;
+				}
+			}
+	> H2O Heater set 1200
+}
+
+#################################################################
+#Try to bring lamp under control; else restart
+#################################################################
+State lamp_reset {
+    depending on (BELOW_CLOUDS) { Validate lamp_wait; }
+    depending on (ON_GROUND) { Validate lamp_wait; }
+		+1	> h2o heater set 0
+			Hold until (convert(WVBKV) < 1.5 &&
+						convert(WVLPV) < 3.0 ) or 2:00
+				else { Validate h2o_init;
+					   Validate lamp_wait;
+				}
+		+5	> h2o heater set 1200
+		+10	{ Validate lamp_control; }
+}
