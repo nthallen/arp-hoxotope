@@ -1,10 +1,6 @@
 ; laser.sol
-; modified 3/19/94 for asho flight series
-; NOFlws for 75 sccm flow controller.
-; modified mode 1 to include NO at back axis 5/31/94
-; modified 8/3/94 to include altline position.
-; modified 10/18/95 to add NO scan at back axis
-; modified 11/02/95 to reduce the smallest NO flow during titrations
+; modified 02/20/2000 for lab
+
 solenoid A1IN  20 21 0      ; Axis 1 In
 solenoid A1OUT 22 23 1      ; Axis 1 Out
 solenoid A2IN  24 25 2      ; Axis 2 In
@@ -22,7 +18,9 @@ solenoid NOF 14 15 9		  ; Front NO injector (Injector Front)
 dtoa NOFlwF 0xE84 {K:550 L:400 M:320 N:240 P:150 Q:100 T:2 A:1 Z:0}
 dtoa NOFlwB 0xE84 {K:2047 L:1500 M:1200 N:900 P:550 Q:350 T:2 A:1 Z:0}
 dtoa SolSt0 0x000 {A:0 B:1 C:2 D:3 E:4 F:5 G:6 H:7 I:8 _:255 
-					J:10 K:11 L:12 M:13 N:14 Q:15 R:16 S:17 T:18 U:19}
+					J:10 K:11 L:12 M:13 N:14 Q:15 R:16 S:17 T:18 U:19
+					V:20 W:21 X:22}
+dtoa AOSPt1 0xE86  {A:0 B:300 C:500 D:700 E:900}
 
 Resolution = 1/1
 
@@ -44,35 +42,74 @@ mode 0 {
 
 
 mode 1 {
-  A1IN:   _____:____:OOO__:____:____:____:____:____:
-  A1OUT:  OOO__:____:_____:____:____:____:____:____:
-  A2IN:   _____:____:OOO__:____:____:____:____:____:
-  A2OUT:  OOO__:____:_____:____:____:____:____:____:
-  Etalon: _____:OOOO:+++++:OOOO:____:OOOO:++++:OOOO:
-  AIR:    OOOOO:OOOO:OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  NO:     _____:____:_____:____:OOOO:OOOO:OOOO:OOOO:
-  NOC:    OOOOO:OOOO:OOOOO:OOOO:____:____:____:____:
-  NOPre:  00000:0000:00000:0000:CCCC:CCCC:CCCC:CCCC:
-  NOF:    _____:____:_____:____:____:____:____:____:
-  NOB:    OOOOO:OOOO:OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  C3F6:   _____:____:_____:____:____:____:____:____:
-  SolSt0: KFFFF:FFFF:LMHHH:DDDD:MHHH:DDDD:MHHH:DDDD:^
+  Etalon: ____:OOOO:++++:OOOO:____:OOOO:++++:OOOO:
+  SolSt0: KFFF:FFFF:MHHH:DDDD:MHHH:DDDD:MHHH:DDDD:
+
+  Etalon: ____:OOOO:++++:OOOO:____:OOOO:++++:OOOO:
+  SolSt0: MHHH:DDDD:MHHH:DDDD:MHHH:DDDD:MHHH:DDDD:
+
+  Etalon: ____:OOOO:++++:OOOO:____:OOOO:++++:OOOO:
+  SolSt0: MHHH:DDDD:MHHH:DDDD:MHHH:DDDD:MHHH:DDDD:^
+
 }
 
 mode 2 {
-  A1IN:   _____:____:OOO__:____:____:____:____:____:
-  A1OUT:  OOO__:____:_____:____:____:____:____:____:
-  A2IN:   _____:____:OOO__:____:____:____:____:____:
-  A2OUT:  OOO__:____:_____:____:____:____:____:____:
-  Etalon: _____:OOOO:+++++:OOOO:____:OOOO:++++:OOOO:
-  AIR:    _____:____:_____:____:____:____:____:____:
-  NO:     _____:____:_____:____:____:____:____:____:
-  NOC:    OOOOO:OOOO:OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  NOPre:  00000:0000:00000:0000:0000:0000:0000:0000:
-  NOF:    _____:____:_____:____:____:____:____:____:
-  NOB:    _____:____:_____:____:____:____:____:____:
-  C3F6:   _____:____:_____:____:____:____:____:____:
-  SolSt0: QQQQQ:QQQQ:QQQQQ:QQQQ:QQQQ:QQQQ:QQQQ:QQQQ:^
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:EEEE:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:CCCC:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:AAAA:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+  Etalon: ____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:____:++++:OOOO:
+  AOSPt1: BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:BBBB:
+  SolSt0: VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:VVVV:WWWW:XXXX:^
+
+}
+
+mode 3 {
+  A1IN:   _____:____:____:____:____:____:____:____:
+  A1OUT:  _____:____:____:____:____:____:____:____:
+  A2IN:   _____:____:____:____:____:____:____:____:
+  A2OUT:  _____:____:____:____:____:____:____:____:
+  Etalon: _____:OOOO:++++:OOOO:____:OOOO:++++:OOOO:
+  AIR:    OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
+  NO:     _____:____:____:____:OOOO:OOOO:OOOO:OOOO:
+  NOC:    OOOOO:OOOO:OOOO:OOOO:____:____:____:____:
+  NOPre:  00000:0000:0000:0000:CCCC:CCCC:CCCC:CCCC:
+  NOF:    _____:____:____:____:____:____:____:____:
+  NOB:    OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
+  C3F6:   _____:____:____:____:____:____:____:____:
+  SolSt0: VWWWW:XXXX:WWWW:XXXX:WWWW:XXXX:WWWW:XXXX:^
 }
 
 mode 4 {
@@ -95,105 +132,56 @@ mode 4 {
 ; N2 filter mode, followed by OH at both axes
 
 mode 5 {
-  A1IN:   ______:OOO__:____:
-  A1OUT:  OOO___:_____:____:
-  A2IN:   ______:OOO__:____:
-  A2OUT:  OOO___:_____:____:
-  Etalon: ___OOO:+++OO:OOOO:
-  AIR:    ______:_____:____:
-  NO:     ______:_____:____:
-  NOC:    OOOOOO:OOOOO:OOOO:
-  NOPre:  000000:00000:0000:
-  NOF:    ______:_____:____:
-  NOB:    ______:_____:____:
-  C3F6:   ______:_____:____:
-  SolSt0: AFFFFF:BHHDD:DDDD:
-  Select 6
+  A1IN:   ______:OOO___:______:
+  A1OUT:  OOO___:______:______:
+  A2IN:   ______:OOO___:______:
+  A2OUT:  OOO___:______:______:
+  Etalon: ___OOO:___OOO:___OOO:
+  AIR:    ______:______:______:
+  NO:     ______:______:______:
+  NOC:    OOOOOO:OOOOOO:OOOOOO:
+  NOPre:  000000:000000:000000:
+  NOF:    ______:______:______:
+  NOB:    ______:______:______:
+  C3F6:   ______:______:______:
+  SolSt0: AAADDD:FFFDDD:FFFDDD:^
 }
-
-; OH at axis 1, HO2 at axis 2 
- 
-mode 6 {
-  A1IN:   _____:_____:_____:_____:_____:_____:
-  A1OUT:  _____:_____:_____:_____:_____:_____:
-  A2IN:   _____:_____:_____:_____:_____:_____:
-  A2OUT:  _____:_____:_____:_____:_____:_____:
-  Etalon: ___OO:OOOOO:OOOOO:+++OO:OOOOO:OOOOO:
-  AIR:    OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:
-  NO:     OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:
-  NOC:    _____:_____:_____:_____:_____:_____:
-  NOPre:  CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:
-  NOF:    _____:_____:_____:_____:_____:_____:
-  NOB:    OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:
-  C3F6:   _____:_____:_____:_____:_____:_____:
-  SolSt0: CHH__:_____:_____:CHH__:_____:_____:
-
-
-
-  A1IN:   _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  A1OUT:  _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  A2IN:   _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  A2OUT:  _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  Etalon: ___OO:OOOOO:OOOOO:+++OO:OOOOO:OOOOO:___OO:OOOOO:OOOOO:
-  AIR:    OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:
-  NO:     OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:
-  NOC:    _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  NOPre:  CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:CCCCC:
-  NOF:    _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  NOB:    OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:OOOOO:
-  C3F6:   _____:_____:_____:_____:_____:_____:_____:_____:_____:
-  SolSt0: CHH__:_____:_____:CHH__:_____:_____:CHH__:_____:_____:
-  Select 7
-}
-; Scan NO at back injector
-
+; 6 s On-off-alt mode
 mode 7 {
-  A1IN:   _____:_____:_____:
-  A1OUT:  _____:_____:_____:
-  A2IN:   _____:_____:_____:
-  A2OUT:  _____:_____:_____:
-  Etalon: +++OO:OOOOO:OOOOO:
-  AIR:    OOOOO:OOOOO:OOOOO:
-  NO:     OOOOO:OOOOO:OOOOO:
-  NOC:    _____:_____:_____:
-  NOFlwB: KKKKK:LLMMN:NPPQQ:
-  NOF:    _____:_____:_____:
-  NOB:    OOOOO:OOOOO:OOOOO:
-  C3F6:   _____:_____:_____:
-  SolSt0: IHHGG:GGGGG:GGGGG:^
-  Select 8
+  Etalon: OOOOOO:___:++++++:___:OOOOOO:___:++++++:___:OOOOOO:___:++++++:___:
+  SolSt0: KKKKKK:LLL:KKKKKK:LLL:KKKKKK:LLL:KKKKKK:LLL:KKKKKK:LLL:KKKKKK:LLL:^ 
 }
-; Scan NO at front injector
 
+; 8s On-off-alt mode without bellows chop.
 mode 8 {
-  A1IN:   _____:_____:_____:
-  A1OUT:  _____:_____:_____:
-  A2IN:   _____:_____:_____:
-  A2OUT:  _____:_____:_____:
-  Etalon: ___OO:OOOOO:OOOOO:
-  AIR:    OOOOO:OOOOO:OOOOO:
-  NO:     OOOOO:OOOOO:OOOOO:
-  NOC:    _____:_____:_____:
-  NOFlwF: KKKKK:LLMMN:NPPQQ:
-  NOF:    OOOOO:OOOOO:OOOOO:
-  NOB:    _____:_____:_____:
-  C3F6:   _____:_____:_____:
-  SolSt0: EHHGG:GGGGG:GGGGG:^
-  Select 5
+
+
+  Etalon: OOOOOOOO:________:++++++++:________:OOOOOOOO:________:++++++++:________:
+  SolSt0: STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:^
 }
-; Add C3F6 at front injector.
+
+
+; On-off-alt mode with water titration.
 mode 9 {
-  A1IN:   OOO__:____:____:____:____:____:____:____:
-  A1OUT:  _____:____:____:____:____:____:____:____:
-  A2IN:   OOO__:____:____:____:____:____:____:____:
-  A2OUT:  _____:____:____:____:____:____:____:____:
-  Etalon: OOOOO:++++:OOOO:____:OOOO:++++:OOOO:____:
-  AIR:    OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  NO:     _____:____:____:____:____:____:____:____:
-  NOC:    OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  NOPre:  00000:0000:0000:0000:0000:0000:0000:0000:
-  NOF:    OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  NOB:    _____:____:____:____:____:____:____:____:
-  C3F6:   OOOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:OOOO:
-  SolSt0: RSTTT:UUUU:STTT:UUUU:STTT:UUUU:STTT:UUUU:^
+
+  Etalon: OOOOOOOO:________:++++++++:________:OOOOOOOO:________:++++++++:________:____:
+  AOSPt1: EEEEEEEE:EEEEEEEE:EEEEEEEE:EEEEEEEE:EEEEEEEE:EEEEEEEE:EEEEEEEE:EEEEEEEE:CCCC:
+  SolSt0: STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:DDDD:^
+
+  Etalon: OOOOOOOO:________:++++++++:________:OOOOOOOO:________:++++++++:________:____:
+  AOSPt1: CCCCCCCC:CCCCCCCC:CCCCCCCC:CCCCCCCC:CCCCCCCC:CCCCCCCC:CCCCCCCC:CCCCCCCC:BBBB:
+  SolSt0: STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:DDDD:^
+
+  Etalon: OOOOOOOO:________:++++++++:________:OOOOOOOO:________:++++++++:________:____:
+  AOSPt1: BBBBBBBB:BBBBBBBB:BBBBBBBB:BBBBBBBB:BBBBBBBB:BBBBBBBB:BBBBBBBB:BBBBBBBB:DDDD:
+  SolSt0: STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:DDDD:^
+
+  Etalon: OOOOOOOO:________:++++++++:________:OOOOOOOO:________:++++++++:________:____:
+  AOSPt1: DDDDDDDD:DDDDDDDD:DDDDDDDD:DDDDDDDD:DDDDDDDD:DDDDDDDD:DDDDDDDD:DDDDDDDD:AAAA:
+  SolSt0: STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:DDDD:^
+
+  Etalon: OOOOOOOO:________:++++++++:________:OOOOOOOO:________:++++++++:________:____:
+  AOSPt1: AAAAAAAA:AAAAAAAA:AAAAAAAA:AAAAAAAA:AAAAAAAA:AAAAAAAA:AAAAAAAA:AAAAAAAA:EEEE:
+  SolSt0: STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:STTTTTTT:UUUUUUUU:DDDD:^
+
 }

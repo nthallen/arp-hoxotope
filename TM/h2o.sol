@@ -29,9 +29,9 @@ mode 2 {
 }
 
 mode 3 {
-  In:  O___:____:____:____:____:____:____:__^
-  Out: ____:O___:____:____:____:____:____:__
-  S:   CCCC:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DD
+  In:  O___:____:____:____:____:____:____:____:__^
+  Out: ____:____:O___:____:____:____:____:____:__
+  S:   CCCC:CCCC:DDDD:DDDD:DDDD:DDDD:DDDD:DDDD:DD
 }
 
 mode 4 {
