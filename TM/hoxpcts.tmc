@@ -34,6 +34,8 @@ TM typedef struct {
 			text "%6lu";
 			convert NGtCt32 GtCt24_32();
 		  }
+TM typedef unsigned char GTDLY { text "%3u"; }
+TM typedef unsigned char GTWID { text "%3u"; }
 
 TM 4 Hz NGtCt16 GtCt1Stat; Address GtCt1Stat 0x600;
 TM 4 Hz GtCt16 SX1FG; Address SX1FG 0x614;
@@ -43,6 +45,11 @@ TM 4 Hz GtCt16 SX2FG; Address SX2FG 0x61C;
 TM 4 Hz GtCt16 SX2AG; Address SX2AG 0x61E;
 TM 4 Hz NGtCt24 SX2NG; Address SX2NG 0x618;
 TM 4 Hz NGtCt16 RepRate1; Address RepRate1 0x608;
+TM 1/4 Hz GTDLY Gt1ADly, Gt1BDly;
+TM 1/4 Hz GTWID Gt1AWid, Gt1BWid;
+Address Gt1AWid 0x604;
+Address Gt1BWid 0x606;
+
 Group GtCt1 ( GtCt1Stat, SX1AG, SX1FG, SX1NG,
 			SX2AG, SX2FG, SX2NG, RepRate1 ) {
   GtCt1Stat = sbwa( GtCt1Stat.address);
@@ -53,22 +60,16 @@ Group GtCt1 ( GtCt1Stat, SX1AG, SX1FG, SX1NG,
   SX2AG = sbwa( SX2AG.address);
   SX2FG = sbwa( SX2FG.address);
   RepRate1 = sbwa( RepRate1.address);
+  Gt1A = sbwa( Gt1AWid.address );
+  Gt1B = sbwa( Gt1BWid.address );
   SX2NG.low = sbwa( SX2NG.address);
   SX2NG.high = sbba( SX2NG.address + 2 );
 }
-TM typedef unsigned char GTDLY { text "%3u"; }
-TM typedef unsigned char GTWID { text "%3u"; }
-TM 1/4 Hz GTDLY Gt1ADly, Gt1BDly;
-TM 1/4 Hz GTWID Gt1AWid, Gt1BWid;
 Group GtCt1Gt ( Gt1ADly, Gt1AWid, Gt1BDly, Gt1BWid ) {
-  unsigned short word;
-  
-  word = sbwa( 0x604 );
-  Gt1AWid = word & 0xFF;
-  Gt1ADly = ( word >> 8 ) & 0xFF;
-  word = sbwa( 0x606 );
-  Gt1BWid = word & 0xFF;
-  Gt1BDly = ( word >> 8 ) & 0xFF;
+  Gt1AWid = Gt1A & 0xFF;
+  Gt1ADly = ( Gt1A >> 8 ) & 0xFF;
+  Gt1BWid = Gt1B & 0xFF;
+  Gt1BDly = ( Gt1B >> 8 ) & 0xFF;
 }
 
 
@@ -80,6 +81,11 @@ TM 4 Hz GtCt16 LABFG; Address LABFG 0x65C;
 TM 4 Hz GtCt16 LABAG; Address LABAG 0x65E;
 TM 4 Hz NGtCt24 LABNG; Address LABNG 0x658;
 TM 4 Hz NGtCt16 RepRate2; Address RepRate2 0x648;
+TM 1/4 Hz GTDLY Gt2ADly, Gt2BDly;
+TM 1/4 Hz GTWID Gt2AWid, Gt2BWid;
+Address Gt2AWid 0x644;
+Address Gt2BWid 0x646;
+
 Group GtCt2 ( GtCt2Stat, SOCAG, SOCFG, SOCNG,
 			LABAG, LABFG, LABNG, RepRate2 ) {
   GtCt2Stat = sbwa( GtCt2Stat.address);
@@ -90,18 +96,14 @@ Group GtCt2 ( GtCt2Stat, SOCAG, SOCFG, SOCNG,
   LABAG = sbwa( LABAG.address);
   LABFG = sbwa( LABFG.address);
   RepRate2 = sbwa( RepRate2.address);
+  Gt2A = sbwa( Gt2AWid.address );
+  Gt2B = sbwa( Gt2BWid.address );
   LABNG.low = sbwa( LABNG.address);
   LABNG.high = sbba( LABNG.address + 2);
 }
-TM 1/4 Hz GTDLY Gt2ADly, Gt2BDly;
-TM 1/4 Hz GTWID Gt2AWid, Gt2BWid;
 Group GtCt2Gt ( Gt2ADly, Gt2AWid, Gt2BDly, Gt2BWid ) {
-  unsigned short word;
-  
-  word = sbwa( 0x644 );
-  Gt2AWid = word & 0xFF;
-  Gt2ADly = ( word >> 8 ) & 0xFF;
-  word = sbwa( 0x646 );
-  Gt2BWid = word & 0xFF;
-  Gt2BDly = ( word >> 8 ) & 0xFF;
+  Gt2AWid = Gt2A & 0xFF;
+  Gt2ADly = ( Gt2A >> 8 ) & 0xFF;
+  Gt2BWid = Gt2B & 0xFF;
+  Gt2BDly = ( Gt2B >> 8 ) & 0xFF;
 }
