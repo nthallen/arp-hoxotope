@@ -8,8 +8,8 @@
 State Initialize {
 	 > telemetry start
   +1 > fail 0
-  +1 > power solenoids and steppers Off
-  +1 > power 28V switched off
+# +1 > power solenoids and steppers Off
+# +1 > power 28V switched off
   +1 > power solenoids and steppers On
 	 Validate Pinch_Valve_Close;
 }

@@ -154,7 +154,7 @@ State Pinch_Valve_PI {
     P_set = A7SPt/1.0;
     Gp = A3SPt/10.;
     Gi = A4SPt/10.;
-    P_diff = P - P_set;
+    P_diff = P_set - P;
     P_sum += P_diff;
     if ( P_sum * Gi > MAX_PINCH_STEPS )
       P_sum = MAX_PINCH_STEPS/Gi;
