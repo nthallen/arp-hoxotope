@@ -1,0 +1,15 @@
+spreadsheet labcnt 4
+	1 LABAG %5.0lf To_Double
+	2 LABFG %5.0lf To_Double
+	3 LABNG %6.0lf 
+
+spreadsheet labana 9
+	1 Lab_1 %4.2lf 
+	2 Lab_2 %4.2lf 
+	3 Lab_3 %4.2lf 
+	4 L12AV %6.4lf 
+	5 L12BV %6.4lf 
+	6 L12CV %6.4lf 
+	7 SAFB1 %5.1lf 
+	8 SD__P %6.4lf 
+

@@ -1,0 +1,9 @@
+# Hox GSE w/ algorithm w/o windows
+statusscreen
+display hoxdisp hox hox1 hox2
+display h2odisp h2o
+client hoxpclt
+memo
+algorithm hoxalgo
+# extraction hoxrtgext
+# rtg //13/home/hoxp/hox.rtg

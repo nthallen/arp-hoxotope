@@ -1,0 +1,28 @@
+# interact for hoxp
+ Launch memo          memo -e $Experiment.log -y -v
+ Launch Cmdctrl       cmdctrl -mv -c0 -M
+ Launch huarp/intserv intserv -vc0 -i 9:5
+ Launch dccc          dccc -c0 -f hoxp.dccc -vs
+ Launch scdc          scdc -c0 -v
+
+# Here are the data acquisition Programs
+ Launch "-g dg"       hoxpcol -v -c0 && pick_file -q
+ Launch -             lgr -v -c0  `lfctr -O`
+
+#----------------------------------------------------------------
+# soldrv and nav go down here so they can talk to DG
+#  I'm not using nav -C so we can test nav with navtest
+#----------------------------------------------------------------
+ Launch -             soldrv -v -c0 -h "OH" laser.sft
+ Launch -             soldrv -v -c0 -h "H2O" h2o.sft
+#					  if [ -z "$launch_error" ]; then
+#					   nav -c0 -vs /dev/ser1 &
+#					   namewait -p $! -t 20 nav
+#					  fi
+
+ Launch db            bfr -v -c0
+ Launch -             idx64 -v -c0 `cat idx.idx64`
+#Launch -             peakalgo -v -c0 -b0 -i1 -H45000 -L25000
+
+# The command server
+ Launch cmdinterp     hoxpsrvr -v -c0

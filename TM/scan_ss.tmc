@@ -1,0 +1,64 @@
+%{
+  #include "ssp.h"
+  #include "nortlib.h"
+  #include "seq_ss.h"
+  #include "ohf.h"
+
+  #define SSP_N_COLS 6
+  #define RAT_COL 1
+  #define CT_COL 2
+  #define FILTER_COL 3
+  #define UV_COL 4
+  #define PEAK_COL 5
+  
+  sps_ptr ssp = -1;
+%}
+
+depending on (scanning_etn once) {
+  ssp = open_seq_ss("scan", SSP_N_COLS);  
+  if (ssp >= 0) {
+	ss_set_column(ssp, 0, "%8.0lf", "Position");
+	ss_set_column(ssp,    RAT_COL, "%10.0lf" , "Ratio");
+	ss_set_column(ssp,     CT_COL,  "%7.0lf", "Counts");
+	ss_set_column(ssp, FILTER_COL, "%10.0lf", "Filter");
+	ss_set_column(ssp,     UV_COL,  "%5.0lf",     "UV");
+	ss_set_column(ssp,   PEAK_COL, "%10.0lf",   "Peak");
+  }
+}
+
+depending on (peakup_ohcell) {
+  if (ssp >= 0) {
+	store_seq_ss(EtnPs, CT_COL,  SOCFG);
+	store_seq_ss(EtnPs, UV_COL,  OClUV);
+  }
+}
+
+depending on (peakup_axis_2) {
+  if (ssp >= 0) {
+	store_seq_ss(EtnPs, CT_COL,  SX2FG);
+	store_seq_ss(EtnPs, UV_COL,  UVMon);
+  }
+}
+
+depending on (filter_point) {
+  unsigned short position;
+
+  if (ssp >= 0) {
+	position = ohf_pos();
+	store_seq_ss(position, RAT_COL, ohf_ratio());
+	store_seq_ss(position, FILTER_COL, ohf_filter());
+	store_seq_ss(position, PEAK_COL, ohf_peak_filter());
+  }
+}
+
+depending on (not_peaking once) {
+  if (ssp >= 0) {
+	int seq_no;
+
+	seq_no = close_seq_ss(1);
+	ssp = -1;
+	if (seq_no >= 0)
+	  msg(0, "End of scan %04d", seq_no);
+	else msg(0, "Discarding Scan Data");
+  }
+}

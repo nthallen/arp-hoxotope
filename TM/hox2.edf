@@ -1,0 +1,58 @@
+spreadsheet pressure 6
+	1 AirHP %4.2lf 
+	2 AirLP %4.2lf 
+	3 NO_HP %4.2lf 
+	4 NO_LP %4.2lf 
+	5 NoseP %4.2lf 
+
+spreadsheet lsrsys 30
+	1 COutT %5.1lf 
+	2 CIn_T %5.1lf 
+	3 DHx1T %5.1lf 
+	4 DHx2T %5.1lf 
+	5 DLH1T %5.1lf 
+	6 DLH2T %5.1lf 
+	7 DLooT %6.2lf 
+	8 DRs_T %5.1lf 
+	9 DStt2 %2.0X To_Double
+	10 DStt3 %2.0X To_Double
+	11 DTE_I %4.2lf 
+	12 DTETV %4.2lf 
+	13 LHx1T %5.1lf 
+	14 LHx2T %5.1lf 
+	15 LTE_I %4.1lf 
+	16 LTETV %4.2lf 
+	17 OClHV %5.2lf 
+	18 OHC2T %5.1lf 
+	19 OHCHT %5.1lf 
+	20 OHCLI %4.2lf 
+	21 TFR1I %5.1lf 
+	22 TFR1O %4.2lf 
+	23 TFR1V %5.2lf 
+	24 TFR2I %5.1lf 
+	25 TFR2O %4.2lf 
+	26 TFR2V %5.2lf 
+	27 X1_HV %5.2lf 
+	28 X2_HV %5.2lf 
+	29 PMonT %5.1lf 
+
+spreadsheet flowtemp 19
+	1 PAFF1 %5.1lf 
+	2 PAFF2 %5.1lf 
+	3 PAFF3 %5.1lf 
+	4 PAFF4 %5.1lf 
+	5 PAFF5 %5.1lf 
+	6 PAFF6 %5.1lf 
+	7 PAFF7 %5.1lf 
+	8 SAFF1 %5.1lf 
+	9 SAFF2 %5.1lf 
+	10 SAFF3 %5.1lf 
+	11 SAFF4 %5.1lf 
+	12 SAFB1 %5.1lf 
+	13 SAFB2 %5.1lf 
+	14 SAFB3 %5.1lf 
+	15 SAFB4 %5.1lf 
+	16 SAFB5 %5.1lf 
+	17 SAFB6 %5.1lf 
+	18 SAFB7 %5.1lf 
+

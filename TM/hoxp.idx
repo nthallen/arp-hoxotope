@@ -1,0 +1,25 @@
+channel 0 Bellows
+  position 1/4 Hz BlwPs
+  status   1/4 Hz BlwSt
+  scanstat ID0Flg
+  scan
+  disable zeroref
+channel 1 Etalon
+  position 4 Hz EtnPs
+  status   4 Hz EtnSt
+  scanstat EtnFlg
+  scan
+  chop
+channel 2 Attenuator
+  position 4 Hz AtnPs
+  status   4 Hz AtnSt
+  scanstat AtnFlg
+  scan
+  chop
+  disable zeroref
+channel 4 Secondary Throttle
+  position 1/4 Hz STVPs
+  status   1/4 Hz STVSt
+  scanstat STVFlg
+  scan
+  disable zeroref

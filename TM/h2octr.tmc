@@ -1,0 +1,26 @@
+%{
+  /* h2octr.tmc
+   * $Log$
+   * Revision 1.1  1993/06/23  18:18:04  nort
+   * Initial revision
+   *
+   * $Id$
+   */
+  #define Ct24_Long(x) (0xFFFFFF & *(TMLONG *)&x)
+%}
+TMLONG WVFlrL;
+TMLONG WVAD2x8;
+TMLONG WVAD1x8;
+Invalidate WVFlrL;
+Invalidate WVAD2x8;
+Invalidate WVAD1x8;
+
+{ WVFlrL = Ct24_Long(WVFlr)*8;
+  Validate WVFLrL;
+}
+{ WVAD2x8 = WVAD2*8L;
+  Validate WVAD2x8;
+}
+{ WVAD1x8 = WVAD1*8L;
+  Validate WVAD1x8;
+}

@@ -1,0 +1,14 @@
+spreadsheet labstat 10
+	1 DStt0 %2.0X To_Double
+	2 DStt1 %2.0X To_Double
+	3 IxStt %2.0X To_Double
+	4 L12AV %6.4lf
+	5 SolSt %2.0X To_Double
+	6 A4SPt %4.0lf
+	7 SW_St %2.0X To_Double
+	8 NOSPt %4.0lf
+	9 NOFlw %4.2lf
+
+;spreadsheet absorb 4
+;	1 L1_NG %6.0lf
+;	2 L2_NG %6.0lf 
