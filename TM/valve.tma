@@ -1,10 +1,31 @@
 PARTITION
 # PARTITION X: Pinch Valve
 #---------------------------------------------------------------
+# Summary:
+#   Pinch_Valve_Init - Startup. Does nothing
+#   Pinch_Valve_Close - Drives to in limit or complains
+#   Pinch_Valve_Closed - Where we go after closing valve.
+#   Pinch_Valve_Failure - Reports in limit failure and sits
+#   Pinch_Valve_Steps_Init - How we get to Pinch_Valve_Steps
+#   Pinch_Valve_Steps - Old Pressure-control algo
+#   Pinch_Valve_PI_Init - How we get to Pinch_Valve_PI
+#   Pinch_Valve_PI - New Pressure-control algo
+#   Pinch_Valve_Scan - Perform a scan, then go back to PI
+#---------------------------------------------------------------
+# The control algorithms currently use otherwise unused
+# analog outputs as a simple way to allow realtime adjustment
+# of parameters. These are all accessed via the
+# "SW Status Pinch Valve" commands
+# Output 3 = Proportional Gain in steps/dekatorr (10*steps/torr) [PI]
+# Output 4 = Integral Gain in steps/dekatorr (10*steps/torr) [PI]
+# Output 5 = number of steps per increment [Steps]
+# Output 6 = number of seconds integration [Steps]
+# Output 7 = pressure setpoint in torr
+#---------------------------------------------------------------
 # Pinch valve regulate.  Set to fixed P.
-# Drives pinch valve in (higher P) or out (lower P).  
-#   L12BV Pot
-#   L12CV Ambient pressure
+# Drives pinch valve out (higher P) or in (lower P).  
+#   L12BV Pot (during early lab tests)
+#   L12CV Ambient pressure (during early lab tests)
 #   A7SPt Set point
 #   n_p_set = A6SPt: determines how often the position is updated
 #   n_steps = A5SPt: size of small steps
@@ -37,32 +58,26 @@ PARTITION
 %}
 
 #---------------------------------------------------------------
-# Pinch valve control subroutine.
-#---------------------------------------------------------------
 # Initialization is triggered by the mainline, since we have
 # to wait for solenoids and steppers power.
 #---------------------------------------------------------------
-State Pinch_Valve_Init { }
-
-State Pinch_Valve_Close {
-  
-  # Output 3 = Proportional Gain in steps/dekatorr (10*steps/torr) [PI]
-  # Output 4 = Integral Gain in steps/dekatorr (10*steps/torr) [PI]
-  # Output 5 = number of steps per increment [Steps]
-  # Output 6 = number of seconds integration [Steps]
-  # Output 7 = pressure setpoint in torr
-
+State Pinch_Valve_Init {
   +1 > Set Pinch Valve Speed 1067 Hz
-  +1 > Drive Pinch Valve in 4000
   +1 > Pinch Valve Set Gain Gp 3.0
   +1 > Pinch Valve Set Gain Gi 1.0
   +1 > Pinch Valve Set n_steps 1
   +1 > Pinch Valve Set n_p_set 4
   +1 > Pinch Valve Set Pressure SetPoint 20
-     Hold Until ( PVStat & 1 ) or 5
-	 else Validate Pinch_Valve_Failure;
-	 Validate Pinch_Valve_Closed;
 }
+
+State Pinch_Valve_Close {
+  +1 > Drive Pinch Valve in 4000
+     Hold Until ( PVStat & 1 ) or 5
+     else Validate Pinch_Valve_Failure;
+     Validate Pinch_Valve_Closed;
+}
+
+State Pinch_Valve_Closed {}
 
 #---------------------------------------------------------------
 # In limit not observed: Retry periodically
@@ -74,8 +89,6 @@ State Pinch_Valve_Failure {
   else Validate Pinch_Valve_Failure;
   Validate Pinch_Valve_Closed;
 }
-
-State Pinch_Valve_Closed {}
 
 #---------------------------------------------------------------
 # controls valve w/ proportional    
@@ -102,38 +115,30 @@ State Pinch_Valve_Steps {
 
 
   { n_p_rats++;
-	P_sum += convert(SD_P2);
-	n_p_set = A6SPt;
-	n_steps = A5SPt;
-	P_set = A7SPt/1.0;
+    P_sum += convert(SD_P2);
+    n_p_set = A6SPt;
+    n_steps = A5SPt;
+    P_set = A7SPt/1.0;
 
-	if (n_p_rats >= n_p_set) {
-	  P_avg = (P_sum/n_p_rats);
-	  P_diff = P_avg - P_set;	  
+    if (n_p_rats >= n_p_set) {
+      P_avg = P_sum/n_p_rats;
+      P_diff = P_avg - P_set;	  
 
-	  est_steps = ( 240*(fabs(P_diff))/P_avg )*n_steps ;    	
-	  if (est_steps < 300) {
-		  est2_steps = floor(est_steps);
-	  } else {
-		  est2_steps = 300;
-	  }
-
-	  /* proportional steps */
-	  if (fabs(P_diff) >= (0.2)){
-		  if (P_diff > 0) 
-			  { ci_sendfcmd(0,"Drive Pinch Valve In %u\n", est2_steps );  }
-			  else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", est2_steps ); 
-	  }
-
-	  /* tiny steps */
-	  if ( (fabs(P_diff) < (0.2)) && (fabs(P_diff) > (0.05)) ){
-		  if (P_diff > 0) 
-			  { ci_sendfcmd(0,"Drive Pinch Valve In %u\n", n_steps); }
-			  else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", n_steps); 
-	  }
-  	
-	  P_avg = P_sum = n_p_rats = 0;
-	}
+      /* proportional steps */
+      if ( fabs(P_diff) >= 0.2 ) {
+	est_steps = ( 240*(fabs(P_diff))/P_avg )*n_steps ;
+	est2_steps = (est_steps<300) ? floor(est_steps) : 300;
+	if (P_diff > 0)
+	  ci_sendfcmd(0,"Drive Pinch Valve In %u\n", est2_steps );
+	else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", est2_steps ); 
+      } else if ( (fabs(P_diff) < 0.2 ) && ( fabs(P_diff) > 0.05 ) ) {
+	/* tiny steps */
+	if (P_diff > 0)
+	  ci_sendfcmd( 0,"Drive Pinch Valve In %u\n", n_steps );
+	else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", n_steps); 
+      }
+      P_sum = n_p_rats = 0;
+    }
   }
 }
 
@@ -164,3 +169,13 @@ State Pinch_Valve_PI {
   }
 }
 
+State Pinch_Valve_Scan {
+    > Drive Pinch Valve In 4000
+    Hold Until ( PVStat & 1 ) or 6
+    else Validate Pinch_Valve_Failure;
+    > Scan Pinch Valve Out 4000 By 100;
+    > Scan Pinch Valve In 4000 By 100;
+    Hold Until ( ! (PVStat & 1) ) or 5;
+    Hold Until ( PVScan == 0 ) or 40;
+
+}

@@ -4,40 +4,35 @@
 # 12/10/99 Modify to check gate valve is open.
 # 01/05/00 Change offline position to -450 (was +250).
 # 01/11/00 Change algorithm to leave gate valve open - do not drive
-# 		open or closed
+#       open or closed
 # 01/28/00 Change throttle scan to leave throttle at 2500 for strato
 # 01/28/00 4000 for tropo
 # 02/22/00 Open gate valve in initialize for safety.
 # 07/10/02 Comment out scan in record at 43:55
 # 10/30/02 Convert to nanomover for etalon drive.  Comment out all etalon inits
-#
-#  Using VERSION 1.3
-# Commenting
-#
+# 11/21/04 Drastically modified for WB-57
+
 %{
+  #include <math.h> /* for floor */
   #include "CmdData.h"
   int saw_cruise = 0;
 %}
+
 { tma_hold((IOSwS & 3) == 1); }
 { depending on (shutdown) {
   } else {
-	if ( (IOSwS & 3) == 0 || SW_St == 255 ||
-		 ( saw_cruise && convert(SD__P) > 700.0 ) )
-	  validate shutdown;
+    if ( (IOSwS & 3) == 0 || SW_St == 255 ||
+         ( saw_cruise && convert(SD__P) > 700.0 ) )
+      validate shutdown;
   }
 }
-#
+
 #{ if ( convert(SD__P) < 150 ) saw_cruise = 1; }
 
-# Need the following controlled by SW_St
-# Adding_C3F6 (was SW_St & 0x10 bit 4)
-# Scan_Mode_Always (was SW_St & 0x2 bit 2)
 %{
-  int Adding_C3F6 = 0;
   int Scan_Mode_Always = 0;
-  int H2O_Lamp_Enable = 1;
 %}
-#
+
 # Review use of valve_open state: appears to be automatic and
 # totally defined, yet there are several commands which attempt
 # to define it...
@@ -46,47 +41,44 @@
 # Initialize power supplies & set gates
 #----------------------------------------------------------------
 
-%{
-  #include <math.h> /* for floor */
-%}
 State initialize {
-			> telemetry start
-		+1	> fail 0
-		+1  > PsD select dye laser
-		+1	> power solenoids and steppers off
-		+1	> power 28V switched off
-		+1	> set etalon online position 30400
-		+1	> set etalon online delta 10
-		+1	> set etalon offline delta 450
-		+1	> set etalon altline delta 950
-		# A is fixed, B is adjustable, so to speak.
-		+1  > adjGate 1a delay set 120
-		+1  > adjGate 1a width set 255
-		+1  > adjGate 1b delay set 120
-		+1  > adjgate 1b width set 255
-		+1  > adjGate 2a delay set 150
-		+1  > adjGate 2a width set 255
-		+1  > adjGate 2b delay set 0
-		+1  > adjgate 2b width set 20
-		+1  > power solenoids and steppers on
-		+3	{ double bastep;
-			  double etstep;
-			  unsigned short ubastep;
-			  unsigned short uetstep;
-			  bastep = 65209 * ((convert(BAPos) - 3.05)/(8.55-3.05));
-			  if (bastep < 0) bastep = 0;
-			  else if (bastep > 65535) bastep = 65535;
-			  ubastep = floor(bastep);
-			  ci_sendfcmd( 0, "Preset Bellows Position to %u\n",
-				ubastep );
-			  etstep =  30000 - (convert(EtPos) - 4.91)*14285;
-			  if (etstep < 0) etstep = 0;
-			  else if (etstep > 65535) etstep = 65535;
-			  uetstep = floor(etstep);
-			  ci_sendfcmd(0,"Preset Etalon Position to %u\n",
-				uetstep );	
-  			  Validate instrument_start;
-			}
+      > telemetry start
+  +1  > fail 0
+  +1  > PsD select dye laser
+  +1  > power solenoids and steppers off
+  +1  > power 28V switched off
+  +1  > set etalon online position 30400
+  +1  > set etalon online delta 10
+  +1  > set etalon offline delta 450
+  +1  > set etalon altline delta 950
+      # A is fixed, B is adjustable, so to speak.
+  +1  > adjGate 1a delay set 120
+  +1  > adjGate 1a width set 255
+  +1  > adjGate 1b delay set 120
+  +1  > adjgate 1b width set 255
+  +1  > adjGate 2a delay set 150
+  +1  > adjGate 2a width set 255
+  +1  > adjGate 2b delay set 0
+  +1  > adjgate 2b width set 20
+  +1  > power solenoids and steppers on
+  +3  { double bastep;
+        double etstep;
+        unsigned short ubastep;
+        unsigned short uetstep;
+        bastep = 65209 * ((convert(BAPos) - 3.05)/(8.55-3.05));
+        if (bastep < 0) bastep = 0;
+        else if (bastep > 65535) bastep = 65535;
+        ubastep = floor(bastep);
+        ci_sendfcmd( 0, "Preset Bellows Position to %u\n",
+          ubastep );
+        etstep =  30000 - (convert(EtPos) - 4.91)*14285;
+        if (etstep < 0) etstep = 0;
+        else if (etstep > 65535) etstep = 65535;
+        uetstep = floor(etstep);
+        ci_sendfcmd(0,"Preset Etalon Position to %u\n",
+          uetstep );  
+        Validate instrument_start;
+      }
 }
 
 #----------------------------------------------------------------
@@ -95,26 +87,28 @@ State initialize {
 #----------------------------------------------------------------
 
 state instrument_start {
-			{ laser_on_requested = 1; }
-		+1	> drive attenuator in 6500
-		+3	> drive attenuator out 320
-		+3  > drive attenuator to 3600
-	   +14	{ if (convert(AtPos)<6.2 || convert(AtPos)>6.4)
-			  msg(1,"Attenuator zero position out of range"); }
-#		+1  > drive attenuator to 4000
-#
+      { laser_on_requested = 1; }
+  +1  Validate Pinch_Valve_Close;
+  +1  > drive attenuator in 6500
+  +3  > drive attenuator out 320
+  +3  > drive attenuator to 3600
+ +14  { if (convert(AtPos)<6.2 || convert(AtPos)>6.4)
+          msg(1,"Attenuator zero position out of range");
+      }
+#     +1  > drive attenuator to 4000
+
 # Validate etalon_init.  One init cycle takes 27 seconds, maximum
 # 3 cycles.  Do not issue etalon commands for 90 seconds after
 # calling etalon_init.  Call etalon_sit to make sure the initialization
 # is disabled after 2 minutes.
 #
-#		+5	Validate etalon_init;
-#			"Etalon Initialization";
-#	 +2:00	Validate etalon_sit;
-		+5	Validate bellows_eval;
-			"Bellows Initialization";
-			depending on (BELOW_CLOUDS) { Validate flight; }
-			depending on (ABOVE_CLOUDS) { Validate flight; }
+#       +5  Validate etalon_init;
+#           "Etalon Initialization";
+#    +2:00  Validate etalon_sit;
+  +5  Validate bellows_eval;
+      "Bellows Initialization";
+      depending on (BELOW_CLOUDS) { Validate flight; }
+      depending on (ABOVE_CLOUDS) { Validate flight; }
 }
 
 #----------------------------------------------------------------
@@ -124,35 +118,33 @@ state instrument_start {
 # are achieved.
 #----------------------------------------------------------------
 
-State flight	{
-		depending on (ON_GROUND) { Validate shutdown; }
+State flight    {
+        depending on (ON_GROUND) { Validate shutdown; }
 
-		+1	> power oh cell on
-		+1	> power 28V switched on
-			{ diodes_on_requested = 1; }
-		+1	Hold until valid (laser_diodes_on);
-			Validate bellows_eval;
-#	   +55	> scan etalon out 45000 by 200
-#	   +60	> Drive etalon in 10000
-#		+5	> Drive etalon to 28000
-#		+3	> Peakup On
-#	   +10	> scan etalon out 4000 by 20
-#	  +300	> Peakup Off
-#		+3	> Stop Etalon
-#		+1	> Peakup On
-		+1  > set etalon online delta 5
-#		+1	> soldrv select mode 0
-	   	+1	> SW Status Green Peakup Enable
-	   +90	Validate limbo;
+        +1  > power oh cell on
+        +1  > power 28V switched on
+            { diodes_on_requested = 1; }
+        +1  Hold until valid (laser_diodes_on);
+            Validate bellows_eval;
+#      +55  > scan etalon out 45000 by 200
+#      +60  > Drive etalon in 10000
+#       +5  > Drive etalon to 28000
+#       +3  > Peakup On
+#      +10  > scan etalon out 4000 by 20
+#     +300  > Peakup Off
+#       +3  > Stop Etalon
+#       +1  > Peakup On
+        +1  > set etalon online delta 5
+#       +1  > soldrv select mode 0
+        +1  > SW Status Green Peakup Enable
+       +90  Validate limbo;
 }
  
 #----------------------------------------------------------------
-
 # Limbo.  Intermediate state between off_the_ground
 # and above_the_clouds for record, and between
 # below_the_clouds and on_the ground for shutdown.
 #----------------------------------------------------------------
-
 
 State limbo {
   depending on (ABOVE_CLOUDS) { Validate record; }
@@ -164,21 +156,21 @@ State limbo {
 # Record mode. Accessible from limbo.
 #----------------------------------------------------------------
 
-State record NoLog	{
-			depending on (BELOW_CLOUDS) { Validate purgatory; }
-			depending on (ON_GROUND) { Validate purgatory; }
-			depending on (1 Hz) {
-			  depending on (laser_diodes_on ) {}
-			  else Validate scan;
-			}
-			> Drive Etalon Online
-			> Scan Etalon In 75 by 5
-			> Drive Etalon Offline
-			Resume Lab_read;
-		+6	> Drive Etalon Altline
-			> Scan Etalon Out 75 by 5
-		+4	Hold until (EtnFlg == 0);
-			Validate record;
+State record NoLog  {
+      depending on (BELOW_CLOUDS) { Validate purgatory; }
+      depending on (ON_GROUND) { Validate purgatory; }
+      depending on (1 Hz) {
+        depending on (laser_diodes_on ) {}
+        else Validate scan;
+      }
+      > Drive Etalon Online
+      > Scan Etalon In 75 by 5
+      > Drive Etalon Offline
+      Resume Lab_read;
+  +6  > Drive Etalon Altline
+      > Scan Etalon Out 75 by 5
+  +4  Hold until (EtnFlg == 0);
+      Validate record;
 }
 
 #----------------------------------------------------------------
@@ -186,20 +178,20 @@ State record NoLog	{
 # is complete before closing gate valve in state scan.
 # Use 350 torr in the troposphere.
 #----------------------------------------------------------------
-State add_c3f6	{
-			depending on (BELOW_CLOUDS) { Validate purgatory; }
-			depending on (ON_GROUND) { Validate purgatory; }
-			depending on (1 Hz) {
-			  depending on (laser_diodes_on ) {}
-			  else Validate scan;
-			}
-		+1	Validate throttle_medium;
-#		+2	> soldrv select mode 9
-	   +33	Validate throttle_fast;
-#	   +30	> soldrv select mode 4
-		+6	{ if (convert(SD__P) < 350. || Scan_Mode_Always)
-				Validate scan;
-			  else Validate record;	}
+State add_c3f6  {
+            depending on (BELOW_CLOUDS) { Validate purgatory; }
+            depending on (ON_GROUND) { Validate purgatory; }
+            depending on (1 Hz) {
+              depending on (laser_diodes_on ) {}
+              else Validate scan;
+            }
+#       +1  Validate throttle_medium;
+#       +2  > soldrv select mode 9
+#      +33  Validate throttle_fast;
+#      +30  > soldrv select mode 4
+        +6  { if (convert(SD__P) < 350. || Scan_Mode_Always)
+                Validate scan;
+              else Validate record; }
 }
 
 #----------------------------------------------------------------
@@ -216,40 +208,40 @@ State add_c3f6	{
 # 07/26/01 EtPos =2.87 at EtnPs = 32000
 # 07/09/02 EtPos = 3.08 at EtnPs = 36700
 #----------------------------------------------------------------
-State scan	{
-			depending on (BELOW_CLOUDS) { Validate purgatory; }
-			depending on (ON_GROUND) { Validate purgatory; }
-			Hold until valid (laser_diodes_on);
-		+1  Validate valve_close;	
-		+1	Validate throttle_scan;	
-#	   +10  > soldrv select mode 0 
-	   +20	Validate valve_open;	
+State scan  {
+            depending on (BELOW_CLOUDS) { Validate purgatory; }
+            depending on (ON_GROUND) { Validate purgatory; }
+            Hold until valid (laser_diodes_on);
+#       +1  Validate valve_close;   
+#       +1  Validate throttle_scan; 
+#      +10  > soldrv select mode 0 
+#      +20  Validate valve_open;    
 #  we now do some stuff to check laser performance
-		+1	> topaz diode 1 temperature 26.0 C
-		+1	> topaz diode 2 temperature 27.0 C
-		+1	> topaz diode 2 temperature 27.0 C
-	   	+1	Hold until valid (laser_diodes_on);
-		+1  { if (DL_TP < 6500) 
-				ci_sendcmd("Topaz current 17.5 amps\n",0);}
-	   +10  { if (convert(UVMon) > 5.0)
-				ci_sendcmd("Topaz current 17.0 amps\n",0);}  
-		+1	> drive etalon to 36700
-		+5	{ if (convert(EtPos) > 3.40 || convert(EtPos) < 2.80)
-				Validate etalon_init;
-			}
-		+2	Hold until valid (etalon_sit);
-		+1	> Drive Etalon to 29000
-		+1	> Peakup on
-		+1	> set etalon online delta 20
-		+1	> scan etalon out 3000 by 10
+        +1  > topaz diode 1 temperature 26.0 C
+        +1  > topaz diode 2 temperature 27.0 C
+        +1  > topaz diode 2 temperature 27.0 C
+        +1  Hold until valid (laser_diodes_on);
+        +1  { if (DL_TP < 6500) 
+                ci_sendcmd("Topaz current 17.5 amps\n",0);}
+       +10  { if (convert(UVMon) > 5.0)
+                ci_sendcmd("Topaz current 17.0 amps\n",0);}  
+        +1  > drive etalon to 36700
+        +5  { if (convert(EtPos) > 3.40 || convert(EtPos) < 2.80)
+                Validate etalon_init;
+            }
+        +2  Hold until valid (etalon_sit);
+        +1  > Drive Etalon to 29000
+        +1  > Peakup on
+        +1  > set etalon online delta 20
+        +1  > scan etalon out 3000 by 10
 # Make sure scan is longer than throttle scan (3 minutes min.)!
 # Make sure there is enough time to find the line.
-	  +180	> peakup off
-		+3	> stop etalon
-		+1	> peakup on
-		+1	> set etalon online delta 10
-		+1	> drive attenuator to 4000
-		+2	Validate record;
+      +180  > peakup off
+        +3  > stop etalon
+        +1  > peakup on
+        +1  > set etalon online delta 10
+        +1  > drive attenuator to 4000
+        +2  Validate record;
 }
 
 #----------------------------------------------------------------
@@ -258,13 +250,13 @@ State scan	{
 #----------------------------------------------------------------
 
 
-State purgatory	{
-		+1	> peakup off
-		+1	> stop etalon
-#		+1	> soldrv select mode 4
-		+5 	Validate throttle_shut;
-	    +13	> peakup on
-			Validate limbo;
+State purgatory {
+        +1  > peakup off
+        +1  > stop etalon
+#       +1  > soldrv select mode 4
+#       +5  Validate throttle_shut;
+        +13 > peakup on
+            Validate limbo;
 }
 
 #----------------------------------------------------------------
@@ -274,20 +266,20 @@ State purgatory	{
 
 
 State shutdown {
-#		+1	> soldrv select mode 0
-#		+2	> soldrv select mode 4
-		+1	Validate throttle_shut;
-			{ diodes_on_requested = 0;
-			  laser_on_requested = 0;
-			}
-		+5	> power oh cell off
-		+5	> power 28v switched off
-#		+1	Validate valve_close;
-		+1	> power oh cell off
-		+2	> power solenoids and steppers off
-		+5	> telemetry logging suspend
-			> Fail 1
-		+1	> quit
+#       +1  > soldrv select mode 0
+#       +2  > soldrv select mode 4
+#       +1  Validate throttle_shut;
+            { diodes_on_requested = 0;
+              laser_on_requested = 0;
+            }
+        +5  > power oh cell off
+        +5  > power 28v switched off
+#       +1  Validate valve_close;
+        +1  > power oh cell off
+        +2  > power solenoids and steppers off
+        +5  > telemetry logging suspend
+            > Fail 1
+        +1  > quit
 }
 
 PARTITION
@@ -297,37 +289,34 @@ PARTITION
 # SW_St control
 #   Cases handled elsewhere:
 #     1-4   Altitude Control
+#     12-13 [were Adding_C3F6]
 #     20-21 Peakup On/Off (scanning.tma)
-#     22    Static Value to advance within record
+#     22    SWS_TIMEWARP Static Value to advance within record
 #     23-24 Enable/Disable Green Power Peakup (grnpw.tma peakalgo)
-#     25-26 Auto/Off H2O Lamp
+#     25-26 [Auto/Off H2O Lamp]
 #     27    Begin Green Power Scan (grnpw.tma)
 #----------------------------------------------------------------
 
 State SW_Stat_Wait {
   { int reset_it;
-	reset_it = 1;
-	switch (SW_St) {
-	  default:
-	  case 0: reset_it = 0; break;
-	  case 12: Adding_C3F6 = 1; break;
-	  case 13: Adding_C3F6 = 0; break;
-	  case 14: Scan_Mode_Always = 1; break;
-	  case 15: Scan_Mode_Always = 0; break;
-	  case 16: laser_on_requested = 1; break;
-	  case 17: laser_on_requested = 0; break;
-	  case 18: diodes_on_requested = 1; break;
-	  case 19: diodes_on_requested = 0; break;
-	  case 22: break;
-	  case 25: H2O_Lamp_Enable = 1; break;
-	  case 26: H2O_Lamp_Enable = 0; break;
-	  case SWS_PV_CLOSE: break;
-	  case SWS_PV_STEPS: break;
-	  case SWS_PV_PI: break;
-	  case SWS_LAB_READ: Validate Lab_read; break;
-	  case SWS_SHUTDOWN: Validate shutdown; break;
-	}
-	if (reset_it) Validate SW_Stat_Reset;
+    reset_it = 1;
+    switch (SW_St) {
+      default:
+      case 0: reset_it = 0; break;
+      case SWS_SCAN_ALWAYS: Scan_Mode_Always = 1; break;
+      case SWS_SCAN_BY_P: Scan_Mode_Always = 0; break;
+      case SWS_LASER_ON: laser_on_requested = 1; break;
+      case SWS_LASER_OFF: laser_on_requested = 0; break;
+      case SWS_DIODES_ON: diodes_on_requested = 1; break;
+      case SWS_DIODES_OFF: diodes_on_requested = 0; break;
+      case SWS_TIMEWARP: break;
+      case SWS_PV_CLOSE: Validate Pinch_Valve_Close; break;
+      case SWS_PV_STEPS: Validate Pinch_Valve_Steps_Init; break;
+      case SWS_PV_PI: Validate Pinch_Valve_PI_Init; break;
+      case SWS_LAB_READ: Validate Lab_read; break;
+      case SWS_SHUTDOWN: Validate shutdown; break;
+    }
+    if (reset_it) Validate SW_Stat_Reset;
   }
 }
 
@@ -360,8 +349,8 @@ PARTITION
 
 
 %{ /* Bellows constants. Dye_P_Low/High are specified here as
-		Volts times a conversion factor.
-	*/
+        Volts times a conversion factor.
+    */
   AD12_uGg Dye_P_Low  = (AD12_uGg) (5.05 * .1 * 65536.);
   AD12_uGg Dye_P_High = (AD12_uGg) (5.05 * .1 * 65536.);
   IndxrPos Bellows_Drive_Low = 5000;
@@ -370,38 +359,38 @@ PARTITION
 State bellows_idle { }
 State bellows_eval {
   { if (DLH_P < Dye_P_Low) {
-	  msg(0, "Dye laser needs to be pumped up");
-	  validate bellows_pump_up;
-	} else if (DLH_P	> Dye_P_High) {
-	  msg(0, "Dye laser needs to be pumped out");
-	  validate bellows_pump_out;
-	} else {
-	  msg(0, "Dye laser pressure within proper range");
-	  validate bellows_idle;
-	}
+      msg(0, "Dye laser needs to be pumped up");
+      validate bellows_pump_up;
+    } else if (DLH_P    > Dye_P_High) {
+      msg(0, "Dye laser needs to be pumped out");
+      validate bellows_pump_out;
+    } else {
+      msg(0, "Dye laser pressure within proper range");
+      validate bellows_idle;
+    }
   }
 }
 State bellows_pump_up {
-			> Drive bellows out 1000
-		+2	{ if (DLH_P >= Dye_P_Low) {
-			  msg(0, "Dye laser pumped up");
-			  validate bellows_idle;
-			} else if (BlwPs > Bellows_Drive_High) {
-			  msg(2, "Bellows out of drive range during pump-up");
-			  validate bellows_idle;
-			} else validate bellows_pump_up;
-		}
+      > Drive bellows out 1000
+  +2  { if (DLH_P >= Dye_P_Low) {
+	  msg(0, "Dye laser pumped up");
+	  validate bellows_idle;
+	} else if (BlwPs > Bellows_Drive_High) {
+	  msg(2, "Bellows out of drive range during pump-up");
+	  validate bellows_idle;
+	} else validate bellows_pump_up;
+      }
 }
 State bellows_pump_out {
-			> Drive bellows in 1000
-		+2	{ if (DLH_P <= Dye_P_High) {
-			  msg(0, "Dye laser pumped out");
-			  validate bellows_idle;
-			} else if (BlwPs < Bellows_Drive_Low) {
-			  msg(2, "Bellows out of drive range during pump-out");
-			  validate bellows_idle;
-			} else validate bellows_pump_out;
-		}
+      > Drive bellows in 1000
+  +2  { if (DLH_P <= Dye_P_High) {
+	  msg(0, "Dye laser pumped out");
+	  validate bellows_idle;
+	} else if (BlwPs < Bellows_Drive_Low) {
+	  msg(2, "Bellows out of drive range during pump-out");
+	  validate bellows_idle;
+	} else validate bellows_pump_out;
+      }
 }
 
 PARTITION
@@ -410,194 +399,58 @@ PARTITION
 
 #----------------------------------------------------------------
 
-#	This partition converts pressure (altitude) into states (ON_GROUND,
-#	BELOW_CLOUDS, ABOVE_CLOUDS). The threshold pressures each have two
-#	values - one for the flight up and the other for the flight down.
-#	This provides hysteresis and prevents bouncing.  
+#   This partition converts pressure (altitude) into states (ON_GROUND,
+#   BELOW_CLOUDS, ABOVE_CLOUDS). The threshold pressures each have two
+#   values - one for the flight up and the other for the flight down.
+#   This provides hysteresis and prevents bouncing.  
 #----------------------------------------------------------------
 
 #----------------------------------------------------------------
 
 
 %{ /* Altitude definitions */
-	AD12 P_ground_up = (AD12) (580. * .001 * 65536.);
-	AD12 P_ground_dn = (AD12) (650. * .001 * 65536.);
-	AD12 P_clouds_up = (AD12) (350. * .001 * 65536.);
-	AD12 P_clouds_dn = (AD12) (500. * .001 * 65536.);
-	int using_swp = 0;
+    AD12 P_ground_up = (AD12) (580. * .001 * 65536.);
+    AD12 P_ground_dn = (AD12) (650. * .001 * 65536.);
+    AD12 P_clouds_up = (AD12) (350. * .001 * 65536.);
+    AD12 P_clouds_dn = (AD12) (500. * .001 * 65536.);
+    int using_swp = 0;
 %}
 
 # note on 960718 it was 10 min to below the clouds 
 # and +7 min to above the clouds
 
 State ON_GROUND {
-	{ using_swp = 0; }
+    { using_swp = 0; }
     { if ( SW_St == 1 ) {
-		using_swp = 1;
-		Validate SW_Stat_Reset;
-	  }
-	  if (using_swp || (SD__P < P_ground_up))
-		Validate BELOW_CLOUDS;
-	}
+        using_swp = 1;
+        Validate SW_Stat_Reset;
+      }
+      if (using_swp || (SD__P < P_ground_up))
+        Validate BELOW_CLOUDS;
+    }
 }
 
 State BELOW_CLOUDS {
-	{ if ( using_swp && ( SW_St == 2 || SW_St == 4 ) )
-		Validate SW_Stat_Reset;
-	  if ((using_swp && SW_St == 2) ||
-		  (!using_swp && SD__P < P_clouds_up)) {
-		Validate ABOVE_CLOUDS;
-	  } else if ((using_swp && SW_St == 4) ||
-				 (!using_swp && SD__P > P_ground_dn)) {
-		Validate ON_GROUND;
-	  }
-	}
+    { if ( using_swp && ( SW_St == 2 || SW_St == 4 ) )
+        Validate SW_Stat_Reset;
+      if ((using_swp && SW_St == 2) ||
+          (!using_swp && SD__P < P_clouds_up)) {
+        Validate ABOVE_CLOUDS;
+      } else if ((using_swp && SW_St == 4) ||
+                 (!using_swp && SD__P > P_ground_dn)) {
+        Validate ON_GROUND;
+      }
+    }
 }
 
 State ABOVE_CLOUDS {
-	{ if ( using_swp && SW_St == 3 )
-		Validate SW_Stat_Reset;
-	  if ( (using_swp && SW_St == 3) ||
-		  (!using_swp && SD__P > P_clouds_dn))
-		Validate BELOW_CLOUDS;
-	}
+    { if ( using_swp && SW_St == 3 )
+        Validate SW_Stat_Reset;
+      if ( (using_swp && SW_St == 3) ||
+          (!using_swp && SD__P > P_clouds_dn))
+        Validate BELOW_CLOUDS;
+    }
 }
-
-PARTITION
-# PARTITION 6: Valve Control
-#----------------------------------------------------------------
-
-# Valve control is in idle/open/close depending on the
-# state of the pressure switch.
-#----------------------------------------------------------------
-
-
-State valve_close {
-			depending on (ABOVE_CLOUDS,record) { Validate valve_open; }
-			depending on (ABOVE_CLOUDS,flight) { Validate valve_open; }
-#		+5	> scan gate Valve in 30000 by 100
-	+20:00	Validate valve_close;
-}
-
-State valve_open {
-			depending on (BELOW_CLOUDS) { Validate valve_close; }
-			depending on (ON_GROUND) { Validate valve_close; }
-#		+5	> scan gate Valve out 2000 by 100
-#	 +2:00	{ if ( (GtVSt & 2) == 0 )  {
-#				msg(1,"Stupid Gate Valve did not open");
-#					Validate valve_open; }
-#			}  
-}
-
-PARTITION
-# PARTITION 7: const V
-#----------------------------------------------------------------
-
-# 02/28/2000 - Increase RATIO_SETPOINT from 11000 to 13000
-#
-# constv.tma is an algorithm to maintain constant rate of the back
-# reaction of NO2+OH in the secondary duct.
-# To this end, we wish to keep SD_DP/(SD__P^2) constant.
-# When these are measured in volts, the constant we are looking
-#    for is approximately 2.3, although for test purposes, we will
-#    use 1.8 or so.
-# We will subtract 13 torr from the pressure
-# Both are 12-bit values at 1 Hz
-# If we are above the constant, we want to close down the throttle
-# If we are below the constant, we want to open up the throttle
-# We will make a decision once every 30 seconds working with
-#    averaged data.
-# We will only take such action above_the_clouds (when the
-#    gate valve is open)
-# We will drive 25 steps - 50 steps as of 110295
-# I will sum 30 values of SD_DP and SP__P into DP_sum and P_sum
-# I will then calculate (DP_sum * 2048)/(((P_sum/(30*16))-P0)^2)
-#  where P0 is the offset in torr * 4096/1000 = 13 torr * 4.096 = 53
-#----------------------------------------------------------------
-
-%{ /* definitions */
-  unsigned short P0 = (unsigned short) (13 * 4.096);
-  /* int n_p_rats = 0; */
-  /* unsigned long DP_sum = 0, P_sum = 0; */
-  #define RATIO_SETPOINT 13000
-  /* #define STVPs_MIN 2500 */
-%}
-
-#----------------------------------------------------------------
-
-# Throttle control subroutine.
-#----------------------------------------------------------------
-
-
-State throttle_init	{
-			Hold until valid (ABOVE_CLOUDS);
-			Validate STV_Sit;
-}
-
-State STV_Sit {
-  depending on (record) { Validate STV_reset_ct; }
-}
-
-State STV_reset_ct {
-  {	/* DP_sum = P_sum = n_p_rats = 0; */
-	validate STV_regulate;
-  }
-}
-
-#----------------------------------------------------------------
-# These states drive the throttle to a particular position
-# and then go to STV_Sit. STV_Sit will return to regulation
-# as soon we get to state record, so if these are used within
-# record, they will not establish a fixed position, though they
-# may help to reach the regulated velocity more quickly if we
-# have a good guess of the correct position.
-# Usually these are called from scan or add_c3f6 or another
-# non-record full-operational state.
-#----------------------------------------------------------------
-State STV_OFF	{
-#			> drive secondary throttle to 3500
-}
-State throttle_fast	{
-#			> drive secondary throttle to 3500
-			Validate STV_Sit;
-}
-State throttle_medium	{
-#			> drive secondary throttle to 2500
-			Validate STV_Sit;
-}
-State throttle_slow	{
-#			> drive secondary throttle to 1000
-			Validate STV_Sit;
-}
-State throttle_shut	{
-#			> drive secondary throttle in 65000
-			Validate STV_Sit;
-}
-State throttle_scan	{
-	  3:00	Validate STV_reset_ct;
-}
-
-State STV_regulate {
-#  { n_p_rats++;
-#	DP_sum += SD_DP;
-#	P_sum += SD__P;
-#	if (n_p_rats >= 30) {
-#	  P_sum = (P_sum/(30*16)) - P0;
-#	  P_sum *= P_sum;
-#	  DP_sum = (DP_sum*2048)/P_sum;
-#	  msg(-4, "Ratio value is %u", DP_sum);
-#	  if (DP_sum > RATIO_SETPOINT) {
-#		if (STVPs_ > STVPs_MIN)
-#		  ci_sendcmd("Drive Secondary Throttle In 50\n", 2);
-#	  } else ci_sendcmd("Drive Secondary Throttle Out 50\n", 2);
-#	  DP_sum = P_sum = n_p_rats = 0;
-#	}
-#  }
-  depending on (BELOW_CLOUDS) { Validate STV_sit; }
-  depending on (1 Hz) { if (convert(SD_DP) < 0.03)
-	Validate STV_OFF;	}
-}
-
 
 PARTITION
 # PARTITION 8: Etalon
@@ -613,20 +466,20 @@ PARTITION
   static int init_count=0, init_limit=3;
 %}
 
-state etalon_sit	{	}
+state etalon_sit    {   }
 
-state etalon_init	{
-		+1  > drive etalon out 10000
-		+5	> drive etalon in 65000
-		+5	> drive etalon in 65000
-		+5	> drive etalon out 6400
-		+5	{ if ((EtnPs < 3900) || (EtnPs > 5600))	{
-				int zero_pos;
-				zero_pos=EtnPs;
-				msg(1,"Etalon zero position out of range EtnPs=%d",zero_pos);
-			  }
-			}
-		+5	> drive etalon to 15000
+state etalon_init   {
+        +1  > drive etalon out 10000
+        +5  > drive etalon in 65000
+        +5  > drive etalon in 65000
+        +5  > drive etalon out 6400
+        +5  { if ((EtnPs < 3900) || (EtnPs > 5600)) {
+                int zero_pos;
+                zero_pos=EtnPs;
+                msg(1,"Etalon zero position out of range EtnPs=%d",zero_pos);
+              }
+            }
+        +5  > drive etalon to 15000
 #
 # 04/26/97 etalon_pos at 15,000 is 4.57 V.  Set range to +/- 1000 steps
 # 06/14/99 etalon_pos at 15,000 is 4.53 V.
@@ -634,17 +487,16 @@ state etalon_init	{
 # 02/22.01 etalon_pos at 15,000 is 4.42 V
 # 07/09/02 etalon_pos at 15,000 is 5.57 V
 #
-		+5	{ if ((EtPos<(5.00*.1*65536)) || (EtPos>(6.00*.1*65536))) {
-				float etalon_pos;
-				etalon_pos=EtPos;
-				etalon_pos=(etalon_pos*10)/65536;
-				msg(1,"Etalon voltage out of range EtPos=%f",etalon_pos);
-				if (++init_count < init_limit) validate etalon_init;
-				else validate etalon_sit;
-			  }
-			}
-		+1	Validate etalon_sit;
+        +5  { if ((EtPos<(5.00*.1*65536)) || (EtPos>(6.00*.1*65536))) {
+                float etalon_pos;
+                etalon_pos=EtPos;
+                etalon_pos=(etalon_pos*10)/65536;
+                msg(1,"Etalon voltage out of range EtPos=%f",etalon_pos);
+                if (++init_count < init_limit) validate etalon_init;
+                else validate etalon_sit;
+              }
+            }
+        +1  Validate etalon_sit;
 }
 
 #----------------------------------------------------------------
-

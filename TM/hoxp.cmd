@@ -86,27 +86,23 @@
 	;
 
 &SWFlags <int>
-	: Altitude Takeoff, eh? { $0 = 1; }
-	: Altitude Cruise { $0 = 2; }
-	: Altitude Descend { $0 = 3; }
-	: Altitude Land { $0 = 4; }
-	: C3F6 Addition Enable { $0 = 12; }
-	: C3F6 Addition Disable { $0 = 13; }
-	: Scan Mode Always { $0 = 14; }
-	: Scan Mode By Pressure { $0 = 15; }
-	: Diodes On { $0 = 18; }
-	: Diodes Off { $0 = 19; }
-	: File Read { $0 = 200; }
-	: H2O Lamp Enable { $0 = 25; }
-	: H2O Lamp Off { $0 = 26; }
-	: Laser Power On { $0 = 16; }
-	: Laser Power Off { $0 = 17; }
-	: Peakup On { $0 = 20; }
-	: Peakup Off { $0 = 21; }
-	: Proceed { $0 = 22; }
-	: Green Peakup Enable { $0 = 23; }
-	: Green Peakup Disable { $0 = 24; }
-	: Green Peakup Scan { $0 = 27; }
+	: Altitude Takeoff, eh? { $0 = SWS_TAKEOFF; }
+	: Altitude Cruise { $0 = SWS_CRUISE; }
+	: Altitude Descend { $0 = SWS_DESCEND; }
+	: Altitude Land { $0 = SWS_LAND; }
+	: Scan Mode Always { $0 = SWS_SCAN_ALWAYS; }
+	: Scan Mode By Pressure { $0 = SWS_SCAN_BY_P; }
+	: Diodes On { $0 = SWS_DIODES_ON; }
+	: Diodes Off { $0 = SWS_DIODES_OFF; }
+	: File Read { $0 = SWS_LAB_READ; }
+	: Laser Power On { $0 = SWS_LASER_ON; }
+	: Laser Power Off { $0 = SWS_LASER_OFF; }
+	: Peakup On { $0 = SWS_PKUP_ON; }
+	: Peakup Off { $0 = SWS_PKUP_OFF; }
+	: Proceed { $0 = SWS_TIMEWARP; }
+	: Green Peakup Enable { $0 = SWS_GRNPK_ON; }
+	: Green Peakup Disable { $0 = SWS_GRNPK_OFF; }
+	: Green Peakup Scan { $0 = SWS_GRNPK_SCAN; }
 	: Pinch Valve Close { $0 = SWS_PV_CLOSE; }
 	: Pinch Valve Regulate by Steps { $0 = SWS_PV_STEPS; }
 	: Pinch Valve Regulate by PI { $0 = SWS_PV_PI; }
