@@ -13,16 +13,17 @@
 # soldrv and nav go down here so they can talk to DG
 #  I'm not using nav -C so we can test nav with navtest
 #----------------------------------------------------------------
- Launch -             soldrv -v -c0 -h "OH" laser.sft
- Launch -             soldrv -v -c0 -h "H2O" h2o.sft
 #					  if [ -z "$launch_error" ]; then
 #					   nav -c0 -vs /dev/ser1 &
 #					   namewait -p $! -t 20 nav
 #					  fi
+ Launch -             soldrv -v -c0 -h "OH" laser.sft
+ Launch -             soldrv -v -c0 -h "H2O" h2o.sft
+ Launch -             topaz -vc0 /dev/ser2
 
  Launch db            bfr -v -c0
  Launch -             idx64 -v -c0 `cat idx.idx64`
-#Launch -             peakalgo -v -c0 -b0 -i1 -H45000 -L25000
+ Launch -             peakalgo -v -c0 -b0 -i1 -H45000 -L25000
 
 # The command server
  Launch cmdinterp     hoxpsrvr -v -c0
