@@ -29,7 +29,13 @@
 %{
   int Scan_Mode_Always = 1;
   int Etalon_Scanmode_Requested = 0;
+  double last_scan_time = 0;
+  IndxrPos last_altline = 0;
 %}
+
+{ double EtnStep_delta; Invalidate EtnStep_delta;
+  { EtnStep_delta = convert(EtPos) - EtnPs; Validate EtnStep_delta; }
+}
 
 #----------------------------------------------------------------
 # Initialize power supplies & set gates
@@ -166,7 +172,17 @@ State scan  {
 
 State scanning {
     depending on (ON_GROUND) { Validate shutdown; }
-    { if ( EtnSt & 1 ) Validate reset_etalon; }
+    { last_scan_time = dtime(); }
+    { if ( EtnSt & 1 ) {
+	msg( 2, "Etalon hit in limit during scan" );
+	Validate reset_etalon;
+      }
+    }
+    { if ( EtnStep_delta < -1000 || EtnStep_delta > 1000 ) {
+        msg( 2, "Observed large etalon delta during scan: %lf", EtnStep_delta );
+	Valildate reset_etalon;
+      }
+    }
 
     Hold until ( EtnFlg == IXFLAG_OFFLINE ) or 300
     else Validate scan_failed;
@@ -219,10 +235,32 @@ State record {
         else Validate scan;
       }
       { Etalon_Scanmode_Requested = 1; }
+      { if ( EtnSt & 1 ) {
+	  msg( 2, "Etalon hit in limit during record" );
+	  Validate reset_etalon;
+	}
+      }
+      { if ( EtnStep_delta < -1000 || EtnStep_delta > 1000 ) {
+	  msg( 2, "Observed large etalon delta during record: %lf", EtnStep_delta );
+	  Valildate reset_etalon;
+	}
+      }
+      { if ((EtnFlg & IXFLAG_ALTLINE) == IXFLAG_ONLINE && last_altline != 0) {
+	  if (EtnPs > last_altline ||
+	      (last_altline - EtnPs) < 820 ||
+	      (last_altline - EtnPs) > 1020 ) {
+	    ci_sendcmd( "Set Etalon Altline Delta 910\n", 0 );
+	    msg( 1, "Resetting Altline Delta" );
+	  }
+	}
+      }
+      { if ((EtnFlg & IXFLAG_ALTLINE) == IXFLAG_ALTLINE)
+	  last_altline = EtnPs;
+      }
 
       > SW Status Green Peakup Enable
-      Hold until ( SW_St == SWS_TIMEWARP && Scan_Mode_Always )
-       or 55:00;
+      Hold until ( Scan_Mode_Always &&
+         ((dtime()-last_scan_time > 55*60) || SW_St == SWS_TIMEWARP) );
       Validate scan;
 }
 
