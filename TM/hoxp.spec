@@ -25,7 +25,7 @@ TGTDIR = $(TGTNODE)/home/hoxp
 OBJ = hox2.cfg
 
 hoxpcol : hoxcol.tmc h2ocol.tmc nav.tmc navcol.tmc idxcol.tmc handler.c topaz.c topazcol.tmc
-hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc hox.tbl hox1.tbl topaztxt.c
+hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc flttime.tmc hox.tbl hox1.tbl topaztxt.c
 hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma
 laser.sft : hox.slp laser.sol
 hoxrtgext : rtgcorr.tmc PSD.tmc hox.tmg
