@@ -1,5 +1,6 @@
 # Hox GSE w/o algorithm w/ windows
 display hoxdisp hox hox1 hox2
+colorconfig hox.cfg
 client hoxpclt
 memo
 extraction hoxrtgext
