@@ -91,7 +91,6 @@ State initialize {
 #----------------------------------------------------------------
 
 state instrument_start {
-      { laser_on_requested = 1; }
   +1  Validate Pinch_Valve_Close;
   +1  > drive attenuator in 6500
   +3  > drive attenuator out 320
@@ -120,7 +119,10 @@ State flight    {
 
   +1  > power oh cell on
 #     > power 28V switched on
-      { diodes_on_requested = 1; }
+      { laser_on_requested = 1;
+        diodes_on_requested = 1;
+      }
+      "Holding for Diodes On";
   +1  Hold until valid (laser_diodes_on);
       Validate bellows_eval;
  +55  > Drive etalon to 25000

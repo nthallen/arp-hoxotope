@@ -19,7 +19,7 @@ PARTITION
   int lhx_overtemp = 0;
 %}
 
-{ if ( convert(LHX1T) > 75. ) lhx_overtemp = 1; }
+{ if ( convert(LHX1T) > 68. ) lhx_overtemp = 1; }
 
 # Validate laser failed instead of laser_eval;
 State dye_pump_start {
