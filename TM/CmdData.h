@@ -1,3 +1,5 @@
+#ifndef CMDDATA_H_INCLUDED
+#define CMDDATA_H_INCLUDED
 /* CmdData.h defines data passed from command server to
    collection.
 */
@@ -28,3 +30,5 @@ typedef struct {
 #define SWS_PV_PI 32
 #define SWS_LAB_READ 200
 #define SWS_SHUTDOWN 255
+
+#endif

@@ -173,8 +173,8 @@ State Pinch_Valve_Scan {
     > Drive Pinch Valve In 4000
     Hold Until ( PVStat & 1 ) or 6
     else Validate Pinch_Valve_Failure;
-    > Scan Pinch Valve Out 4000 By 100;
-    > Scan Pinch Valve In 4000 By 100;
+    > Scan Pinch Valve Out 4000 By 100
+    > Scan Pinch Valve In 4000 By 100
     Hold Until ( ! (PVStat & 1) ) or 5;
     Hold Until ( PVScan == 0 ) or 40;
 
