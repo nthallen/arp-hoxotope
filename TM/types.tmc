@@ -254,6 +254,12 @@ TM typedef AD12 AD12_CTORR { convert TORR; text "%6.2lf"; }
 	65536,  200.0
   }
 
+TM typedef AD12 AD12_DDTORR { convert TORR; text "%5.2lf"; }
+  Calibration (AD12_DDTORR, TORR) {
+        0,      0,
+    65536, 20.000
+  }
+
 TM typedef UINT Ct16 { collect x = sbwa(x.address); }
 TM typedef UINT DA_SPt { collect x = 0xFFF & sbwa(x.address); text "%4d"; }
 TM typedef unsigned char DStat {
