@@ -13,6 +13,7 @@ SRC = ohf.h CmdData.h laserlab.sol
 
 TOOL = hoxp.idx rcs2html.dat
 
+CLEANDIST
 MNC = hoxpcrnt
 DISTRIB = hox.cfg hox1.cfg h2o.cfg
 TGTDIR = $(TGTNODE)/home/hoxp
