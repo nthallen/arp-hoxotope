@@ -60,7 +60,7 @@ State initialize {
 		+1  > OH adjGate 1a width set 255
 		+1  > OH adjGate 1b delay set 0
 		+1  > OH adjgate 1b width set 255
-		+1  > OH adjGate 2a delay set 0
+		+1  > OH adjGate 2a delay set 150
 		+1  > OH adjGate 2a width set 255
 		+1  > OH adjGate 2b delay set 0
 		+1  > OH adjgate 2b width set 20
