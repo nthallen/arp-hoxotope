@@ -1,20 +1,15 @@
 NGtCt32 SX1BG;
 invalidate SX1BG;
-depending on (SX1NG once, SX1FG once) {
-  SX1BG = convert(SX1NG) - SX1FG; validate SX1BG;
-}
+{ SX1BG = convert(SX1NG); validate SX1BG; }
+
 NGtCt32 SX2BG;
 invalidate SX2BG;
-depending on (SX2NG once, SX2FG once) {
-  SX2BG = convert(SX2NG) - SX2FG; validate SX2BG;
-}
+{ SX2BG = convert(SX2NG); validate SX2BG; }
+
 NGtCt32 SOCBG;
 invalidate SOCBG;
-depending on (SOCNG once, SOCFG once) {
-  SOCBG = convert(SOCNG) - SOCFG; validate SOCBG;
-}
+{ SOCBG = convert(SOCNG); validate SOCBG; }
+
 NGtCt32 LABBG;
 invalidate LABBG;
-depending on (LABNG once, LABFG once) {
-  LABBG = convert(LABNG) - LABFG; validate LABBG;
-}
+{ LABBG = convert(LABNG); validate LABBG; }
