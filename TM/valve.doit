@@ -1,0 +1,9 @@
+# Hox GSE w/ algorithm w/ windows
+batchfile runfile.valve
+display hoxdisp hox hox1 hox2
+client hoxpclt
+memo
+algorithm valvealgo -p
+extraction hoxrtgext
+algorithm prtgext -p
+rtg //35/home/hoxp/hox.rtg
