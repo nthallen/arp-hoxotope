@@ -13,3 +13,8 @@ Proxy NOPre {
   D: OH NO FLOW PRESET 3
   E: OH NO FLOW PRESET 4
 }
+Proxy Bellow {
+  O: OH Drive Bellows Online
+  _: OH Drive Bellows Offline
+  +: OH Drive Bellows Altline
+}
