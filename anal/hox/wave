@@ -1,0 +1,17 @@
+#! /bin/sh
+#__USAGE
+#%C <date>
+# WAVE
+# HOx Oh cell signal data.
+# Created 6/1996 by Eric Lanzendorf
+# Modified for POLARIS 4/1997, for SOLVE 10/1999
+# > input flight day <
+# (example: wave 960718)
+#
+where=//35/home/hoxp/anal/housekeep
+jessica=//41/dos/d/solve/flight
+sps2mat -b$where/sigwave.inp
+sps2mat -b$where/ohcellwave.inp
+sps2mat -b$where/pressurewave.inp
+#mkdir $jessica/$1
+#mv *.mat $jessica/$1

@@ -1,0 +1,16 @@
+; ---------------------------------------------------------------------------
+; ohcellwave.inp
+;
+; sps2mat batch file used for looking at raw data from the axes
+;
+;----------------------------------------------------------------------------
+ohcell
+0
+timeohcl
+2
+
+6
+
+
+ohcellwv
+All

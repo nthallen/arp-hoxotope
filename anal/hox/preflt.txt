@@ -1,0 +1,310 @@
+FLIGHT CHECKLIST -- HARVARD HOx EXPERIMENT
+
+This document is intended to tabulate the operations on and
+around the ER-2 OH/H2O. Version 960719
+revised 970922 for POLARIS.
+
+In Lab:
+
+check etalon zeros
+check baratron zeros
+sd__p
+sd__p2
+sd_dp
+
+check bellows zeros
+check bellows range
+check dye laser pressure
+
+
+MATERIAL REQUIRED:
+
+Computers & Peripherals:
+
+     [ ] GSE
+     [ ] network cable
+	 [ ] rolly cart
+
+Electrical:
+
+     [ ] Extension cord.
+     [ ] AC plug strip
+     [ ] DVM 
+
+TEC/Diode Assembly GSE Equipment:
+
+     [ ] Chiller and hoses for TFR cooling
+     [ ] GSE Heat Exchanger
+
+Tools:
+
+     [ ] Torque-set screwdriver
+     [ ] allen drivers
+     [ ] diagonal cutters
+     [ ] socket set
+     [ ] Flashlight
+
+Miscellaneous:
+
+     [ ] NO Detector
+     [ ] Thermal blanket & straps for nose
+     [ ] Wire Lift tackles (2) & Aft chain lift (1)
+     [ ] "ears"
+     [ ] Tie-Wraps  misc. sizes
+     [ ] Balloon tape
+	 [ ] Access plate (may be in hanger)
+	 [ ] Screws for plates, incl. 1/4 28 FH (4)
+
+
+PRE-ROLL TO HANGER
+
+Gas Systems:
+
+Air:
+     [ ] Fill to 2200 psi; Verify: ________ psi
+     [ ] Fill valve CLOSED
+     [ ] High pressure valve OPEN
+     [ ] Low pressure valve OPEN
+
+NO:
+     [ ] Check bottle pressure: > 25 psi/hour; Verify: ________ psi
+     [ ] High pressure valve CLOSED
+     [ ] Low pressure valve CLOSED
+
+TIME COMPLETED: __________
+
+
+PRE-INSERTION INTO NOSE
+
+In Nose:
+     [ ] Dress of fixed Nose cables checked
+     [ ] Power connector from Nose DP propped up above
+     [ ] MMS cables & hoses clear
+     [ ] Dress of (2) fixed Tygon drains - plenum & Turn 1
+
+Upper Plenum, inside (if previously removed)
+
+	 [ ] Secondary Valve / duct installed
+     [ ] All duct attach screws in
+     [ ] Secondary deflector installed
+     [ ] Primary deflector installed
+     [ ] Louver cover installed
+
+On Fork Lift:
+
+     [ ] HOX lift in use
+
+HOx Instrument:
+	 [ ] Verify 2 switches on PC Distribution panel in
+		 up position for flight
+     [ ] Plastic removed from snout
+	 [ ] Secondary Duct plug removed
+     [ ] Snout gasket in place
+     [ ] Cables on rack checked for dress (for slide-in)
+         Note particularly diode assembly cabling
+     [ ] Wire lift slings (2) installed
+	 [ ] Aft Lift Chain Installed 
+	 [ ] Sec. Duct clips swung aside and secured with rubber band
+     [ ] "ear spacers" in place
+
+TIME COMPLETED: ___________
+
+
+AFTER NOSE INSERTION; PRE-FUNCTIONAL
+
+
+     [ ] Verify (2) wire slings, aft-chain removed
+     [ ] 2-Main rack securing screws installed
+     [ ] Clips closed on Secondary Duct attach
+     [ ] Nose DP- Make up P33 (tab forward)
+     [ ] Nose DP- Make up P35 (tab forward)
+     [ ] P.S. power cable J30 (Secondary Duct Throttle)
+	 [ ] Connector for Thermistor cable (PAFF1-7) P126
+     [ ] Dress of reservoir "O" ring checked
+     [ ] TEC/Diode assembly external screws installed
+     [ ] Drains (3) made up to "T's" at lower window
+     [ ] NO sensor inserted, or hanging below skin
+    
+TFR Reservoir:
+
+     [ ] GSE heat exchanger attached
+	 [ ] Neslab on; Temp. = 15 degrees; Verify circulation
+
+Airplane connections: 
+
+   BEFORE CONNECTING
+     [ ] Open Circuit check: 3 phase and 28 VDC: Pin-out and Polarity
+     [ ] Verify Instrument Arming connector removed 
+     [ ] Verify NO Arming connector removed
+
+   Plug in:
+	 [ ] Verify cockpit switches off (Nose Power, HOx Operate)
+     [ ] J139 28VDC
+     [ ] J137 Cockpit interface
+     [ ] J138 3 phase
+     [ ] J136 BNC Nav
+     [ ] Install Instrument Arming connector
+
+GAS:
+     Air: NOTE:  [ ] Lab. Air        [ ] Flight Air
+
+          [ ] Air high pressure & low pressure OPEN
+          [ ] Verify High: ________ psi; Low: ________ psi
+
+
+READY FOR PRE-FLIGHT FUNCTIONAL TEST - - - 
+
+	First:
+
+    	 [ ] Verify network connection to GSE
+  		 [ ] pdoit (interactive) or pdoit not
+		 [ ] Nose Power on
+		 [ ] HOx Operate on
+		 [ ] Check Secondary Valve;  [ ] Step #2500 = 3.95V
+		 [ ] Close secondary throttle valve
+		 [ ] Power Solenoids and Steppers off
+	Check Cockpit Switches:
+		 [ ] Check FAIL
+
+         [ ] Quit and reduce
+         [ ] diff hox.tma, laser.tma & laser.sol
+         [ ] Check pressure switch vs forecast. 
+             eg, is above_clouds_P above clouds?
+		 [ ] If flight is stair-step "scan mode always on"
+			 If flight is cruise "scan mode always off"
+
+	Second:  Pre-flight laser functional
+	
+	 [ ] pdoit algo (or whatever)
+	 [ ] Exit and reduce
+	 [ ] check disk space  (df [ ] < xx % )  _______
+	 [ ] settime -u
+	 [ ] flttime 
+	 [ ] Operate off
+	 [ ] Nose power off
+
+TIME COMPLETED: __________
+
+
+PRE-ROLLOUT
+
+BEFORE NOSE CLOSURE:
+
+Mechanical:
+
+     [ ] GSE heat exchanger removed, Neslab rolled away
+     [ ] 1/4-28 set screws installed into heat exchanger bottom
+     [ ] Check Drains
+     [ ] Final visual inspection
+     [ ] NO sensor clear of nose cart
+
+Electrical:
+
+     [ ] Close flash card insulation flap
+     [ ] Final visual inspection
+     [ ] Verify Instrument Arming plug IN
+     [ ] Visual inspect NO system for safety
+
+Air: 
+	 [ ] Disconnect Lab Air (if req'd)
+  Flight Supply
+	 [ ] High Press ON                 [ ] High Press: _______psi
+	 [ ] Low Press Valve OPEN          [ ] Low Press : _______psi
+     [ ] Diode assembly purge valve OPEN
+
+Nose Closure:
+
+     [ ] Inform flight crew of readiness
+
+TIME COMPLETED: __________
+
+
+BEFORE ROLL OUT:
+
+     [ ] Thermal blanket installed on Nose, straps in place
+	 [ ] Heat exchanger screws in place
+	 [ ] Access panel & screw bag in place
+
+
+PRE-TAKEOFF
+
+Approximately 45 minutes before take-off:
+
+	 [ ] Obtain Crew Chief approval to arm NO system
+ 
+NO System:
+     
+	 [ ] Check for no NO, then remove Sensor
+     [ ] Latch flow limit valve OPEN (down)
+     [ ] Verify high pressure:   ________ psi
+     [ ] Verify high pressure valve ON
+     [ ] Turn low pressure valve ON
+     [ ] Verify low pressure:    ________ psi
+     [ ] RELEASE flow limit valve (up)
+     [ ] Install NO Arming connector
+     [ ] Check for no NO leakage, then remove sensor
+
+[ ] Install Starboard access panel
+[ ] Verify all screws in place on lower window
+
+[ ] Clear with Crew Chief and leave area
+
+
+TIME COMPLETED: __________
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+POST LANDING
+
+ON APRON, AFTER ENGINE SHUT-DOWN:
+
+     [ ] Clear with Crew Chief to approach aircraft
+
+NO System: 
+
+     [ ] Remove starboard access panel
+     [ ] Verify NO safety with sensor
+     [ ] High pressure valve OFF
+     [ ] Low pressure valve OFF
+     [ ] Remove NO Arming and Instrument connectors
+     [ ] Verify High pressure: _______psi
+     [ ] Verify low pressure:  _______psi
+     [ ] Remove flashcard
+
+[ ] Verify Closure Valve CLOSED
+
+[ ] Install Nose plug, if available
+
+TIME COMPLETED: __________
+
+
+POST-RETURN TO HANGER
+
+	[ ] Install nose cart (Lockheed)  
+	[ ] Check placement wrt heat exchanger
+	[ ] Break Nose attachment (Lockheed)
+
+AIR:
+	
+	[ ] Air High Pressure: ______ psi; Low Pressure: ______ psi.
+
+[ ] Visual inspection of instrument: Condition, moisture, etc.
+     Comments:___________________________________________________
+          _______________________________________________________
+          _______________________________________________________
+
+
+REMOVAL from NOSE
+
+	[ ] Undo secondary duct clips
+	[ ] Disconnect P33, P35 and P30 from nose DP
+	[ ] Disconnect P126 (Thermistor cable) from nose DP
+	[ ] Disconnect and secure drain hoses 
+	[ ] Remove heat exchanger screws
+	[ ] Rest heat exchanger on support
+	[ ] Remove 2-rack securing screws
+	[ ] slide instrument out to CG mark
+	[ ] install fore (2) and aft (1) chain lifts
+

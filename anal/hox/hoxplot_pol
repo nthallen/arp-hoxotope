@@ -1,0 +1,20 @@
+# HOXPLOT
+# script to create 16 second average of HOx Housekeeping data.
+# input flight day
+# Oct 1995
+# modified June 1996
+#modified for POLARIS April 1997
+where=/home/hoxp/anal/housekeep
+snafu -b$where/tavg.inp
+sps2mat -b$where/tcavg2m.inp
+sps2mat -b$where/tfavg2m.inp
+sps2mat -b$where/tsavg2m.inp
+sps2mat -b$where/htgas2m.inp
+sps2mat -b$where/lsrsys2m.inp
+sps2mat -b$where/lsrstpt2m.inp
+sps2mat -b$where/lsrrdy2m.inp
+sps2mat -b$where/press2m.inp
+sps2mat -b$where/ind2m.inp
+sps2mat -b$where/power2m.inp
+sps2mat -b$where/nav2m.inp
+#cp *.mat /dos/c/polaris/flight/$1

@@ -1,0 +1,216 @@
+; lifeoh2.inp
+; snafu -blifeoh2.inp [ n from to ]
+;  Where:
+;    n is an integer used to identify the output file
+;  from to are times
+; Performs linear regression
+;----------------------------------------------------------------
+; lifeoh2.inp is responsible for
+;   a) Locating the rising edge of the laser pulse for this range
+;   b) Performing a linear regression on the OH decay to
+;      calculate the lifetime
+;   c) Producing output sufficient to determine
+;        a, b and sigmab for lifetime
+;        Location of rising edge
+;-Strategy-------------------------------------------------------
+; I will first determine the maximum value of lifediff[2], MOH
+; for all time. Then I will search through the specified time
+; to locate the smallest gate value (lifediff[1]) for which
+; V0 MOH maximum value of OHLife (lifediff[2]) for all time
+; V1 M1 = MOH*.5 V2 M2 = MOH*.8
+; V3 G1 = min value of Gt2BDly (lifediff[1]) within range for which
+;      OHLife>M1
+; V4 G2 = min value of Gt2BDly (lifediff[1]) within range for which
+;      OHLife>M2
+; V5 G3 = G1 + 50
+; Then I'll use those numbers to do two linear regressions
+;  One for OHLife>.001 && Gt2BDly < G2, the rising edge
+;  One for Gt2BDly > G3 && OHLife > 0
+;----------------------------------------------------------------
+; Now pick up the lifeoh3 and 4 portions
+; Create lifeOH$(n) of width 3
+; Merge from lifediff
+; Calculate Curve(s)
+; Merge from lifeOH$(n) into lifeOHtau row 0 to row 0
+; Insert Tau, sigTau, Rise
+;----------------------------------------------------------------
+$=(n)|$(0)|
+$=(range)|$?(n)/Times
+$(1)
+$(2)/All/|
+$=(orange)|$?(n)/from time $(1) $(2)//|
+$=(stime)|$?(n)/$(1)//|
+Data
+Operate lifediff
+; Determine MOH(V0)
+Initialize 0 -1
+Define Conditional
+((isnum(C2))&&(C2>V0))
+V0=C2
+
+; Calculate M1(V1) and M2(V2)
+Operate
+Define Operation
+V1=V0*.5
+Define Operation
+V2=V0*.8
+Operate From Row 0 0
+; Find G1(V3) and G2(V4)
+Initialize 3 300
+Initialize 4 300
+Define Conditional
+((isnum(C2))&&(C2>V1)&&(C1<V3))
+V3=C1
+
+Define Conditional
+((isnum(C2))&&(C2>V2)&&(C1<V4))
+V4=C1
+
+Operate $(orange)
+; Define G3 (V5) = G1(V3)+50
+Define Operation
+V5=V3+50
+Operate From Row 0 0
+Set %%.10le
+Define Macro G1 3
+Define Macro G2 4
+Define Macro G3 5
+;----------------------------------------------------------------
+; Now separate out the rising edge into C6:
+;----------------------------------------------------------------
+Define operation
+C6=NaN
+Define conditional 
+((isnum(C2))&&(C1<V4)&&(C2>.001))
+C6=C2
+
+Operate $(orange)
+Quit
+$=(cmderr)//Linear lifediff
+6
+1
+$(range)
+$?(cmderr)||Quit
+|;
+$=(rise)/$(lr_a)/$=(rslope)/$(lr_b)/;
+Operate lifediff
+Define operation
+C6=NaN
+Define conditional 
+((isnum(C2))&&(C1>$(G3))&&(C2>0))
+C6=log(C2)
+
+Operate $(orange)
+Quit
+$=(cmderr)//Linear lifediff
+1
+6
+$(range)
+$?(cmderr)||Quit
+|;
+$=(a)/$(lr_a)/$=(b)/$(lr_b)/$=(sigb)/$(lr_sb)/;
+
+;----------------------------------------------------------------
+; Now pick up the lifeoh3 and 4 portions
+; Create lifeOH$(n) of width 3
+; Merge from lifediff
+; Calculate Curve(s)
+; Insert Tau, sigTau, Rise
+;----------------------------------------------------------------
+$=(lifeSS)|lifeOH$(n)|
+$=(CLOBBE)/y/Create $(lifeSS) 3 
+Data 
+Merge lifediff $(lifeSS)
+1
+2
+1
+
+.5
+All
+Average
+$=(CLOBBE)/y/lifeOHtmp$(n)
+$(range)
+Operate $(lifeSS)
+Define Operation
+C2=NaN
+$?(rise)|Define Conditional
+((C0>=$(rise))&&(C0<=$(G2)))
+C2=(C0-$(rise))/$(rslope)
+
+||
+Define Conditional
+(C0>$(G3))
+V0 = ($(a))+C0*($(b))
+V0 = NaN
+Define Conditional
+(isnum(V0))
+C2 = exp(V0)
+
+Operate
+Define Operation
+V0=(-1)/($(b))
+Define Operation
+V1=($(sigb))*V0*V0
+Operate From Row 0 0
+Set %%.10le
+Define Macro tau 0
+Define Macro dtau 1
+;Show Variable 0
+;Show Variable 1
+Quit
+
+Sedit $(lifeSS)
+Jump Column 2
+Set Column Title OHCurve
+Set Column Format %%9.6lf
+File
+;----------------------------------------------------------------
+; Get the time value for the start of this region
+;----------------------------------------------------------------
+Sedit lifediff
+$?(stime)|Time $(stime)||
+Set Column Format %%11.0lf
+Define T0
+Set Column Format %%11.9lt
+File
+$=(cmderr)//
+Sedit lifeOHtau
+$=(create)|$?(cmderr)/y//|;
+$=(JC)|Jump Column|
+$=(SCT)|Set Column Title|
+$=(SCF)|Set Column Format|
+$?(create)|$=(CLOBBE)/y/Create lifeOHtau 4
+Sedit lifeOHtau
+$(JC) 0
+$(SCT) Time
+$(SCF) %%17.6ly
+$(JC) 1
+$(SCT) Tau
+$(SCF) %%6.2lf
+$(JC) 2
+$(SCT) dTau
+$(SCF) %%6.2lf
+$(JC) 3
+$(SCT) Rise
+$(SCF) %%6.2lf
+$(JC) 0
+||;
+$=(cmderr)||Insert Value $(T0)
+$?(cmderr)|Jump Start
+Search >= $(T0)
+||;
+Edit
+@r$(tau)
+@u@r$(dtau)
+@u@r$?(rise)|$(rise)|$(G1)|
+
+File
+Data 
+ASCII Output lifeOHtau lifeOH.tau
+Yes
+Yes
+No
+Yes
+All
+
+Quit

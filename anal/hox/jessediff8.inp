@@ -1,0 +1,85 @@
+; For Mode 8
+data
+solenoid
+set status mode integer
+set status mask 19
+set integer start 19
+set integer prestart 19
+set start mask equal
+set prestart mask not
+set cycle length 16
+set cycle precision 1
+set data 0.25
+set background start 1
+set background end 8
+set signal start -7
+set signal end 0
+calculate difference
+counts
+9
+10
+11
+13
+
+n
+
+counts
+12
+calsig
+18
+1
+2
+3
+4
+5
+6
+7
+8
+00:00:00
+48:00:00
+quit
+merge sd_pt calsig
+0
+4
+5
+1
+7
+5
+11
+
+1
+m
+l
+a
+merge ohcell calsig
+0
+4
+9
+6
+10
+
+1
+m
+l
+a
+merge labstat calsig
+0
+4
+12
+5
+13
+6
+14
+10
+15
+11
+16
+16
+17
+
+1
+m
+l
+a
+
+quit

@@ -1,0 +1,24 @@
+;
+;
+;    scan2m.inp sps2mat inp file
+;
+$(0)
+0
+time
+5
+EtnPs
+10
+SD__P
+11
+SD_P2
+12
+L12AV
+13
+L12BV
+14
+L12CV
+
+$(0)
+a
+
+

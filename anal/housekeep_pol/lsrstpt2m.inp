@@ -1,0 +1,24 @@
+; lsrstpt2m.inp
+; sps2mat lsrstpt (topaz setpoints, KDP_H, TopazSecs)
+; April 1997
+lsrstpt
+0
+timelspt
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+lsrstpt
+a

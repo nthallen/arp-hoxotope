@@ -1,0 +1,4 @@
+snafu -b//35/home/hoxp/anal/signal_sync.inp 0.022 0.05
+snafu -b//35/home/hoxp/anal/scanstatmerge.inp
+sps2mat -b//35/home/hoxp/anal/scanstat2mat.inp
+

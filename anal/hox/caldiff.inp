@@ -1,0 +1,58 @@
+data
+solenoid
+set status mode integer
+set status mask 8
+set integer start 8
+set integer prestart 8
+set start mask equal
+set prestart mask not
+set cycle length 8
+set cycle precision 1
+set data 0.25
+set background start 0.25
+set background end 2.0
+set signal start 2.25
+set signal end 8.0
+calculate difference
+counts
+9
+10
+11
+
+n
+
+linestat
+3
+calsig
+17
+1
+2
+3
+4
+5
+6
+00:00:00
+48:00:00
+quit
+merge linestat calsig
+0
+4
+15
+6
+17
+
+1
+m
+l
+a
+merge ohcell calsig
+0
+3
+16
+
+1
+m
+l
+a
+
+quit

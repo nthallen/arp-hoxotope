@@ -1,0 +1,56 @@
+
+prodo1d=2..*O1D.*(ko1dh2o(TMM,M).*H2O + ko1dch4m(TMM,M).*CH4 + ko1dh2(TMM,M).*H2);
+prodhv=JHNO3c.*HNO3 + (JHNO4).*HNO4 + 2*JH_HCO.*H2CO;
+prodcl=Cl.*CH4.*kclch4(TMM,M);
+prod=prodo1d+prodhv+prodcl;
+lossOH=OH.*(kohhno3(TMM,M).*HNO3 + kohhno4(TMM,M).*HNO4 + kohno2(TMM,M).*NO2c + ...
+kohhcl(TMM,M).*HCl+kho2oh(TMM,M).*HO2);
+lossHO2=HO2.*(kho2oh(TMM,M).*OH + kho2no2(TMM,M).*NO2);
+loss=lossOH+lossHO2;
+lossOH_n=OH.*(kohhno3n(TMM,M).*HNO3 + kohhno4(TMM,M).*HNO4 + kohno2n(TMM,M).*NO2 + ...
+kohhcl(TMM,M).*HCl+kho2oh(TMM,M).*HO2);
+ohc=OH.*prod./loss;
+ho2c=ohc.*RAT;
+p_all_c=prod;
+l_all=loss;
+l_all_n=lossOH_n+lossHO2;
+p_h2o_all=2..*O1D.*ko1dh2o(TMM,M).*H2O;
+p_ch4_all=2..*O1D.*ko1dch4m(TMM,M).*CH4;
+p_h2_all=2..*O1D.*ko1dh2(TMM,M).*H2;
+p_o1d_all=prodo1d;
+p_hno3_all=JHNO3c.*HNO3;
+p_hno4_all=JHNO4.*HNO4;
+p_h2co_all=2..*JH_HCO.*H2CO;
+p_HOBR=JHOBR.*HOBR;
+p_cl_all=prodcl;
+l_hno3_all=OH.*kohhno3(TMM,M).*HNO3;
+l_hno4_all=OH.*kohhno4(TMM,M).*HNO4;
+l_no2_all=OH.*kohno2(TMM,M).*NO2+HO2.*kho2no2(TMM,M).*NO2c;
+l_hcl_all=OH.*kohhcl(TMM,M).*HCl;
+l_hox_all=2.*OH.*kho2oh(TMM,M).*HO2;
+l_BrO=HO2.*kho2BrO(TMM,M).*BrO;
+l_oh_no2_all=OH.*kohno2(TMM,M).*NO2;
+l_oh_hno4_all=OH.*kohhno4(TMM,M).*HNO4;
+l_oh_hcl_all=OH.*kohhcl(TMM,M).*HCl;
+l_hno3_all_n=OH.*kohhno3n(TMM,M).*HNO3;
+l_oh_no2_all_n=OH.*kohno2n(TMM,M).*NO2c;
+
+P_HNO3=p_hno3_all;
+P_O1D=p_o1d_all;
+L_HNO3=l_hno3_all;
+L_NO2=l_oh_no2_all;
+L_HNO3_n=l_hno3_all_n;
+L_NO2_n=l_oh_no2_all_n;
+L_HOX=l_hox_all;
+P_c=P_HNO3+P_O1D;
+L=L_HNO3+L_NO2+L_HOX;
+L_n=L_HNO3_n+L_NO2_n+L_HOX;
+OHC=OH.*P./L;
+F_HNO3=P_HNO3./P;
+F_O1D=P_O1D./P;
+F_HOX=L_HOX./L;
+F_NO2=L_NO2./L;
+FL_HNO3=L_HNO3./L;
+F_HOX_n=L_HOX./L_n;
+F_NO2_n=L_NO2_n./L_n;
+FL_HNO3_n=L_HNO3_n./L_n;

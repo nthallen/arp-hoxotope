@@ -1,0 +1,14 @@
+# Script to extract log files from the flashcard
+# on node 46.  Move directories to an sps directory.
+# Run while in //46/home/hoxp
+flightday=$1
+spsdir=${flightday%.*}sps
+where=/home/hoxp/anal
+extract $flightday hox[1-4]ext h2oext
+mv $where/$flightday $where/$spsdir
+# cp -rfc $where/$spsdir //8/$where/$spsdir
+cp -rfc $where/$spsdir //49/$where/$spsdir
+cp -fc $where/$spsdir/wv*.sps //27/home/eric/polaris/$flightday &&
+cp -fc $where/$spsdir/sd_pt.sps //27/home/eric/polaris/$flightday &&
+cp -fc $where/$spsdir/labana.sps //27/home/eric/polaris/$flightday
+

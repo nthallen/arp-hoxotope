@@ -1,0 +1,55 @@
+OH=[oh_94 oh_97];
+RAT=8;
+HO2=OH.*RAT;
+HOBR=0.0;
+M=2e18;
+H2=5e-7.*M;
+TMM=220;
+NO2=.4e8;
+H2O=1e13;
+CH4=3e12;
+HNO4=3e8;
+H2CO=3e7;
+HCl=2.5e9;
+Cl=2e4;
+HNO3_fit=0.5e10;
+OHC=2e6;
+HO2C=16e6;
+
+JCLONO2_fit=f_jsza(abs(SZA),6.9e-5,.945,0.21);
+JNO2_FIT=f_jsza(abs(SZA),1.35e-2,.965,0.11);
+JO1D_fit=f_jsza(abs(SZA),8e-5,.85,2.2);
+JHNO3_FIT1=f_jsza(abs(SZA),1.25e-6,.945,2.75);
+JHNO3_FIT2=f_jsza(abs(SZA),.53e-6,.93,0.375);
+JHNO3_fit=JHNO3_FIT1+JHNO3_FIT2;
+O1D_fit=o1dss(JO1D_fit,1.e12,M,TMM);
+
+prodo1d=2..*O1D_fit.*(ko1dh2o(TMM,M).*H2O + ko1dch4m(TMM,M).*CH4 + ko1dh2(TMM,M).*H2);
+prodhv=JHNO3_fit.*HNO3_fit + JHNO4_fit.*HNO4 + 2*JH_HCO_fit.*H2CO;
+prodcl=Cl.*CH4.*kclch4(TMM,M);
+p_fit=prodo1d+prodhv+prodcl;
+lossOH=OHC.*(kohhno3(TMM,M).*HNO3_fit + kohhno4(TMM,M).*HNO4 + kohno2(TMM,M).*NO2 + ...
+kohhcl(TMM,M).*HCl+kho2oh(TMM,M).*HO2C);
+lossHO2=HO2C.*(kho2oh(TMM,M).*OHC + kho2no2(TMM,M).*NO2);
+l_fit=lossOH+lossHO2;
+OHC_fit=OHC.*p_fit./l_fit;
+ho2c=OHC_fit.*RAT;
+
+p_h2o_fit=2..*O1D_fit.*ko1dh2o(TMM,M).*H2O;
+p_ch4_fit=2..*O1D_fit.*ko1dch4m(TMM,M).*CH4;
+p_h2_fit=2..*O1D_fit.*ko1dh2(TMM,M).*H2;
+p_o1d_fit=prodo1d;
+p_hno3_fit=JHNO3_fit.*HNO3_fit;
+p_hno4_fit=JHNO4_fit.*HNO4;
+p_h2co_fit=2..*JH_HCO_fit.*H2CO;
+p_HOBR=JHOBR.*HOBR;
+p_cl_fit=prodcl;
+l_hno3_fit=OHC_fit.*kohhno3(TMM,M).*HNO3_fit;
+l_hno4_fit=OHC_fit.*kohhno4(TMM,M).*HNO4;
+l_no2_fit=OHC_fit.*kohno2(TMM,M).*NO2+ho2c.*kho2no2(TMM,M).*NO2;
+l_hcl_fit=OHC_fit.*kohhcl(TMM,M).*HCl;
+l_hox_fit=2.*OHC_fit.*kho2oh(TMM,M).*ho2c;
+l_bro=ho2c.*kho2bro(TMM,M).*BRO;
+l_oh_no2_fit=OHC_fit.*kohno2(TMM,M).*NO2;
+l_oh_hno4_fit=OHC_fit.*kohhno4(TMM,M).*HNO4;
+l_oh_hcl_fit=OHC_fit.*kohhcl(TMM,M).*HCl;

@@ -1,0 +1,2 @@
+where=/home/hoxp/anal
+snafu -b$where/signal.inp .022 .05

@@ -1,0 +1,12 @@
+# batch file scan.  Searches for lw*.sps (from scanext)
+# and converts them to mat format.
+# This should be obvious from the intuitive
+# QNX syntax used below.
+#
+for i in lw*.sps; do
+	snafu -b//35/home/hoxp/anal/scanmerge.inp ${i%%????}
+done
+for i in lw*.sps; do
+	sps2mat -b//35/home/hoxp/anal/scan2m.inp ${i%%????}
+done
+

@@ -1,0 +1,13 @@
+# extract $1 hox1ext hox2ext hox3ext hox4ext h2oext
+where=/home/hoxp/anal
+#snafu -b$where/signal.inp 0.022 0.05
+snafu -b$where/signal_ng.inp 0.022 0.05
+#snafu -b$where/signal_fg.inp 0.022 0.05
+#snafu -b$where/signal_og.inp 0.022 0.05
+snafu -b$where/asho_doit.inp
+sps2mat -b$where/sps2mater.inp hox sol_out
+sps2mat -b$where/sps2mater.inp n2 sol_n2
+sps2mat -b$where/sps2mater.inp oh sol_oh
+sps2mat -b$where/sps2matno.inp
+sps2mat -b$where/sps2matnob.inp
+

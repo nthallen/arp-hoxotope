@@ -1,0 +1,30 @@
+; adds labcounts to lw files (col 10)
+data 
+merge sd_pt $(0)
+0
+1
+10
+5
+11
+
+1.0
+m
+l
+a
+merge labstat $(0)
+0
+4
+12
+5
+13
+6
+14
+
+1.0
+m
+l
+a
+
+quit
+
+

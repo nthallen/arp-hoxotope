@@ -1,0 +1,15 @@
+; adds labcounts to lw files (col 10)
+data 
+merge labcounts $(0)
+0
+3
+10
+
+.2
+m
+l
+a
+
+quit
+
+

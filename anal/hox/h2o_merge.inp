@@ -1,0 +1,72 @@
+; input file to merge flow controller data into
+; 1 s water vapor spreadsheet
+data
+time
+wvcts
+0
+1
+2
+3
+4
+
+a
+1.0
+n
+avg_h2o
+9
+0
+1
+2
+3
+4
+n
+merge labstat avg_h2o
+0
+4
+5
+5
+6
+6
+7
+
+1.0
+m
+l
+a
+merge sd_pt avg_h2o
+0
+5
+8
+
+1.0
+m
+l
+a
+merge htgasrdy avg_h2o
+0
+1
+9
+2
+10
+3
+11
+4
+12
+
+8.0
+m
+l
+a
+merge labcounts avg_h2o
+0
+3
+13
+
+1.0
+m
+l
+a
+
+quit
+
+

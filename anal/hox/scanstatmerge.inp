@@ -1,0 +1,62 @@
+; For scan mode
+data
+merge counts scanstat
+0
+9
+6
+10
+7
+
+.1
+m
+l
+a
+merge sd_pt scanstat
+0
+4
+8
+1
+9
+5
+10
+
+1
+m
+l
+a
+merge labstat scanstat
+0
+4
+11
+5
+12
+6
+13
+10
+14
+11
+15
+16
+16
+
+1
+m
+l
+a
+merge htgasrdy scanstat
+0
+1
+17
+2
+18
+3
+19
+4
+20
+
+8
+m
+l
+a
+
+quit

@@ -1,0 +1,31 @@
+#! /bin/sh
+
+# Assumes lifeext has already been run
+
+sdir=`dirname $0`
+sdir=`fullpath -t $sdir`
+
+[ -n "$1" -a -d "$1" ] && cd $1
+
+AOK=yes
+
+for i in lifediff.sps $sdir/lifetime.inp $sdir/lifetime.rtg; do
+  if [ ! -f "$i" ]; then
+	echo File `basename $i` is missing >&2
+	AOK=no
+  fi
+done
+
+[ $AOK != yes ] && exit 1
+
+rm -f lifetime.sps lifetmp.sps
+
+snafu -b$sdir/lifetime.inp &&
+sps2mat -b$sdir/life2mat.inp && {
+  rm -f lifetmp.sps
+  namewait -t0 qnx/screen 2>/dev/null && {
+	on -t /dev/null /windows/apps/rtg/rtg -f $sdir/lifetime.rtg
+  }
+  cls
+  echo Lifetime output is in $PWD/lifetime.mat
+}

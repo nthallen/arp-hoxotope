@@ -1,0 +1,17 @@
+; Input for writing fast.sps to plume.mat
+fast
+0
+time
+7
+UVMon
+8
+SolSt
+9
+x1sig
+10
+x2sig
+
+plume$(2)
+t
+$(0)
+$(1)

@@ -1,0 +1,114 @@
+#! /bin/sh
+#__USAGE
+#%C <fileordir> [<fileordir> ...]
+#
+#Writes scans.sps in the current directory (which should probably
+#be the directory with the scans. The filenames are the full 
+#names of the spreadsheets (scan0000.sps).
+
+function nl_error {
+  typeset level fname ltext
+  level=$1
+  fname=`basename $2`
+  shift 2
+  case $level in
+	0) ltext="";;
+	1) ltext="Warning: ";;
+	2) ltext="Error: ";;
+	3) ltext="Fatal: ";;
+	4) ltext="Internal: ";;
+  esac
+  echo "$fname: $ltext$*" >&2
+  [ $level -gt 2 ] && exit 1
+}
+
+namewait -t0 qnx/screen 2>/dev/null ||
+  nl_error 3 $0 "Rerun rtgscans under QNX Windows"
+
+[ -d anal ] && cd anal
+
+typeset files graphs dir
+for i in; do
+  [ ! -f $i -a ! -d $i ] && nl_error 3 $0 "Unable to locate file $i"
+  if [ -d $i ]; then
+	[ -z "$dir" ] && dir=`fullpath -t $i`
+	for j in $i/lw*[0-9].sps; do
+	  [ ! -f $j ] && nl_error 3 $0 "No scans in directory $i"
+	  files="$files $j"
+	  graphs="$j $graphs"
+	done
+  else
+	case $i in
+	  *lw*.sps) :;;
+	  *) nl_error 3 $0 "$i is not a snafu scan file";;
+	esac
+	[ -z "$dir" ] && {
+	  dir=`dirname $1`
+	  dir=`fullpath -t $dir`
+	}
+	files="$files $i"
+	graphs="${i%.sps}a.sps $graphs"
+  fi
+done
+
+for i in $files; do
+  snafu -buvscans.inp ${i%%.sps} ${i%%.sps}a
+done
+
+{
+  echo 'PO RP ""'
+  echo "PC APC $dir/lws.rtg"
+  echo "PA"
+  for i in $files; do
+	name=`fullpath -t $i`
+	echo "CC sps ${name%.sps}a"
+  done
+  echo "CW UV,SOCFG"
+  echo "PO WP UV,SOCFG"
+  echo "PC APC 2"
+  echo "PC apR 0"
+  echo "PC apC 0"
+  echo "PC apW 4565"
+  echo "PC apH 5500"
+  echo "PA"
+  echo "CA X X/Position/1"
+  echo "PO XP X/Position/1"
+  echo "PC APU Position"
+  echo "PC APLm 29500"
+  echo "PC APLM 36000"
+  echo "PC APAm 0"
+  echo "PC APAM 0"
+  echo "PA"
+  echo "EA"
+  for i in $files; do
+	num=${i##*scan}
+	num=${num%.sps}
+	echo "CA Y Y/UV/$num"
+	echo "PO YP Y/UV/$num"
+	echo "PC APU UV"
+	echo "PA"
+	echo "EA"
+	echo "CA Y Y/SOCFG/$num"
+	echo "PO YP Y/SOCFG/$num"
+	echo "PC APU SOCFG"
+	echo "PA"
+	echo "EA"
+  done
+  for i in $graphs; do
+	num=${i##*lw}
+	num=${num%a.sps}
+	echo "CG Scan$num/UV UVMon/$i X/Position/1 Y/UV/$num"
+	echo "PO GP Scan$num/UV"
+	echo "PC APc 15"
+	echo "PA"
+	echo "EG"
+	echo "CG Scan$num/SOCFG SOCFG/$i X/Position/1 Y/SOCFG/$num"
+	echo "PO GP Scan$num/SOCFG"
+	echo "PC APc 15"
+	echo "PA"
+	echo "EG"
+  done
+  echo "EW"
+} >$dir/lws.rtg
+echo Output written to $dir/lws.rtg
+on -t /dev/con1 /windows/apps/rtg/rtg -f $dir/lws.rtg

@@ -1,0 +1,8 @@
+# Executable file to run fast_doit.inp.
+# Inputs are starting time,$1, and ending time,$2.
+# Produces 8 Hz data in plume$3.mat.
+rm junk.sps
+where=/home/strat/anal
+snafu -b$where/fast_doit.inp $1 $2
+snafu -b$where/sigcorr_fast.inp $1 $2
+sps2mat -b$where/fast2mat.inp $1 $2 $3
