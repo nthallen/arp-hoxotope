@@ -1,5 +1,8 @@
 /* ohf.c OH filter functions
  * $Log$
+ * Revision 1.4  2004/12/04 20:31:25  nort
+ * Tweaks
+ *
  * Revision 1.3  2002/04/01 17:39:46  nort
  * Guard against negative scans
  *
@@ -90,13 +93,16 @@ unsigned int high_limit = HIGH_SCAN_LIMIT;
    is a maximum, we would want to drive to the center of q11, which
    was ohf.q11c scan steps back in the scan. Hence we will want
    to buffer ohf.q11c+1 values of the position input.
+   
+   050107: Modifying spacing and relative size parameters for
+   HOxotope.
 */
 static void ohf_init_filter(void) {
   ohf.q12r = 0; /* We've already done 0 */
-  ohf.q12c = ohf.q12r + (103 + ohf.rate/2) / ohf.rate;
+  ohf.q12c = ohf.q12r + (92 + ohf.rate/2) / ohf.rate;
   ohf.q12l = 2 * ohf.q12c - ohf.q12r;
-  ohf.q11c = ohf.q12r + ((710 + ohf.rate/2) / ohf.rate);
-  ohf.q11r = (156 + ohf.rate/2) / ohf.rate; /* just the width for now */
+  ohf.q11c = ohf.q12r + ((310 + ohf.rate/2) / ohf.rate);
+  ohf.q11r = (117 + ohf.rate/2) / ohf.rate; /* just the width for now */
   ohf.q11l = ohf.q11c + ohf.q11r;
   ohf.q11r = ohf.q11c - ohf.q11r;
   ohf.dd = new_dig_delay(ohf.q11c);
@@ -143,9 +149,9 @@ static int ohf_process_point(unsigned short pos, unsigned long value) {
   ohf.dlyd_fltr -= value; /* q12r contribution, weighted -1 */
   ohf.dlyd_fltr += 2 * digdly_val(ohf.rdd, ohf.q12c);
   ohf.dlyd_fltr -=     digdly_val(ohf.rdd, ohf.q12l);
-  ohf.dlyd_fltr -= 3 * digdly_val(ohf.rdd, ohf.q11r);
-  ohf.dlyd_fltr += 6 * digdly_val(ohf.rdd, ohf.q11c);
-  ohf.dlyd_fltr -= 3 * digdly_val(ohf.rdd, ohf.q11l);
+  ohf.dlyd_fltr -= 2 * digdly_val(ohf.rdd, ohf.q11r);
+  ohf.dlyd_fltr += 4 * digdly_val(ohf.rdd, ohf.q11c);
+  ohf.dlyd_fltr -= 2 * digdly_val(ohf.rdd, ohf.q11l);
   if (ohf.dlyd_fltr >  ohf.peak_filter &&
       ohf.dlyd_pos  >= low_limit &&
 	  ohf.dlyd_pos  <  high_limit) {
