@@ -1,5 +1,8 @@
 /* ohf.c OH filter functions
  * $Log$
+ * Revision 1.2  2001/05/08 13:31:24  nort
+ * Doc
+ *
  * Revision 1.1  1997/02/25 19:06:24  nort
  * Initial revision
  *
@@ -181,6 +184,7 @@ int ohf_point(unsigned short pos, unsigned long value) {
 	ohf.min_pos = ohf.max_pos = pos;
 	ohf.dlyd_fltr = value; /* store it here just this once */
 	ohf.n_points = 1;
+	ohf.rate = 0;
 	return 0; /* nothing to report yet */
   }
 
@@ -194,6 +198,7 @@ int ohf_point(unsigned short pos, unsigned long value) {
    ohf_point() starts a new scan.
 */
 int ohf_end_point(void) {
+  if ( ohf.rdd == 0 ) return 0;
   return ohf_process_point(ohf.max_pos, digdly_last(ohf.rdd));
 }
 

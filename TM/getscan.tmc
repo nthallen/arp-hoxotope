@@ -48,7 +48,7 @@ depending on (peaking, not_scanning_etn once) {
   while (ohf_end_point()) validate filter_point;
   validate not_peaking;
   
-  if ( Peakup_On && ohf_rate() <= 50) {
+  if ( Peakup_On && ohf_rate() <= 50 && ohf_rate() > 0 ) {
 	if (ohf_peak_filter() == 0) {
 	  msg(MSG_FAIL, "Found absolutely Nothing");
 	  ohf_another_scan(low_limit, high_limit - low_limit, 50);
