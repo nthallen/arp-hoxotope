@@ -84,6 +84,19 @@ OHCell {
   OCLUV: (OCLUV,4) "V";
   OHCLI: (OHCLI,4) "A";
 }
+Lamps {
+  HBox{ +=+; Title: "Lamps"; +=+ };
+  Header:
+   ""    "" {>UV<} {>T<};
+  "1:"   (EHV1S,3) (UV_1V,6) (Lmp1T,5);
+  "2:"   (EHV2S,3) (UV_2V,6) (Lmp2T,5);
+}
+Pressure {
+  +=+;
+  SD__P: (SD__P,5);
+  SD_P2: (SD_P2,6);
+  PaltP: (PaltP,6);
+}
 Gates {
   "" "1A" "1B" "2A" "2B";
   Wid: (Gt1AWid,3) (Gt1BWid,3) (Gt2AWid,3) (Gt2BWid,3);
@@ -107,7 +120,8 @@ Table {
 	  HBox {
 		Table {
 		  HBox{ +=+; Title: "Dye Laser"; +=+ };
-		  HBox { [DyeLas]; |; [LasIdx] };
+		  { HBox { [DyeLas]; |; [LasIdx] };
+		    HBox { [Lamps]; |; [Pressure] } };
 		  # [GasDeck];
 		};
 		||+;
