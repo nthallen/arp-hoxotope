@@ -53,11 +53,13 @@ State Pinch_Valve_Close2 {
  +1  Hold until ( convert(PumpT) < 60 && convert(PumpT) >= 25 );
  +1  > Pump Close
  +2  > AC On
- +15 depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Closed; }
+     > Drive Pinch Valve out 80
+ +60 depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Closed; }
      depending on (ABOVE_CLOUDS) { Validate Pinch_Valve_Closed; }
 }
 
 State Pinch_Valve_Closed {
+  > Drive Pinch Valve in 200
   > Pump Open
   depending on (shutdown) { Validate Pinch_Valve_Shutdown; }
   { if ( convert(PumpT) > 75 )

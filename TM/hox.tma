@@ -67,7 +67,13 @@ State initialize {
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
       > Drive etalon out 10000
-  +3  > Preset Etalon Position to 24000
+  +3  { double etstep;
+        etstep = convert(EtPos);
+	if ( etstep < 64000 ) {
+	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
+	    etstep );
+	} else msg( 2, "EtPos out of range: %.0lf", etstep );
+      }
   +1  > Drive etalon to 31000
   +1  Hold until ( EtnPs == 31000 ) or 10;
   +3  { double bastep;
@@ -81,7 +87,7 @@ State initialize {
           ubastep );
 	  
         etstep =  convert(EtPos);
-	if ( etstep > 20000 && etstep < 40000 ) {
+	if ( etstep > 30800 && etstep < 31200 ) {
 	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
 	    etstep );
 	} else msg( 2, "EtPos out of range: %.0lf", etstep );
@@ -94,7 +100,6 @@ State initialize {
 #----------------------------------------------------------------
 
 state instrument_start {
-  +1  Validate Pinch_Valve_Close;
   +1  > drive attenuator in 6500
   +3  > drive attenuator out 320
   +3  > drive attenuator to 3600
@@ -118,7 +123,7 @@ state instrument_start {
 # are achieved.
 #----------------------------------------------------------------
 
-State flight    {
+State flight {
   depending on (ON_GROUND) { Validate shutdown; }
 
   +1  > power oh cell on
@@ -227,9 +232,10 @@ State reset_etalon {
 	ci_sendfcmd( 0, "Drive Etalon %s %.0lf\n", et_dir, etdelta );
       }
   +2  Hold until ( (EtnSt & 8) == 0 ) or 30;
+      > Peakup On
       { double etstep;
         etstep = convert(EtPos);
-	if ( etstep < 20000 || etstep > 40000 ) {
+	if ( etstep < 30900 || etstep > 31100 ) {
 	  msg( 2, "EtPos out of range after reinit: %.0lf", etstep );
 	  Validate reset_etalon;
 	} else {
@@ -265,7 +271,7 @@ State record {
 	  Validate reset_etalon;
 	}
       }
-      { if ( EtnStep_delta < -50 || EtnStep_delta > 50 ) {
+      { if ( EtnStep_delta < -70 || EtnStep_delta > 70 ) {
 	  if ( big_delta ) {
 	    msg( 2, "Observed large etalon delta during record: %lf", EtnStep_delta );
 	    Validate reset_etalon;
@@ -482,7 +488,7 @@ PARTITION
 #----------------------------------------------------------------
 
 %{ /* Altitude definitions */
-    TORR P_ground_up = 580.;
+    TORR P_ground_up = 500.;
     TORR P_ground_dn = 650.;
     TORR P_clouds_up = 200.;
     TORR P_clouds_dn = 400.;
