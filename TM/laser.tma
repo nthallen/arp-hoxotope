@@ -244,7 +244,7 @@ State laser_ready {
         depending on (1 Hz) {
           if ( lhx_overtemp || !laser_on_requested )
             Validate laser_off;
-          else if ( diodes_on_requested )
+          else if ( DL_Fl && diodes_on_requested )
             Validate laser_diodes_turn_on;
         }
 }
@@ -260,6 +260,7 @@ State laser_diodes_turn_on {
 		       ! (laser_on_requested && diodes_on_requested) )
             Validate laser_diodes_off;
         }
+	    { if (!DL_Fl) Validate laser_diodes_off; }
     +1  > Topaz Current 10 Amps
     +1  > Topaz Emission Start
         "Holding to Observe Current Mode";
@@ -279,10 +280,11 @@ State laser_diodes_on {
             Validate laser_diodes_off;
         }
         { if (RLHist0 != 2 && RLHist0 != 4) Validate laser_reboot; }
+	    { if (!DL_Fl) Validate laser_diodes_off; }
 }
 
 State laser_diodes_off {
-    +1  > Topaz Emission Off
+        > Topaz Emission Off
     +1  > Topaz Current 0 Amps
         Hold until (RLHist0 == NIRVANA) or 10
           else {
