@@ -29,46 +29,62 @@
 	 multiples of 10. Reducing with a different value of low_limit
 	 will not change the results. UVMon can be mapped down to its
 	 12-bit resolution with no loss of precision.
-  */
+	 
+	 Modifications for peak scanning:
+	 
+	 Our minimum condition will be based on the standard
+	 deviation of the EtnPs, since we will no longer be
+	 spending any significant amount of time online or
+	 offline. Even with the above reduction in magnitude
+	 of EtnPs, S(x*x) will not remain within 32 bits,
+	 so we'll need to move to floating point.
+ */
   #include "nortlib.h"
 
   static unsigned long sum_x, sum_y, sum_xy;
+  static double sum_x2;
   static unsigned short sum_count, sum_online;
   #define BF_NPOINTS 240
-  #define BF_MINPOINTS 50
+  #define BF_MINSTD 30
   #define BF_NSTEPS "1000"
+  #define dsquared(x) ((double)(x)*(double)(x))
 %}
 
 { unsigned short Reset_counts;
   
-  Reset_counts = ( EtnFlg == 0 ) || !( Peakup_On );
+  Reset_counts = !( Peakup_On );
   if (!Reset_counts) {
-	unsigned short x;
-	unsigned long y;
+    unsigned short x;
+    unsigned long y;
 
-	x = (EtnPs - low_limit)/10;
-	y = UVMon>>4;
-	sum_x += x;
-	sum_y += y;
-	sum_xy += x * y;
-	if (EtnFlg == IXFLAG_ONLINE) sum_online++;
-	if (sum_count++ >= BF_NPOINTS &&
-		sum_online >= BF_MINPOINTS &&
-		sum_count - sum_online >= BF_MINPOINTS) {
-	  unsigned long sum_x_sum_y;
+    x = (EtnPs - low_limit)/10;
+    y = UVMon>>4;
+    sum_x += x;
+    sum_y += y;
+    sum_xy += x * y;
+    sum_x2 += dsquared(x);
+    if (sum_count++ >= BF_NPOINTS ) {
+      double std;
+      std = sum_x;
+      std = std/sum_count;
+      std = sqrt(sum_x2/sum_count - std * std);
+      if ( std > BF_MINSTD ) {
+        unsigned long sum_x_sum_y;
 
-	  sum_x_sum_y = sum_y/sum_count;
-	  sum_x_sum_y *= sum_x;
-	  sum_x_sum_y += (sum_x * (sum_y % sum_count))/sum_count;
-	  if (sum_xy > sum_x_sum_y)
-		ci_sendcmd("OH Drive Bellows Out " BF_NSTEPS "\n", 0);
-	  else
-		ci_sendcmd("OH Drive Bellows In " BF_NSTEPS "\n", 0);
-	  Reset_counts = 1;
-	}
+        sum_x_sum_y = sum_y/sum_count;
+        sum_x_sum_y *= sum_x;
+        sum_x_sum_y += (sum_x * (sum_y % sum_count))/sum_count;
+        if (sum_xy > sum_x_sum_y)
+          ci_sendcmd("OH Drive Bellows Out " BF_NSTEPS "\n", 0);
+        else
+          ci_sendcmd("OH Drive Bellows In " BF_NSTEPS "\n", 0);
+      }
+      Reset_counts = 1;
+    }
   }
   if (Reset_counts && sum_count != 0) {
-	sum_count = sum_online = 0;
-	sum_x = sum_y = sum_xy = 0;
+    sum_count = sum_online = 0;
+    sum_x = sum_y = sum_xy = 0;
+    sum_x2 = 0.;
   }
 }
