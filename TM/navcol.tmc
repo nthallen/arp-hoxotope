@@ -75,8 +75,7 @@ Collect Lattd = N_pos(N_data.lat);
 Collect Lngtd = N_pos(N_data.lon);
 Collect Alttd = N_alt(N_data.gps_alt);
 Collect TASpd = N_tas(N_data.tru_air_speed);
-/* Collect TTemp = N_temp(N_data.total_temp); */
-/* Collect STemp = N_temp(N_data.static_temp); */
-/* Collect TPres = N_prs(N_data.total_presr); */
-/* Collect SPres = N_prs(N_data.static_presr); */
-
+Collect TTemp = N_temp(N_data.total_temp);
+Collect STemp = N_temp(N_data.static_temp);
+Collect TPres = N_prs(N_data.total_presr);
+Collect SPres = N_prs(N_data.static_presr);

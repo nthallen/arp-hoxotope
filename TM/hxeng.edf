@@ -58,7 +58,7 @@ spreadsheet hxeng_1 60
   57 XL_TP %5.1lf
   58 XL_X %5.1lf
   59 XL_Y %5.1lf
-spreadsheet hxeng_1_16 43
+spreadsheet hxeng_1_16 47
   1 A_RgT %5.1lf
   2 AirHP %5.1lf
   3 AirLP %5.1lf
@@ -93,14 +93,18 @@ spreadsheet hxeng_1_16 43
   32 RLSD2TSP %5.1lf
   33 RepRtSP %5.1lf
   34 SDP_T %5.1lf
-  35 TASpd %5.1lf
-  36 TDrft %5.1lf
-  37 X1DAT %5.1lf
-  38 X1FAT %5.1lf
-  39 X1_HV %5.1lf
-  40 X2DAT %5.1lf
-  41 X2FAT %5.1lf
-  42 X2_HV %5.1lf
+  35 SPres %5.1lf
+  36 STemp %5.1lf
+  37 TASpd %5.1lf
+  38 TDrft %5.1lf
+  39 TPres %5.1lf
+  40 TTemp %5.1lf
+  41 X1DAT %5.1lf
+  42 X1FAT %5.1lf
+  43 X1_HV %5.1lf
+  44 X2DAT %5.1lf
+  45 X2FAT %5.1lf
+  46 X2_HV %5.1lf
 spreadsheet hxeng_1_4 12
   1 AtPos %5.1lf
   2 BlwPs %5.1lf

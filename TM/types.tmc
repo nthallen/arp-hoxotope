@@ -309,6 +309,25 @@ TM typedef unsigned short NAV_Knots { convert Knots; text "6.1lf"; }
 	65536, 1000
   }
 
+TM typedef unsigned short m_per_sec { text "%6.1lf"; }
+TM typedef unsigned short NAV_m_per_sec { convert m_per_sec; text "6.1lf"; }
+  Calibration (NAV_m_per_sec, m_per_sec) {
+	0, 0,
+	65536, 514.4
+  }
+
+TM typedef double kPa;
+TM typedef unsigned short NAV_Pres { Convert kPa; text "%5.1lf"; }
+Calibration ( NAV_Pres, kPa ) {
+      0,   0,
+  65536, 200
+}
+
+TM typedef signed short NAV_Temp { Convert CELCIUS; text "%6.2lf"; }
+Calibration ( NAV_Temp, CELCIUS ) {
+  -32767, -327.67, 32767, 327.67
+}
+
 %{
   char * On_Off_text[2] = { "Off", " On" };
   char * OK_Fail_text[2] = { "  OK", "Fail" };

@@ -197,25 +197,56 @@ state scan_failed {
 #----------------------------------------------------------------
 # Reinitialize the etalon if it ever hits the in limit
 #----------------------------------------------------------------
+%{
+  int n_etalon_resets = 0;
+%}
 State reset_etalon {
       { Etalon_Scanmode_Requested = 0; }
       Hold until valid (Etalon_Hold);
       > Peakup Off
   +3  > Stop Etalon
-  +1  > Drive etalon in 64000
-      Hold until ( EtnSt & 1 ) or 30;
-      > Drive etalon out 10000
-  +3  > Preset Etalon Position to 24000
-  +1  > Drive etalon to 31000
-  +1  Hold until ( EtnPs == 31000 ) or 10;
+      { double etdelta;
+        char *dir;
+	etdelta = 31000. - convert(EtPos);
+	if ( etdelta < 0 ) {
+	  dir = "Out";
+	  etdelta = -etdelta;
+	} else dir = "In";
+	while (etdelta > 64000 ) {
+	  ci_sendfcmd( 0, "Drive Etalon %s 64000\n", dir );
+	  etdelta -= 64000.;
+	}
+	ci_sendfcmd( 0, "Drive Etalon %s %.0lf\n", etdelta );
+      }
+  +2  Hold until ( (EtnSt & 8) == 0 ) or 30;
       { double etstep;
-        etstep =  convert(EtPos);
+	if ( ++n_etalon_resets >= 5 )
+	  ci_sendcmd( "Set Etalon Speed 3200 Hz\n", 0 );
+        etstep = convert(EtPos);
 	if ( etstep > 20000 && etstep < 40000 ) {
 	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
 	    etstep );
-	} else msg( 2, "EtPos out of range: %.0lf", etstep );
+	} else {
+	  msg( 2, "EtPos out of range after reinit: %.0lf", etstep );
+	  Validate reset_etalon;
+	}
       }
-  +1  Validate etalon_defaults;
+
+# +1  > Drive etalon in 64000
+#     Hold until ( EtnSt & 1 ) or 30;
+#     > Drive etalon out 10000
+# +3  > Preset Etalon Position to 24000
+# +1  > Drive etalon to 31000
+# +1  Hold until ( EtnPs == 31000 ) or 10;
+#     { double etstep;
+#       etstep =  convert(EtPos);
+#	if ( etstep > 20000 && etstep < 40000 ) {
+#	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
+#	    etstep );
+#	} else msg( 2, "EtPos out of range: %.0lf", etstep );
+#     }
+
+  +2  Validate etalon_defaults;
 }
 
 State etalon_defaults {

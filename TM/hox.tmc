@@ -63,7 +63,7 @@ TM 1    Hz AD12_CTORR SD_P2; /* SD 100 Torr baratron (was PD__P) */
 TM 1/16 Hz AD8_T30K   SDP_T; /* SECONDARY DUCT PRS GUAGE TEMP */
 TM 4    Hz UCHAR      SolSt; /* Soldrv Status Byte */
 TM 1    Hz UCHAR      SW_St; /* Software Status Byte */
-TM 1/16 Hz NAV_Knots  TASpd; /* NAV True Air Speed */
+TM 1/16 Hz NAV_m_per_sec  TASpd; /* NAV True Air Speed */
 TM 1/16 Hz SINT       TDrft; /* NAV Time Drift */
 TM 4    Hz AD12       UVMon; /* 282nm DETECTOR OUTPUT(DYE LASER) */
 TM 1    Hz AD8_51V    V28_V; /* +28V MONITOR */
@@ -180,6 +180,10 @@ TM 1 Hz AD12 PVPos; Address PVPos 0xCA8; /* Pinch Valve Pot Position (PAFF7 T30K
 TM 1 Hz PV_Gain_t PV_SetP;
 TM 1 Hz PV_Gain_t PV_Gi;
 TM 1 Hz PV_Gain_t PV_Gp;
+TM 1/16 Hz NAV_Pres TPres;
+TM 1/16 Hz NAV_Pres SPres;
+TM 1/16 Hz NAV_Temp TTemp;
+TM 1/16 Hz NAV_Temp STemp;
 
 /* TM 1 Hz AD12_DTORR SD_DP; Address SD_DP  0xC8A; */ /* SECONDARY DUCT DIFF PRS OUTPUT */
 /* TM 1/16 Hz AD8 NO_HP; Address NO_HP 0xC2F; */ /* NO BOTTLE OUTPUT PRESS */
