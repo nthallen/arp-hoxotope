@@ -1,0 +1,36 @@
+%{
+  /* PSC.tmc derives X,Y & Total Power for the two different
+     PSD detectors.
+	 XL_X XL_Y XL_TP
+	 DL_X DL_Y DL_TP
+	 This operation will be based on the assumption that
+	 BmPsMux == 0 => XL, 1 => DL, but that can be changed here.
+  */
+%}
+
+TM typedef int PSD_pos_t { text "%3d"; }
+TM typedef unsigned int PSD_pwr_t { text "%4d"; }
+
+PSD_pos_t XL_X; invalidate XL_X;
+PSD_pos_t XL_Y; invalidate XL_Y;
+PSD_pwr_t XL_TP; invalidate XL_TP;
+if ( BmPsMux == 0 ) {
+  XL_X = (( BmPsE - BmPsW ) * 99 ) / ( BmPsE + BmPsW );
+  XL_Y = (( BmPsN - BmPsS ) * 99 ) / ( BmPsN + BmPsS );
+  XL_TP = BmPsN + BmPsS + BmPsE + BmPsW;
+  validate XL_X;
+  validate XL_Y;
+  validate XL_TP;
+}
+
+PSD_pos_t DL_X; invalidate DL_X;
+PSD_pos_t DL_Y; invalidate DL_Y;
+PSD_pwr_t DL_TP; invalidate DL_TP;
+if ( BmPsMux != 0 ) {
+  DL_X = (( BmPsE - BmPsW ) * 99 ) / ( BmPsE + BmPsW );
+  DL_Y = (( BmPsN - BmPsS ) * 99 ) / ( BmPsN + BmPsS );
+  DL_TP = BmPsN + BmPsS + BmPsE + BmPsW;
+  validate DL_X;
+  validate DL_Y;
+  validate DL_TP;
+}
