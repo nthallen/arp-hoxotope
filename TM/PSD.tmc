@@ -10,7 +10,13 @@
 %}
 
 TM typedef double PSD_pos_t { text "%4d"; }
-TM typedef unsigned int PSD_pwr_t { text "%5d"; }
+/* PSD_pwr_t is the sum of four raw BmPs channels. Each
+   is a 12-bit value (0-4095) so the sum is 14-bits (0-16383).
+   Here we convert to VOLTS in order to get a familiar
+   0-10 value for display.
+*/
+TM typedef unsigned short PSD_pwr_t { text "%5.2lf"; convert VOLTS;  }
+Calibration ( PSD_pwr_t, VOLTS ) { 0, 0, 16384, 10. }
 
 PSD_pos_t XL_X; invalidate XL_X;
 PSD_pos_t XL_Y; invalidate XL_Y;
