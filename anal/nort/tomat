@@ -45,8 +45,10 @@ done
 let sval=$OPTIND-1
 shift $sval
 
-[ -n "$destdir" -a ! -d "$destdir" ] &&
-  nl_error "Destination directory '$destdir' not found"
+if [ -n "$destdir" ]; then
+  [ -d "$destdir" ] || mkdir $destdir ||
+    nl_error "Destination directory '$destdir' not found"
+fi
 
 summary=''
 
