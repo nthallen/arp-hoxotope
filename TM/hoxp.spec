@@ -58,8 +58,7 @@ TBL=*.tbl h2o.fld *.cfg
 EDF=*.edf
 
 # These are old sources which we haven't resolved yet:
-OLDSRC=hox2.fld hoxlcts.tmc hox.tma hox.pl
-OLDSRC+=fast.edf scan.tmg
+OLDSRC+=fast.edf
 
 SOURCE+=$(OLDSRC)
 
