@@ -32,7 +32,7 @@
 
 depending on (scanning_etn once) {
   sps_ptr seq_ss;
-  if ((seq_ss = open_seq_ss("lw", 15)) >= 0) {
+  if (which_line == 0 && (seq_ss = open_seq_ss("lw", 15)) >= 0) {
 	ss_set_column(seq_ss, 0, "%14.11lt", "Time");
 	ss_set_column(seq_ss, 1, "%5.0lf", "SX1AG");
 	ss_set_column(seq_ss, 2, "%5.0lf", "Et_LW");
@@ -46,20 +46,21 @@ depending on (scanning_etn once) {
   }
 }
 depending on (scanning_etn) {
-  double ins_time;
-  
-  ins_time = dtime()+ext_delta;
-  store_seq_ss(ins_time, 1, To_Double( SX1AG));
-  store_seq_ss(ins_time, 2, To_Double( Et_LW));
-  store_seq_ss(ins_time, 3, convert( SOCFG));
-  store_seq_ss(ins_time, 4, convert( OClUV));
-  store_seq_ss(ins_time, 5, To_Double( EtnPs));
-  store_seq_ss(ins_time, 6, To_Double( SX2AG));
-  store_seq_ss(ins_time, 7, convert( UVMon));
-  store_seq_ss(ins_time, 8, convert( X1Las));
-  store_seq_ss(ins_time, 9, EtPos );
-
+  if ( which_line == 0 ) {
+    double ins_time;
+    
+    ins_time = dtime()+ext_delta;
+    store_seq_ss(ins_time, 1, To_Double( SX1AG));
+    store_seq_ss(ins_time, 2, To_Double( Et_LW));
+    store_seq_ss(ins_time, 3, convert( SOCFG));
+    store_seq_ss(ins_time, 4, convert( OClUV));
+    store_seq_ss(ins_time, 5, To_Double( EtnPs));
+    store_seq_ss(ins_time, 6, To_Double( SX2AG));
+    store_seq_ss(ins_time, 7, convert( UVMon));
+    store_seq_ss(ins_time, 8, convert( X1Las));
+    store_seq_ss(ins_time, 9, EtPos );
+  }
 }
 depending on (not_scanning_etn once) {
-  close_seq_ss(1);
+  if ( which_line == 0 ) close_seq_ss(1);
 }
