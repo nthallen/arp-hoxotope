@@ -61,8 +61,8 @@ State GreenPeak {
 		  
 			GP_new_DubT = GP_crnt_KDPTSP;
 			GP_new_GrnPw = GP_Sum / GP_Count;
-			if ( GP_new_DubT <= 2500 ) new_dir = 1;
-			else if ( GP_new_DubT >= 4000 ) new_dir = -1;
+			if ( GP_new_DubT <= GP_MIN_KDPTSP ) new_dir = 1;
+			else if ( GP_new_DubT >= GP_MAX_KDPTSP ) new_dir = -1;
 			else if ( GP_prev_datapt ) {
 			  prev_step = GP_new_DubT > GP_prev_DubT ? 1 :
 				(GP_new_DubT == GP_prev_DubT ? 0 : -1 );
