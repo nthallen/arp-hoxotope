@@ -7,6 +7,34 @@
 
 	static send_id CmdData_id;
 	static CmdData_t CmdData;
+
+	static void Set_AdjGate( unsigned short gate, unsigned short dly,
+			  int inc, int val ) {
+	  unsigned short data;
+	  int width, delay, *dp;
+	  
+	  data = sbw( gate );
+	  width = data & 0xFF;
+	  delay = (data>>8) & 0xFF;
+	  dp = dly ? &delay : &width;
+	  if ( inc ) *dp += val;
+	  else *dp = val;
+	  if ( *dp < 0 ) *dp = 0;
+	  else if( *dp > 255 ) *dp = 255;
+	  data = ( delay << 8 ) + width;
+	  sbwr( gate, data );
+	}
+	static void DitherGate( void ) {
+	  static unsigned char rdelay = 0;
+	  unsigned char rdly = rdelay, delay = 0;
+	  int i;
+	  for ( i = 0; i < 8; i++ ) {
+		delay = (delay << 1) + (rdly & 1);
+		rdly >>= 1;
+	  }
+	  rdelay++;
+	  Set_AdjGate( 0x646, 1, 0, delay );
+	}
   #endif
 %}
 &command
@@ -22,8 +50,9 @@
 &ohcmdset
 	: &ohcmd
 	: &indexer_cmd
-	: Adjustable Gate &adj Delay &adjv Width &adjv *
-	  { sbwr($3, ($5 << 8) + $7); }
+	: AdjGate &AdjGate &WdDly &SetAdd %d * {
+		Set_AdjGate( $2, $3, $4, $5 );
+	  }
 	: &CmdData {
 		if ( CmdData_id == 0 )
 		  CmdData_id = Col_send_init( "CmdData", &CmdData,
@@ -32,16 +61,34 @@
 	  }
 	;
 &CmdData
-	: SW Status Bit &bitno Set * {
-		if ($4 < 8)
-		  CmdData.SW_St |= (1<<$4);
-	  }
-	: SW Status Bit &bitno Clear * {
-		if ($4 < 8)
-		  CmdData.SW_St &= ~(1<<$4);
-	  }
-	: Peakup On * { CmdData.SW_St |= 0x80; }
-	: Peakup Off * { CmdData.SW_St &= ~0x80; }
+	: SW Status Value to %d * { CmdData.SW_St = $5; }
+	: SW Status &SWFlags * { CmdData.SW_St = $3; }
+	: Peakup On * { CmdData.SW_St = SWS_PKUP_ON; }
+	: Peakup Off * { CmdData.SW_St = SWS_PKUP_OFF; }
+	;
+
+&SWFlags <int>
+	: Altitude Takeoff { $0 = 1; }
+	: Altitude Cruise { $0 = 2; }
+	: Altitude Descend { $0 = 3; }
+	: Altitude Land { $0 = 4; }
+	: C3F6 Addition Enable { $0 = 12; }
+	: C3F6 Addition Disable { $0 = 13; }
+	: Scan Mode Always { $0 = 14; }
+	: Scan Mode By Pressure { $0 = 15; }
+	: Diodes On { $0 = 18; }
+	: Diodes Off { $0 = 19; }
+	: File Read { $0 = 200; }
+	: H2O Lamp Enable { $0 = 25; }
+	: H2O Lamp Off { $0 = 26; }
+	: Laser Power On { $0 = 16; }
+	: Laser Power Off { $0 = 17; }
+	: Peakup On { $0 = 20; }
+	: Peakup Off { $0 = 21; }
+	: Proceed { $0 = 22; }
+	: Green Peakup Enable { $0 = 23; }
+	: Green Peakup Disable { $0 = 24; }
+	: Shutoff { $0 = 255; }
 	;
 
 &command
@@ -61,14 +108,21 @@
 	: 6 { $0 = 0xE54; }
 	;
 
-&adj <unsigned short>
-	: 0 { $0 = 0x64E; }
-	: 1 { $0 = 0x65E; }
-	: 2 { $0 = 0x66E; }
+&AdjGate <unsigned short>
+	: 1A { $0 = 0x604; }
+	: 1B { $0 = 0x606; }
+	: 2A { $0 = 0x644; }
+	: 2B { $0 = 0x646; }
 	;
-&adjv <unsigned short>
-	: %d (Enter 0-255) { $0 = ($1 < 0) ? 0 : (($1 > 255) ? 255 : $1); }
+&WdDly <unsigned short>
+	: Width { $0 = 0; }
+	: Delay { $0 = 1; }
 	;
+&SetAdd <int>
+	: Set { $0 = 0; }
+	: Add { $0 = 1; }
+	;
+
 &set_point <unsigned short>
 	: %d (Enter Set Point Value)
 	  { $0 = ($1 < 0) ? 0 : (($1 > 0xFFF) ? 0xFFF : $1); }
@@ -76,7 +130,4 @@
 &set_point5 <unsigned short>
 	: %d (Enter Set Point Value)
 	  { $0 = ($1 < 0) ? 0 : (($1 > 0x7FF) ? 0x7FF : $1); }
-	;
-&bitno <unsigned short>
-	: %d (Enter Bit Number 0-7) { $0 = $1; }
 	;

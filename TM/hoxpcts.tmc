@@ -36,11 +36,11 @@ TM typedef struct {
 		  }
 
 TM 4 Hz NGtCt16 GtCt1Stat; Address GtCt1Stat 0x600;
-TM 4 Hz GtCt16 SX1AG; Address SX1AG 0x614;
-TM 4 Hz GtCt16 SX1FG; Address SX1FG 0x616;
+TM 4 Hz GtCt16 SX1FG; Address SX1FG 0x614;
+TM 4 Hz GtCt16 SX1AG; Address SX1AG 0x616;
 TM 4 Hz NGtCt24 SX1NG; Address SX1NG 0x610;
-TM 4 Hz GtCt16 SX2AG; Address SX2AG 0x61C;
-TM 4 Hz GtCt16 SX2FG; Address SX2FG 0x61E;
+TM 4 Hz GtCt16 SX2FG; Address SX2FG 0x61C;
+TM 4 Hz GtCt16 SX2AG; Address SX2AG 0x61E;
 TM 4 Hz NGtCt24 SX2NG; Address SX2NG 0x618;
 TM 4 Hz NGtCt16 RepRate1; Address RepRate1 0x608;
 Group GtCt1 ( GtCt1Stat, SX1AG, SX1FG, SX1NG,
@@ -52,9 +52,9 @@ Group GtCt1 ( GtCt1Stat, SX1AG, SX1FG, SX1NG,
   SX1NG.high = sbba( SX1NG.address + 2);
   SX2AG = sbwa( SX2AG.address);
   SX2FG = sbwa( SX2FG.address);
+  RepRate1 = sbwa( RepRate1.address);
   SX2NG.low = sbwa( SX2NG.address);
   SX2NG.high = sbba( SX2NG.address + 2 );
-  RepRate1 = sbwa( RepRate1.address);
 }
 TM typedef unsigned char GTDLY { text "%3u"; }
 TM typedef unsigned char GTWID { text "%3u"; }
@@ -73,11 +73,11 @@ Group GtCt1Gt ( Gt1ADly, Gt1AWid, Gt1BDly, Gt1BWid ) {
 
 
 TM 4 Hz NGtCt16 GtCt2Stat; Address GtCt2Stat 0x640;
-TM 4 Hz GtCt16 SOCAG; Address SOCAG 0x654;
-TM 4 Hz GtCt16 SOCFG; Address SOCFG 0x656;
+TM 4 Hz GtCt16 SOCFG; Address SOCFG 0x654;
+TM 4 Hz GtCt16 SOCAG; Address SOCAG 0x656;
 TM 4 Hz NGtCt24 SOCNG; Address SOCNG 0x650;
-TM 4 Hz GtCt16 LABAG; Address LABAG 0x65C;
-TM 4 Hz GtCt16 LABFG; Address LABFG 0x65E;
+TM 4 Hz GtCt16 LABFG; Address LABFG 0x65C;
+TM 4 Hz GtCt16 LABAG; Address LABAG 0x65E;
 TM 4 Hz NGtCt24 LABNG; Address LABNG 0x658;
 TM 4 Hz NGtCt16 RepRate2; Address RepRate2 0x648;
 Group GtCt2 ( GtCt2Stat, SOCAG, SOCFG, SOCNG,
@@ -89,9 +89,9 @@ Group GtCt2 ( GtCt2Stat, SOCAG, SOCFG, SOCNG,
   SOCNG.high = sbba( SOCNG.address + 2);
   LABAG = sbwa( LABAG.address);
   LABFG = sbwa( LABFG.address);
+  RepRate2 = sbwa( RepRate2.address);
   LABNG.low = sbwa( LABNG.address);
   LABNG.high = sbba( LABNG.address + 2);
-  RepRate2 = sbwa( RepRate2.address);
 }
 TM 1/4 Hz GTDLY Gt2ADly, Gt2BDly;
 TM 1/4 Hz GTWID Gt2AWid, Gt2BWid;
