@@ -13,12 +13,6 @@ SRC = ohf.h CmdData.h
 
 TOOL = hoxp.idx
 
-# These are old sources which we haven't resolved yet:
-SRC = hox2.fld hoxlcts.tmc hox.tma hox.pl
-SRC = fast.edf
-SRC = scan.tmg
-SRC = scan_ss.tmc
-
 MNC = hoxpcrnt
 DISTRIB = hox.cfg hox1.cfg h2o.cfg
 TGTDIR = $(TGTNODE)/home/hoxp
@@ -59,9 +53,15 @@ CFG=VERSION Experiment.config rcs2html.dat hoxp.spec
 FRAME=hoxp.pcm $(TMCBASE)
 CMD=hoxp.cmd idx64.cmd idxdrv.cmd hox.cmd hox.slp no.cmd
 CMD+=h2o.cmd topaz.cmd
-TMA=*.tma
-TBL=*.tbl *.cfg
+TMA=*.tma *.sol
+TBL=*.tbl h2o.fld *.cfg
 EDF=*.edf
+
+# These are old sources which we haven't resolved yet:
+OLDSRC=hox2.fld hoxlcts.tmc hox.tma hox.pl
+OLDSRC+=fast.edf scan.tmg
+
+SOURCE+=$(OLDSRC)
 
 CYCLE=cycle > $@
 ohf.o : ohf.h
