@@ -3,6 +3,8 @@
 /* attribute type */
 #ATTRIBUTES# NORMAL FIELD CMDLINE line title 
 /* fields: number, line, col, width, length, attribute code, string */
+#FIELD# 25 11 54 5 1 1 "WVHSPt"
+#FIELD# 24 21 0 78 2 0 "%TMA:hoxalgo:10"
 #FIELD# 22 20 0 76 2 1 "%TMA:hoxalgo:9"
 #FIELD# 21 23 0 35 2 1 "%CLIENT"
 #FIELD# 15 14 68 5 1 1 "MFCtr"
@@ -21,6 +23,7 @@
 #FIELD# 7 10 22 4 1 1 "WVFWV"
 #FIELD# 6 8 22 4 1 1 "WVLPV"
 #FIELD# 5 7 22 4 1 1 "WVVMV"
+#FIELD# 16 9 21 5 1 1 "L12AV"
 /* strings: line, col, attribute code, string */
 #STRING# 0 29 4 "Water Vapor Lab Screen"
 #STRING# 1 6 3 "зддддддддддддддддддддддд©"
@@ -92,6 +95,10 @@
 #STRING# 8 30 3 "Ё"
 #STRING# 8 39 3 "юддддддддддддддддддддддддддддддддддды"
 #STRING# 9 6 3 "Ё"
+#STRING# 9 7 0 "12bit"
+#STRING# 9 13 0 "Vismon"
+#STRING# 9 21 1 "     "
+#STRING# 9 28 0 "V"
 #STRING# 9 30 3 "Ё"
 #STRING# 9 39 3 "зддддддддддддддддддддддд©"
 #STRING# 10 6 3 "Ё"
@@ -112,7 +119,11 @@
 #STRING# 11 22 1 "    "
 #STRING# 11 28 0 "V"
 #STRING# 11 30 3 "Ё"
-#STRING# 11 39 3 "юддддддддддддддддддддддды"
+#STRING# 11 39 3 "Ё"
+#STRING# 11 40 0 "Heater"
+#STRING# 11 47 0 "SetPt"
+#STRING# 11 54 1 "     "
+#STRING# 11 63 3 "Ё"
 #STRING# 11 67 3 "зддддд©"
 #STRING# 12 6 3 "Ё"
 #STRING# 12 7 0 "Lamp"
@@ -120,6 +131,7 @@
 #STRING# 12 22 1 "    "
 #STRING# 12 28 0 "V"
 #STRING# 12 30 3 "Ё"
+#STRING# 12 39 3 "юддддддддддддддддддддддды"
 #STRING# 12 67 3 "Ё"
 #STRING# 12 68 0 "MFCtr"
 #STRING# 12 73 3 "Ё"
