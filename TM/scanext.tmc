@@ -42,6 +42,7 @@ depending on (scanning_etn once) {
 	ss_set_column(seq_ss, 6, "%5.0lf", "SX2AG");
 	ss_set_column(seq_ss, 7, "%6.4lf", "UVMon");
 	ss_set_column(seq_ss, 8, "%6.4lf", "X1Las");
+	ss_set_column(seq_ss, 9, "%6.0lf", "EtPos");
   }
 }
 depending on (scanning_etn) {
@@ -56,7 +57,7 @@ depending on (scanning_etn) {
   store_seq_ss(ins_time, 6, To_Double( SX2AG));
   store_seq_ss(ins_time, 7, convert( UVMon));
   store_seq_ss(ins_time, 8, convert( X1Las));
-
+  store_seq_ss(ins_time, 9, EtPos );
 
 }
 depending on (not_scanning_etn once) {
