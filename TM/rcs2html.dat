@@ -1,0 +1,41 @@
+CFG Configuration
+FRAME TMC Frame Definition
+CMD Command Definitions
+TMA Algorithms
+TBL Screen Definitions
+EDF Extractions
+SRC Other Source Files
+OLDSRC Obsolete Source Files
+hox.cfg: Color Definitions for Data Display
+hox1.cfg: Color Definitions for Second Display
+h2o.cfg: Color Definitions for Water
+fields.cfg: Colors to show Data Fields
+h2o.sft: Compiled H2O Soldrv Cycles
+h2odisp: H2O Display Program
+h2odoit: H2O GSE Script
+h2oext: H2O Extraction
+h2opbdoit: H2O Playback Script
+hox1ext: HOx Extraction #1
+hox2ext: HOx Extraction #2
+hox3ext: HOx Extraction #3
+hox4ext: HOx Extraction #4
+hox5ext: HOx Extraction #5
+hox6ext: HOx Extraction #6
+hoxalgo: Compiled Flight Algorithm
+hoxdisp: HOx Display Program
+hoxpclt: HOx Keyboard Program
+hoxpcol: HOx Collection Program
+hoxpsrvr: HOx Command Server
+hoxrtgext: HOx RTG Extraction Program
+inetdoit: Internet Telemetry Script
+laser.sft: Compiled HOx Soldrv Cycles
+lifeext: HOx Lifetime Extraction Program
+nortext: Nort's Transient Extractions
+padoit: HOx GSE Script w/ Algorithm
+pbdoit: HOx Playback Script
+pdoit: HOx GSE Script w/o Algorithm
+peakalgo: HOx Etalon Peakup Algo
+peakext: HOx Peakup Extraction
+prtgext: HOx Peakup RTG Output
+scanext: HOx Scan Extraction
+
