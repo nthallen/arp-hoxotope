@@ -4,5 +4,5 @@ display hoxdisp hox hox1
 memo
 algorithm hoxalgo -p
 extraction hoxrtgext
-algorithm prtgext -p
+algorithm p2rtgext -p
 rtg /home/hoxp/pb.rtg

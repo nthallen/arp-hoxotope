@@ -1,7 +1,7 @@
 # Hox GSE w/o algorithm w/ windows
-display hoxdisp hox hox1
+display hoxdisp hox hox1 hox2
 client hoxpclt
 memo
 extraction hoxrtgext
-algorithm prtgext -p
+algorithm p2rtgext -p
 rtg //35/home/hoxp/hox.rtg
