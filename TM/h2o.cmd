@@ -11,4 +11,6 @@
 	: RF Set %d (Enter Set Point Value) * { sbwr(0xE20, $3); }
 	: Wet Air On * { send_dascmd(DCT_SCDC, 10, 0); }
 	: Wet Air Off * { send_dascmd(DCT_SCDC, 11, 0); }
+	: Heater Set %d (Enter Heater Set Point Value) * {
+	     sbwr(0xE22, $3); }
 	;
