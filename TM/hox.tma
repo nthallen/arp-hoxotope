@@ -517,8 +517,8 @@ PARTITION
 
 %{ /* definitions */
   unsigned short P0 = (unsigned short) (13 * 4.096);
-  int n_p_rats = 0;
-  unsigned long DP_sum = 0, P_sum = 0;
+  /* int n_p_rats = 0; */
+  /* unsigned long DP_sum = 0, P_sum = 0; */
   #define RATIO_SETPOINT 13000
   /* #define STVPs_MIN 2500 */
 %}
@@ -539,7 +539,7 @@ State STV_Sit {
 }
 
 State STV_reset_ct {
-  {	DP_sum = P_sum = n_p_rats = 0;
+  {	/* DP_sum = P_sum = n_p_rats = 0; */
 	validate STV_regulate;
   }
 }

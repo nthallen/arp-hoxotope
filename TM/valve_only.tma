@@ -15,7 +15,7 @@ State Initialize {
 }
 
 State shutdown {
-  +1 Validate Pinch_Valve_Sit;
+  +1 Validate Pinch_Valve_Init;
   +1 > Drive Pinch Valve to 5000
   +5 > power solenoids and steppers Off
   +1 > quit
