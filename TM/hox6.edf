@@ -1,14 +1,43 @@
-spreadsheet labstat 10
-	1 DStt0 %2.0X To_Double
-	2 DStt1 %2.0X To_Double
-	3 IxStt %2.0X To_Double
+spreadsheet labstat 20
+	1 EtnSt %2.0X To_Double
+	2 IxStt %2.0X To_Double
+	3 SolSt %2.0X To_Double
 	4 L12AV %6.4lf
-	5 SolSt %2.0X To_Double
-	6 A4SPt %4.0lf
-	7 SW_St %2.0X To_Double
-	8 NOSPt %4.0lf
-	9 NOFlw %4.2lf
+	5 L12BV %6.4lf
+	6 L12CV %6.4lf
+	7 A4SPt %4.0lf
+	8 A5SPt %4.0lf
+	9 A6SPt %4.0lf
+	10 Lab_1 %4.0lf
+	11 Lab_2 %4.0lf
+	12 Lab_3 %4.0lf
+	13 SW_St %2.0X To_Double
+	14 NOSPt %4.0lf
+	15 NOFlw %4.2lf
+	16 LABNG %6.0lf
 
-;spreadsheet absorb 4
-;	1 L1_NG %6.0lf
-;	2 L2_NG %6.0lf 
+spreadsheet scanstat 22
+	1 EtnSt %2.0X To_Double
+	2 EtnFlg %2.0X To_Double
+	3 EtnPs %6.0lf
+	4 EtPos %6.0lf
+	5 UVMon %6.4lf
+
+spreadsheet lifetest 8
+	1 SOCFG %6.0lf 
+	2 SOCAG	%6.0lf
+	3 SolSt %2.0X To_Double
+	4 UVMon %4.0lf
+
+spreadsheet delays 5
+	1 Gt1ADly %6.0lf
+	2 Gt1BDly %6.0lf
+	3 Gt2ADly %6.0lf
+	4 Gt2BDly %6.0lf
+
+spreadsheet pinchvalve 6
+	1 L12AV %4.2lf
+	2 L12BV %4.2lf
+	3 L12CV %4.2lf
+	4 SD_P2 %4.2lf
+	5 STVPs %4.2lf
