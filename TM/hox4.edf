@@ -27,21 +27,21 @@ spreadsheet jumbo 100
 	22 Lngtd %6.1lf 
 	23 TASpd %6.1lf .1*convert
 	24 TDrft %6.0lf 
-; Secndary Duct Thermisters & Roving Temperatures & 12-bit BmPs
-;	25 SAFF1 %5.1lf 
-;	26 SAFF2 %5.1lf 
-;	27 SAFF3 %5.1lf 
-;	28 SAFF4 %5.1lf 
-;	29 SAFB1 %5.1lf 
-;	30 SAFB2 %5.1lf 
-;	31 SAFB3 %5.1lf 
-;	32 SAFB4 %5.1lf 
-;	33 SAFB5 %5.1lf 
-;	34 SAFB6 %5.1lf 
-;	35 SAFB7 %5.1lf 
-;	36 PAFF5 %5.1lf 
-;	37 PAFF6 %5.1lf 
-;	38 PAFF7 %5.1lf 
+; Photolysis DP signals **HOxotope**
+	25 PumpT %5.1lf 
+	26 Lmp1T %5.1lf 
+	27 Lmp2T %5.1lf 
+	28 HVPSP %5.1lf 
+	29 Anemo %5.1lf 
+	30 UV_1V %5.1lf 
+	31 UV_2V %5.1lf 
+	32 DucT1 %5.1lf 
+	33 DucT2 %5.1lf 
+	34 HtXT2 %5.1lf 
+	35 PhoT2 %5.1lf 
+	36 DetT2 %5.1lf 
+	37 PAltP %5.1lf 
+	38 PVPos %5.1lf 
 ; Gas Addition System Diagnositcs (Temp. & Press.)
 	39 A_RgT %5.1lf 
 ;	40 NOFlT %5.1lf 

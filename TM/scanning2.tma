@@ -55,6 +55,7 @@
   double PkPos; Invalidate PkPos;
   unsigned char PkQuality; Invalidate PkQuality;
   state (filter_point);
+  int lamps_on;
 }
 
 State not_scanning_etn {
@@ -74,6 +75,7 @@ State not_scanning_etn {
 	  if ( which_line ) {
 		sx = sx2 = sx3 = sx4 = sy = sxy = sx2y = 0.;
 		n_scan = 0;
+		lamps_on = 1;
 		Validate scanning_line;
 	  } else Validate scanning_etn;
 	}
@@ -108,6 +110,7 @@ State scanning_etn {
 }
 
 State scanning_line {
+  { if ( ! (EHV1S && EHV2S) ) lamps_on = 0; }
   { if ( EtnFlg & IXFLAG_SCAN ) {
 	  if ( EtnFlg == IXFLAG_SCAN ) {
 		double et, x, y, x2;
@@ -192,10 +195,12 @@ State scanning_line {
 		PkStd = sqrt(sx2/n_scan);
 	  }
 	  newstart = PkPos - (etdata[n_scan-1]-etdata[0])/2;
-	  if ( newstart != line_start ) {
-		ci_sendfcmd( 2, "Set Etalon %s Position %u\n",
-		  which_line == IXFLAG_ONLINE ? "Online" : "Altline",
-		  newstart );
+	  if ( which_line == IXFLAG_ONLINE || lamps_on ) {
+	    if ( newstart != line_start ) {
+	      ci_sendfcmd( 2, "Set Etalon %s Position %u\n",
+		which_line == IXFLAG_ONLINE ? "Online" : "Altline",
+		newstart );
+	    }
 	  }
 	  Validate PkHeight;
 	  Validate PkPos;

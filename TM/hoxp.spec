@@ -34,12 +34,12 @@ hxengext : idxflag.tmc PSD.tmc hxeng.edf
 nortext : idxflag.tmc nort.edf
 lifeext : time.tmc rtgcorr.tmc life.cyc lifeavg.tmc lifeext.tmc
 # fastext : fast.edf
-scanext : ohf.c idxflag.tmc scanning2.tma scanext.tmc
+scanext : ohf.c idxflag.tmc hoxpbits.tmc scanning2.tma scanext.tmc
 peakalgo : ohf.c idxflag.tmc chop.tmc PSD.tmc scanning.tma getscan.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
-peak2algo : ohf.c idxflag.tmc PSD.tmc scanning2.tma bellows.tmc peak.oui grnpw.tma
+peak2algo : ohf.c idxflag.tmc hoxpbits.tmc PSD.tmc scanning2.tma bellows.tmc peak.oui grnpw.tma
 peakext : ohf.c idxflag.tmc chop.tmc PSD.tmc scanning.tma getscan.tmc scan_ss.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
 prtgext : ohf.c idxflag.tmc scanning.tma getscan.tmc scan.tmg chop.tmc dither.tmc bellows.tmc peak.oui
-p2rtgext : ohf.c idxflag.tmc scanning2.tma scan2.tmg peak.oui
+p2rtgext : ohf.c idxflag.tmc hoxpbits.tmc scanning2.tma scan2.tmg peak.oui
 pdoit : hox.doit
 padoit : hoxa.doit
 pbdoit : pb.doit
