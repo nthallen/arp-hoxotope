@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#define N_TEMP_REQ 1
+#define N_PRS_REQ 1
 
 short N_drift(char tim[]) {
   long nav_secs;
