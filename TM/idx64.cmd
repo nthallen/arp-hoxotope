@@ -3,6 +3,10 @@
     &command : &indexer_cmd, since we want to put it elsewhere
   */
   #include "idx64.h"
+
+  /* This assumes that we are chopping only one drive (the
+     Etalon). */
+  static short int alt_delta = 0, alt_delta_delta = 0;
 %}
 
 &indexer_cmd
@@ -27,10 +31,20 @@
 		  { idx64_offline_delta($2, $5); }
 	: Set &drive Altline Delta
 		%d (Enter signed number of steps from Online to Altline position) *
-		  { idx64_altline_delta($2, $5); }
+		  { idx64_altline_delta($2, $5);
+		    if ( $2 == 1 ) alt_delta = $5;
+		  }
 	: Set &drive Speed &ix_rate Hz * { idx64_speed( $2, $4<<8 ); }
 	: Move &drive Online Position Out * { idx64_move_out($2); }
 	: Move &drive Online Position In * { idx64_move_in($2); }
+	: Set Altline Increment %d *
+		{ alt_delta_delta = $4; }
+	: Increase Etalon Altline Delta *
+		{ alt_delta += alt_delta_delta;
+		  idx64_altline_delta( 1, alt_delta ); }
+	: Decrease Etalon Altline Delta *
+		{ alt_delta -= alt_delta_delta;
+		  idx64_altline_delta( 1, alt_delta ); }
 	;
 &drive <byte_t>
 	: Channel %d (Enter Channel Number from 0-?) { $0 = $2; }
