@@ -104,8 +104,9 @@ state instrument_start {
 #     +1  > drive attenuator to 4000
 
   +5  Validate bellows_eval;
-      "Bellows Initialization";
-
+      { laser_on_requested = 1; }
+      "Bellows Initialization, Laser On";
+        
       # BELOW_CLOUDS == off the ground
       depending on (BELOW_CLOUDS) { Validate flight; }
       depending on (ABOVE_CLOUDS) { Validate flight; }
@@ -122,9 +123,7 @@ State flight    {
 
   +1  > power oh cell on
 #     > power 28V switched on
-      { laser_on_requested = 1;
-        diodes_on_requested = 1;
-      }
+      { diodes_on_requested = 1; }
       "Holding for Diodes On";
   +1  Hold until valid (laser_diodes_on);
       Validate bellows_eval;
@@ -150,10 +149,6 @@ State scan  {
   +1  > topaz diode 2 temperature 28.0 C
   +1  > topaz diode 2 temperature 28.0 C
   +1  Hold until valid (laser_diodes_on);
-  +1  { if ( convert(DL_TP) < 2.0 ) 
-	  ci_sendcmd("Topaz current 17.5 amps\n",0);}
- +10  { if (convert(UVMon) > 5.0)
-	  ci_sendcmd("Topaz current 17.0 amps\n",0);}  
   +1  > drive etalon to 31000
   +5  { double Pot_Step, Pot_Diff;
 	Pot_Step = convert(EtPos);
@@ -166,8 +161,7 @@ State scan  {
 	  }
 	} msg( 2, "EtPos out of whack: %.0lf", Pot_Step );
       }
-  +1  > Drive etalon Online
-  +1  > Drive etalon In 500
+  +1  > Drive etalon To 29500
   +1  > Peakup on
   +1  > Set etalon altline delta 910
   +1  > Scan etalon out 2000 by 5
