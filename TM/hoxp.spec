@@ -26,22 +26,22 @@ OBJ = hox2.cfg
 
 hoxpcol : hoxcol.tmc h2ocol.tmc nav.tmc navcol.tmc idxcol.tmc handler.c topaz.c topazcol.tmc
 hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc hox.tbl hox1.tbl topaztxt.c
-hoxalgo : hoxpbits.tmc idxflag.tmc hox.tma laser.tma
+hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma
 laser.sft : hox.slp laser.sol
-hoxrtgext : rtgcorr.tmc hox.tmg
+hoxrtgext : rtgcorr.tmc PSD.tmc hox.tmg
 h2oext : h2o.edf
 hox1ext : hox1.edf
 hox2ext : hox2.edf
 hox3ext : hox3.edf
-hox4ext : hox4.edf
-hox5ext : hox5.edf
+hox4ext : PSD.tmc hox4.edf
+hox5ext : PSD.tmc hox5.edf
 hox6ext : hox6.edf
-nortext : rtgcorr.tmc nort.edf
+nortext : PSD.tmc nort.edf
 lifeext : time.tmc rtgcorr.tmc life.cyc lifeavg.tmc lifeext.tmc
 # fastext : fast.edf
 scanext : idxflag.tmc scanning.tma scanext.tmc
-peakalgo : ohf.c idxflag.tmc chop.tmc scanning.tma getscan.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
-peakext : ohf.c idxflag.tmc chop.tmc scanning.tma getscan.tmc scan_ss.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
+peakalgo : ohf.c idxflag.tmc chop.tmc PSD.tmc scanning.tma getscan.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
+peakext : ohf.c idxflag.tmc chop.tmc PSD.tmc scanning.tma getscan.tmc scan_ss.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
 prtgext : ohf.c idxflag.tmc scanning.tma getscan.tmc scan.tmg chop.tmc dither.tmc bellows.tmc peak.oui
 pdoit : hox.doit
 padoit : hoxa.doit
