@@ -1,0 +1,40 @@
+%{
+  /* scanning.tmc Defines scanning_etn state  */
+  #include "CmdData.h"
+  #include "idx64.h"
+%}
+
+State not_scanning_etn {
+  { if ( EtnFlg & IXFLAG_SCAN ) Validate scanning_etn; }
+}
+
+State scanning_etn {
+  { if (!(EtnFlg & IXFLAG_SCAN)) Validate not_scanning_etn; }
+}
+
+Partition
+
+%{
+  int Peakup_On = 1;
+%}
+
+State PeakupCtrl_Wait {
+  { if ( SW_St == SWS_PKUP_OFF ) {
+	  Peakup_On = 0;
+	  nl_error( 0, "Peakup Off" );
+	  Validate PeakupCtrl_Ack;
+	}
+  }
+  { if ( SW_St == SWS_PKUP_ON ) {
+	  Peakup_On = 1;
+	  nl_error( 0, "Peakup On" );
+	  Validate PeakupCtrl_Ack;
+	}
+  }
+}
+
+State PeakupCtrl_Ack {
+  > OH SW Status Value to 0
+  Hold until ( SW_St == 0 ) or 10;
+  Validate PeakupCtrl_Wait;
+}
