@@ -6,7 +6,7 @@ cmdbase = hox.cmd
 cmdbase = topaz.cmd
 
 SCRIPT = Experiment.config interact runfile.1111 idx.idx64 hoxp.dccc
-SCRIPT = VERSION get_lifetimes
+SCRIPT = VERSION get_lifetimes runfile.valve
 NONRCS = hox.cfg hox1.cfg fields.cfg
 SRC = ohf.h CmdData.h laserlab.sol
 
