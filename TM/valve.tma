@@ -1,7 +1,6 @@
 # Test tma for valve control.
-# 12/12/2003
-#
-# Jason is a weenie
+# 3/10/2004
+
 
 { if ( SW_St == 66 ) validate shutdown;
 }
@@ -32,7 +31,7 @@ State shutdown {
 PARTITION
 # PARTITION X: Pinch Valve
 ################################################################
-# Pinch valve regulate.  Set to fixed P = 50 torr.
+# Pinch valve regulate.  Set to fixed P.
 # Drives pinch valve in (higher P) or out (lower P).  
 ################################################################
 
@@ -64,32 +63,15 @@ PARTITION
 # Pinch valve control subroutine.
 ################################################################
 
-State Pinch_Valve_Sit { { msg(1, "Pinch Valve Sit"); }}
+State Pinch_Valve_Sit { }   
 
 
-State Pinch_Valve_Regulate {
-  { n_p_rats++;
-	P_sum += convert(SD_P2);
-	n_p_set = A6SPt;
-	n_steps = floor(A5SPt);
-	P_set = A7SPt/1.0;
-	if (n_p_rats >= n_p_set) {
-	  P_avg = (P_sum/n_p_rats);
-	  P_diff = P_avg - P_set;
-		  
-	if (fabs(P_diff) > (0.01*P_set)){
-			if (P_diff > 0) 
-			{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", n_steps*2); }
-  	 	else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", n_steps*2); 
-		}
-  	P_avg = P_sum = n_p_rats = 0;
-	}
-  }
-
-}
-
-State Pinch_Valve_Limbo {
-  {	msg(1, "Pinch Valve Limbo");
+#######################################         
+# valve is here when P <= 145 torr       
+# sends to Initialize if P < 145 torr  
+#######################################  
+State Pinch_Valve_Limbo {  
+  {	msg(1, "Pinch Valve Limbo"); 
 	n_p_rats++;
 	P_sum += convert(SD_P2);
 	n_p_set = A6SPt;
@@ -107,8 +89,12 @@ State Pinch_Valve_Limbo {
   }
 }
 
+######################################
+# estimates valve position using pot 
+# and then sends to Proportionate    
+######################################
 State Pinch_Valve_Initialize {
-  { pot_pos = convert(L12BV);
+  { pot_pos = convert(L12BV);     
 	stepper_pos_raw = 1097.8*pot_pos -2206.1 + 0.5;
 	stepper_pos = floor(stepper_pos_raw);
 	ci_sendfcmd(0,"OH preset Secondary Throttle Position to %u\n", stepper_pos);
@@ -117,14 +103,17 @@ State Pinch_Valve_Initialize {
   }
 }	
 
-
+###################################
+# controls valve w/ proportional    
+# steps until close to target, then 
+# takes small, fixed steps          	
+###################################
 State Pinch_Valve_Proportionate {
 
 {if  ((Convert(L12BV) > 6.65) || (Convert(L12BV) < 2.85) )
 	Validate Pinch_Valve_Sit;
 } 
  
-
 {if ( (convert(L12CV)*100) > 150) { 
 	ci_sendfcmd(0,"OH Drive Secondary Throttle to %u\n", 1000); 
   	Validate Pinch_Valve_Limbo;	
@@ -152,14 +141,14 @@ State Pinch_Valve_Proportionate {
 				est2_steps = 300;
 			}
 
-
+			/* proportional steps */
 			if (fabs(P_diff) >= (0.2)){
 				if (P_diff > 0) 
-					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", 
-						est2_steps );  }
-  					else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", 
-						est2_steps ); 
+					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", est2_steps );  }
+  					else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", est2_steps ); 
 			}
+
+			/* tiny steps */
  			if ( (fabs(P_diff) < (0.2)) && (fabs(P_diff) > (0.05)) ){
 				if (P_diff > 0) 
 					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", n_steps); }
