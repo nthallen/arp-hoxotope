@@ -24,14 +24,8 @@
 	: Injector Back ON * { send_dascmd(DCT_SCDC, 12, 0); }
 	: Injector Front OFF * { send_dascmd(DCT_SCDC, 15, 0); }
 	: Injector Front ON * { send_dascmd(DCT_SCDC, 14, 0); }
-	: LASER 1 DIODE OFF * { send_dascmd(DCT_SCDC, 39, 0); }
-	: LASER 1 DIODE ON * { send_dascmd(DCT_SCDC, 38, 0); }
-	: LASER 1 POWER OFF * { send_dascmd(DCT_SCDC, 35, 0); }
-	: LASER 1 POWER ON * { send_dascmd(DCT_SCDC, 34, 0); }
-	: LASER 2 DIODE OFF * { send_dascmd(DCT_SCDC, 41, 0); }
-	: LASER 2 DIODE ON * { send_dascmd(DCT_SCDC, 40, 0); }
-	: LASER 2 POWER OFF * { send_dascmd(DCT_SCDC, 37, 0); }
-	: LASER 2 POWER ON * { send_dascmd(DCT_SCDC, 36, 0); }
+	: LASER POWER OFF * { send_dascmd(DCT_SCDC, 35, 0); }
+	: LASER POWER ON * { send_dascmd(DCT_SCDC, 34, 0); }
 	: NO FLOW CLOSED OFF * { send_dascmd(DCT_SCDC, 2, 0); }
 	: NO FLOW CLOSED ON * { send_dascmd(DCT_SCDC, 3, 0); }
 	: NO PURGE OFF * { send_dascmd(DCT_SCDC, 5, 0); }
@@ -49,6 +43,6 @@
 	: SECONDARY CLOSURE VLV OPEN OFF * { send_dascmd(DCT_SCDC, 17, 0); }
 	: SECONDARY CLOSURE VLV OPEN ON * { send_dascmd(DCT_SCDC, 16, 0); }
 	: Soldrv Select Mode %d (Enter Mode Number) * { send_dascmd(DCT_SOLDRV_A, $4, 0); }
-	: TFR COOLANT PUMP OFF * { send_dascmd(DCT_SCDC, 43, 0); }
-	: TFR COOLANT PUMP ON * { send_dascmd(DCT_SCDC, 42, 0); }
+	: Laser COOLANT PUMP OFF * { send_dascmd(DCT_SCDC, 43, 0); }
+	: Laser COOLANT PUMP ON * { send_dascmd(DCT_SCDC, 42, 0); }
 	;
