@@ -109,7 +109,7 @@ State Pinch_Valve_PI {
     if (dstep<0) dstep = 0;
     else if (dstep > MAX_PINCH_STEPS) dstep = MAX_PINCH_STEPS;
     ustep = US_CAST(dstep);
-    ci_sendfcmd(0, "Drive Pinch Valve To %u\n", ustep);
+    ci_sendfcmd(2, "Drive Pinch Valve To %u\n", ustep);
   }
 
   # We can jump ahead with "SW Status Pinch Valve Scan"
@@ -127,11 +127,14 @@ State Pinch_Valve_Scan {
     > Drive Pinch Valve In 8000
     Hold Until ( PVStat & 1 ) or 6
     else Validate Pinch_Valve_Close;
+    Hold Until ( convert(SD_P2) < 2. ) or 10;
     > Scan Pinch Valve Out 4000 By 10
     Hold Until ( PVScan != 0 ) or 1;
     Hold Until ( PVScan == 0 || convert(SD_P2) > 25. ) or 30;
     > Stop Pinch Valve
+    Hold Until ( PVScan == 0 ) or 3; 
     > Scan Pinch Valve In 4000 By 10
+    Hold Until ( PVScan != 0 ) or 2;
     Hold Until ( PVScan == 0 ) or 100;
     > Drive Pinch Valve Out 0
  +1 { if ( PVStep != 0 ) Validate Pinch_Valve_Close; }
@@ -186,13 +189,13 @@ State Pinch_Valve_Steps {
 	est_steps = ( 240*(fabs(P_diff))/P_avg )*n_steps ;
 	est2_steps = (est_steps<300) ? floor(est_steps) : 300;
 	if (P_diff > 0)
-	  ci_sendfcmd(0,"Drive Pinch Valve In %u\n", est2_steps );
-	else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", est2_steps ); 
+	  ci_sendfcmd(2,"Drive Pinch Valve In %u\n", est2_steps );
+	else ci_sendfcmd(2,"Drive Pinch Valve Out %u\n", est2_steps ); 
       } else if ( (fabs(P_diff) < 0.2 ) && ( fabs(P_diff) > 0.05 ) ) {
 	/* tiny steps */
 	if (P_diff > 0)
-	  ci_sendfcmd( 0,"Drive Pinch Valve In %u\n", n_steps );
-	else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", n_steps); 
+	  ci_sendfcmd( 2,"Drive Pinch Valve In %u\n", n_steps );
+	else ci_sendfcmd(2,"Drive Pinch Valve Out %u\n", n_steps); 
       }
       P_sum = n_p_rats = 0;
     }

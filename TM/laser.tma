@@ -49,7 +49,7 @@ State laser_eval {
 
 State laser_eval_on {
 		{ laser_on_requested = 1; }
-	+1	> Topaz Frequency 10000
+	+1	> Topaz Frequency 0
 	+1	> Topaz KDP SetPoint 2400
 		{ if ( RLHist0 != 2 && RLHist0 != 4 )
 			Validate laser_talking;
@@ -111,7 +111,7 @@ State laser_talking {
 		{ if ( RLHist0 == 1 ) Validate PowerModeA; }
 		> Topaz Emission Off
 	+1	> Topaz Current 0 Amps
-	+1	> Topaz Frequency 10000
+	+1	> Topaz Frequency 0
 	+1	> Topaz KDP SetPoint 2400
 		depending on ( ON_GROUND) { Validate laser_high_setpoint; }
 	+1	> Topaz Diode 1 Temperature 26.0 C

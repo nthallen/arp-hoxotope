@@ -163,8 +163,8 @@ Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
 }
 
 TM 1 Hz AD12_T30K100KU Inl_T; Address Inl_T 0xCB2; /* Inlet Temperature (SAFB1 T10K) */
-TM 1 Hz AD12 HtXT2; Address HtXT2 0xCB4; /* (SAFB2 T10K) */
-TM 1 Hz AD12 PhoT2; Address PhoT2 0xCB6; /* (SAFB3 T10K) */
+TM 1 Hz AD12_T30K30KU HtXT2; Address HtXT2 0xCB4; /* (SAFB2 T10K) */
+TM 1 Hz AD12_T30K30KU PhoT2; Address PhoT2 0xCB6; /* (SAFB3 T10K) */
 TM 1 Hz AD12 DetT2; Address DetT2 0xCB8; /* (SAFB4 T10K) */
 TM 1 Hz AD12_DucT1 DucT1; Address DucT1 0xCBA; /* (SAFB5 T10K) */
 TM 1 Hz AD12_DucT2 DucT2; Address DucT2 0xCBC; /* (SAFB6 T10K) */

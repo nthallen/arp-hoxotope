@@ -19,8 +19,8 @@ Lamps {
 Temps {
   HBox{ +=+; Title: "Temps"; +=+ };
   Inl_T: (Inl_T,5) C;
-  HtXT2: (HtXT2,6) V;
-  PhoT2: (PhoT2,6) V;
+  HtXT2: (HtXT2,5) C;
+  PhoT2: (PhoT2,5) C;
   DetT2: (DetT2,6) V;
   VGlue 0+1;
   HBox{ -+; Title: "Etc."; +- };

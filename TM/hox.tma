@@ -187,7 +187,12 @@ State reset_etalon {
       > Peakup Off
   +3  > Stop Etalon
   +1  > Peakup On
+  +1  > Drive etalon in 64000
+      Hold until ( EtnSt & 1 ) or 15;
+      > Drive etalon out 10000
+  +3  > Preset Etalon Position to 24000
   +1  > Drive etalon to 31000
+  +1  Hold until ( EtnPs == 31000 ) or 10;
       { double etstep;
         etstep =  convert(EtPos);
 	if ( etstep > 20000 && etstep < 40000 ) {
