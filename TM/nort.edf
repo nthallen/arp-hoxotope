@@ -1,16 +1,22 @@
-spreadsheet nortBP 8
-	condition depending on (2Hz)
-	1 BmPsN %8.4lf
-	2 BmPsS %8.4lf
-	3 BmPsE %8.4lf
-	4 BmPsW %8.4lf
-	5 BmPsMux %5.0lf
-	6 UVMon  %8.4lf
+spreadsheet nortIX 5
+   1 IXStt %5.0lf
+   2 EtnPs %5.0lf
+   3 EtnSt %5.0lf
+   4 EtnFlg %5.0lf
 
-spreadsheet test 4
-	condition depending on (2Hz)
-	1 GtVSt %6lf
-	2 SW_St  %6lf
+# spreadsheet nortBP 8
+# 	condition depending on (2Hz)
+# 	1 BmPsN %8.4lf
+# 	2 BmPsS %8.4lf
+# 	3 BmPsE %8.4lf
+# 	4 BmPsW %8.4lf
+# 	5 BmPsMux %5.0lf
+# 	6 UVMon  %8.4lf
+
+# spreadsheet test 4
+# 	condition depending on (2Hz)
+# 	1 GtVSt %6lf
+# 	2 SW_St  %6lf
 
 #spreadsheet nort 6
 #	1 GtCt1Stat %7.0lf 0xC000&
