@@ -4,10 +4,10 @@ TM 1/16 Hz AD8        AirLP; /* AIR LOW PRESSURE */
 TM 1/16 Hz NAV_Alttd  Alttd; /* NAV Altitude */
 TM 1/4  Hz AD8        AtPos; /* ATTENUATOR POSN POT */
 TM 1/16 Hz AD8        BAPos; /* BELLOWS ACTUATOR POSITION */
-TM 2    Hz AD8_PSD    BmPsN; /* Beam Position Monitor N */
-TM 2    Hz AD8_PSD    BmPsS; /* Beam Position Monitor S */
-TM 2    Hz AD8_PSD    BmPsE; /* Beam Position Monitor E */
-TM 2    Hz AD8_PSD    BmPsW; /* Beam Position Monitor W */
+/* TM 2 Hz AD8_PSD    BmPsN;*/ /* Beam Position Monitor N */
+/* TM 2 Hz AD8_PSD    BmPsS;*/ /* Beam Position Monitor S */
+/* TM 2 Hz AD8_PSD    BmPsE;*/ /* Beam Position Monitor E */
+/* TM 2 Hz AD8_PSD    BmPsW;*/ /* Beam Position Monitor W */
 TM 2    Hz DStat      BmPsMux; /* Beam Position Mux Status */
 TM 1/16 Hz AD8_T30K   CIn_T; /* TFR COOLANT TEMPERATURE IN */
 TM 1/16 Hz AD8_T30K   COutT; /* TFR COOLANT TEMPERATURE OUT */
@@ -61,10 +61,10 @@ TM 4    Hz AD8        OClUV; /* OH CELL UV MONITOR */
 TM 1/16 Hz AD8_T30K   OHC2T; /* OH CELL TEMP 2 */
 TM 1/16 Hz AD8_T30K   OHCHT; /* OH CELL HOUSING TEMP */
 TM 1/16 Hz AD8_5A     OHCLI; /* OH CELL LAMP CURRENT */
-TM 1    Hz AD12_T30K  PAFF1; /* PRIMARY AIR FLOW FWD TEMP 1 */
-TM 1    Hz AD12_T30K  PAFF2; /* PRIMARY AIR FLOW FWD TEMP 2 */
-TM 1    Hz AD12_T30K  PAFF3; /* PRIMARY AIR FLOW FWD TEMP 3 */
-TM 1    Hz AD12_T30K  PAFF4; /* PRIMARY AIR FLOW FWD TEMP 4 */
+TM 2    Hz AD12_PSD   BmPsN; /* PAFF1; PRIMARY AIR FLOW FWD TEMP 1 */
+TM 2    Hz AD12_PSD   BmPsS; /* PAFF2; PRIMARY AIR FLOW FWD TEMP 2 */
+TM 2    Hz AD12_PSD   BmPsE; /* PAFF3; PRIMARY AIR FLOW FWD TEMP 3 */
+TM 2    Hz AD12_PSD   BmPsW; /* PAFF4; PRIMARY AIR FLOW FWD TEMP 4 */
 TM 1    Hz AD12_T30K  PAFF5; /* PRIMARY AIR FLOW FWD TEMP 5 */
 TM 1    Hz AD12_T30K  PAFF6; /* PRIMARY AIR FLOW FWD TEMP 6 */
 TM 1    Hz AD12_T30K  PAFF7; /* PRIMARY AIR FLOW FWD TEMP 7 */
@@ -160,10 +160,10 @@ Address OClUV  0xC2C; /* OH CELL UV MONITOR */
 Address OHC2T  0xC30; /* OH CELL TEMP 2 */
 Address OHCHT  0xC26; /* OH CELL HOUSING TEMP */
 Address OHCLI  0xC28; /* OH CELL LAMP CURRENT */
-Address PAFF1  0xC9C; /* PRIMARY AIR FLOW FWD TEMP 1 */
-Address PAFF2  0xC9E; /* PRIMARY AIR FLOW FWD TEMP 2 */
-Address PAFF3  0xCA0; /* PRIMARY AIR FLOW FWD TEMP 3 */
-Address PAFF4  0xCA2; /* PRIMARY AIR FLOW FWD TEMP 4 */
+Address BmPsN  0xC9C; /* PRIMARY AIR FLOW FWD TEMP 1 */
+Address BmPsS  0xC9E; /* PRIMARY AIR FLOW FWD TEMP 2 */
+Address BmPsE  0xCA0; /* PRIMARY AIR FLOW FWD TEMP 3 */
+Address BmPsW  0xCA2; /* PRIMARY AIR FLOW FWD TEMP 4 */
 Address PAFF5  0xCA4; /* PRIMARY AIR FLOW FWD TEMP 5 */
 Address PAFF6  0xCA6; /* PRIMARY AIR FLOW FWD TEMP 6 */
 Address PAFF7  0xCA8; /* PRIMARY AIR FLOW FWD TEMP 7 */
@@ -200,18 +200,18 @@ Address X2_HV  0xC1E; /* AXIS 2 PMT VOLTS HV MON */
 Address X2DAT  0xC16; /* AXIS 2 PMT HOUSING TEMP */
 Address X2FAT  0xC18; /* AXIS 2 HOUSING TEMP */
 Address X2Las  0xC86; /* AXIS #2 X LAS(OH DETECT AXES) */
-Address BmPsN  0xC19; /* Beam Position Monitor N */
-Address BmPsS  0xC17; /* Beam Position Monitor S */
-Address BmPsE  0xC15; /* Beam Position Monitor E */
-Address BmPsW  0xC13; /* Beam Position Monitor W */
+/* Address BmPsN  0xC19; */ /* Beam Position Monitor N */
+/* Address BmPsS  0xC17; */ /* Beam Position Monitor S */
+/* Address BmPsE  0xC15; */ /* Beam Position Monitor E */
+/* Address BmPsW  0xC13; */ /* Beam Position Monitor W */
 Address BmPsMux 0x833; /* Beam Position Mux Status */
 
 Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
   BmPsMux = ( sbba(BmPsMux.address) & 0x10 ) ? 1 : 0;
-  BmPsN = sbba(BmPsN.address);
-  BmPsS = sbba(BmPsS.address);
-  BmPsE = sbba(BmPsE.address);
-  BmPsW = sbba(BmPsW.address);
+  BmPsN = (sbwa(BmPsN.address)>>4) & 0xFFF;
+  BmPsS = (sbwa(BmPsS.address)>>4) & 0xFFF;
+  BmPsE = (sbwa(BmPsE.address)>>4) & 0xFFF;
+  BmPsW = (sbwa(BmPsW.address)>>4) & 0xFFF;
   /* DigSelect( 52, (1-BmPsMux)*0xFFFF ); */
-  DigSelect( 52, 1 * 0xFFFF );
+  /* DigSelect( 52, 0 * 0xFFFF ); */
 }
