@@ -1,0 +1,93 @@
+Partition
+
+{ double GP_prev_GrnPw;
+  int GP_prev_DubT;
+  int GP_prev_datapt; /* True if we have a point logged in */
+}
+
+%{
+  #define GP_SMALL_STEP 100
+  #define GP_SMALL_DP 0.03
+  #define GP_ENABLE 23
+  #define GP_DISABLE 24
+  static double GP_Sum;
+  static int GP_Count;
+%}
+
+State GreenPeakInit {
+		{ GP_prev_datapt = 0; }
+		{ if ( SW_St == GP_ENABLE ) Validate GreenPeak_Start; }
+		{ if ( SW_St == GP_DISABLE ) Validate GreenPeak_Stop; }
+}
+
+State GreenPeak_Start {
+		> Log Green Power Peakup Enabled
+		> OH SW Status Value to 0
+		Hold until ( SW_St == 0 );
+		Validate GreenPeak;
+}
+
+State GreenPeak_Restart {
+		{ GP_prev_datapt = 0; }
+		Validate GreenPeak;
+}
+
+State GreenPeak {
+		{ GP_Sum = 0; GP_Count = 0; }
+		{ if ( SW_St == GP_ENABLE ) Validate GreenPeak_Start; }
+		{ if ( SW_St == GP_DISABLE ) Validate GreenPeak_Stop; }
+		{ GP_Sum += convert(GrnP1);
+		  GP_Count++;
+		}
+		{ if ( GP_Count >= 30 ) {
+			int GP_new_DubT, new_dir;
+			double GP_new_GrnPw, dP_dT;
+			double prev_step;
+		  
+			GP_new_DubT = convert( RKDPTSP );
+			GP_new_GrnPw = GP_Sum / GP_Count;
+			if ( GP_new_DubT == 1000 ) new_dir = 1;
+			else if ( GP_new_DubT == 3000 ) new_dir = -1;
+			else if ( GP_prev_datapt ) {
+			  prev_step = GP_new_DubT > GP_prev_DubT ? 1 :
+				(GP_new_DubT == GP_prev_DubT ? 0 : -1 );
+			  if ( prev_step != 0 ) {
+				dP_dT = (GP_new_GrnPw - GP_prev_GrnPw) * prev_step;
+				new_dir = (dP_dT >= 0) ? 1 : -1;
+				if ( dP_dT * new_dir < GP_SMALL_DP ) new_dir = 0;
+			  } else {
+				new_dir = 1;
+			  }
+			} else {
+			  new_dir = 1;
+			}
+			GP_prev_DubT = GP_new_DubT;
+			GP_prev_GrnPw = GP_new_GrnPw;
+			GP_prev_datapt = 1;
+			GP_Sum = 0; GP_Count = 0;
+			if ( new_dir == 0 ) Validate GreenPeakWait;
+			else {
+			  GP_new_DubT += GP_SMALL_STEP * new_dir;
+			  ci_sendfcmd( 2, "OH Topaz KDP SetPoint %d\n", 
+							  GP_new_DubT );
+			}
+		  }
+		}
+		
+		> Log Entering State GreenPeak
+}
+
+State GreenPeakWait { 
+		{ if ( SW_St == GP_ENABLE ) Validate GreenPeak_Start; }
+		{ if ( SW_St == GP_DISABLE ) Validate GreenPeak_Stop; }
+		{ if ( GP_prev_datapt == 0 ) Validate GreenPeak; }
+		> Log Entering State GreenPeakWait
+  +5:00 Validate GreenPeak_Restart;
+}
+
+State GreenPeak_Stop {
+		> Log Green Power Peakup Disabled
+		> OH SW Status Value to 0
+		Hold until ( SW_St == 0 );
+		Validate GreenPeakInit;
+}
