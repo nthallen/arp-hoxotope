@@ -48,7 +48,7 @@ State Pinch_Valve_Close2 {
      > Drive Pinch Valve out 0
      Hold Until ( PVStep == 0 ) or 2
      else { msg( 2, "Pinch Valve step did not reset" ); }
-     > Preset Pinch Valve 0
+     > Preset Pinch Valve Position to 0
      { if ( AC_S ) Validate Pinch_Valve_Closed; }
  +1  Hold until ( convert(PumpT) < 60 && convert(PumpT) >= 25 );
      > AC On
@@ -113,7 +113,7 @@ State Pinch_Valve_PI {
   }
 
   # We can jump ahead with "SW Status Pinch Valve Scan"
-  "Regulating"
+  "Regulating";
   +55:00 Validate Pinch_Valve_Scan;
 }
 

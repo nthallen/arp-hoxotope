@@ -16,7 +16,7 @@ spreadsheet whathappened 25
 	15 Alttd %6.1lf 
 	16 SD__P %6.4lf 
 	17 SD_P2 %6.4lf
-	18 SD_DP %6.4lf
+;	18 SD_DP %6.4lf
 ;	19 GtVPs %5.0lf 
 ;	20 SVPos %4.2lf 
 ;	21 STVPs %5.0lf To_Double

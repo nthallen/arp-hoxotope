@@ -46,7 +46,7 @@ spreadsheet hxeng_1 61
   45 RLSD1T %5.1lf
   46 RLSD2I %5.1lf
   47 RLSD2T %5.1lf
-  48 SD_DP %5.1lf
+;  48 SD_DP %5.1lf
   49 SD_P2 %5.1lf
   50 SD__P %5.1lf
   51 TopazSecs %5.1lf

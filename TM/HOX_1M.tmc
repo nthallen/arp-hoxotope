@@ -1,5 +1,5 @@
-/* AD12_DucT1 1M Thermistor (SN 114) Pulled up by 1.0000M */
-Calibration ( AD12_DucT1, CELCIUS ) {
+/* AD12_DucT2 1M Thermistor (SN 114) Pulled up by 1.0000M */
+Calibration ( AD12_DucT2, CELCIUS ) {
     16, 404.38172,
     48, 309.17715,
     80, 273.20815,
@@ -114,8 +114,8 @@ Calibration ( AD12_DucT1, CELCIUS ) {
   65504, -87.13015,
   65520, -93.74313
 }
-/* AD12_DucT2 1M Thermistor (SN 116) Pulled up by 1.0000M */
-Calibration ( AD12_DucT2, CELCIUS ) {
+/* AD12_DucT1 1M Thermistor (SN 116) Pulled up by 1.0000M */
+Calibration ( AD12_DucT1, CELCIUS ) {
     16, 384.51233,
     48, 296.43731,
     80, 262.74643,

@@ -15,6 +15,7 @@
 %{
   #include <math.h> /* for floor */
   #include "CmdData.h"
+  #include "idx64.h"
 %}
 
 { tma_hold((IOSwS & 3) == 1); }
@@ -27,7 +28,7 @@
 
 %{
   int Scan_Mode_Always = 1;
-  int Etalon_Scanmode_Reqested = 0;
+  int Etalon_Scanmode_Requested = 0;
 %}
 
 #----------------------------------------------------------------
@@ -54,7 +55,7 @@ State initialize {
   +1  > adjGate 2b delay set 0
   +1  > adjgate 2b width set 20
   +1  > power solenoids and steppers on
-  +1  Validate Pinch_Valve_Close
+  +1  Validate Pinch_Valve_Close;
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
       > Drive etalon out 0
@@ -130,7 +131,7 @@ State flight    {
 #----------------------------------------------------------------
 State scan  {
       depending on (ON_GROUND) { Validate shutdown; }
-      { Etalon_Scanmode_Reqested = 0; }
+      { Etalon_Scanmode_Requested = 0; }
       Hold until valid (Etalon_Hold);
       Hold until valid (laser_diodes_on);
   +1  > topaz diode 1 temperature 26.0 C
@@ -210,18 +211,18 @@ State record NoLog  {
         depending on (laser_diodes_on ) {}
         else Validate scan;
       }
-      { Etalon_Scanmode_Reqested = 1; }
+      { Etalon_Scanmode_Requested = 1; }
 
       > SW Status Green Peakup Enable
-      Hold until ( SWStat == SWS_TIMEWARP && Scan_Mode_Always )
+      Hold until ( SW_St == SWS_TIMEWARP && Scan_Mode_Always )
        or 55:00;
       Validate scan;
 }
 
 State standby {
       depending on (ON_GROUND) { Validate shutdown; }
-      { Etalon_Scanmode_Reqested = 0; }
-      Hold until ( SWStat == SWS_TIMEWARP );
+      { Etalon_Scanmode_Requested = 0; }
+      Hold until ( SW_St == SWS_TIMEWARP );
       Validate record;
 }
 

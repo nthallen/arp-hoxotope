@@ -11,7 +11,7 @@ spreadsheet jumbo 100
 ; Secondary Duct Pressures & Nav. Data
 	9 SD__P %6.4lf 
 	10 SD_P2 %6.4lf
-	11 SD_DP %6.4lf
+;	11 SD_DP %6.4lf
 	12 SDP_T %5.1lf 
 ;	13 GtVPs %5.1lf
 ;	14 GtVSt %6f

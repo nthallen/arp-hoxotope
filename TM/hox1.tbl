@@ -37,11 +37,10 @@ GasDeck {
 }
 AirFlow {
   Title: >"Air Flow"<;
+  PaltP (PaltP,5);
   SD__P (SD__P,5);
-  SD_DP (SD_DP,6);
   SD_P2 (SD_P2,6);
-# SAFB1 (SAFB1,5);
-# SAFB2 (SAFB2,5);
+  SetP  (PV_SetP,5);
   DucT1 (DucT1,5);
   DucT2 (DucT2,5);
   "A/C" (AC_S,3);
@@ -50,13 +49,11 @@ AirFlow {
   VGlue 0+1;
   HBox { -; Title: Pinch; - };
   #VGlue 0+1;
-  >{(PVStep)       (PVPos,6);
+  >{(PVStep,5)     (PVPos,5);
     (PVStatFlag,5) (PVScan,4);
   }<;
-# Title: >Gate<;
-# >{(GtVPs) "";
-# (GtVStatus,5) (GtVFlg,4);
-# }<;
+  Gp: (PV_Gp,5);
+  Gi: (PV_Gi);
 }
 Laser {
   Title: >Laser<;
@@ -89,7 +86,7 @@ OtherT {
 }
 Software {
   HBox { +-; Title: Software; -+ };
-  Sol:   (SolSt,3);
+  #Sol:   (SolSt,3);
   SW:    (SW_St,3);
 }
 HBar { VGlue 0+1; +-+; VGlue 0+1 }
