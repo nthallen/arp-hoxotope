@@ -37,3 +37,13 @@ RTG_REPORT( XL_X, dtime(), XL_X );
 RTG_REPORT( XL_Y, dtime(), XL_Y );
 RTG_REPORT( XL_TP, dtime(), XL_TP );
 
+{ double press, mult, uv;
+  press = convert(SD__P) + 5.2;
+  uv = convert(UVMon) - 0.02;
+  if ( uv <= .001 )
+	mult = 0;
+  else
+	mult = ( 345.6 + 98.76 * press + 0.193 * press * press ) / uv;
+  RTG_REPORT( X1_OH, dtime(), SX1FGc * mult );
+  RTG_REPORT( X2_OH, dtime(), SX2FGc * mult );
+}
