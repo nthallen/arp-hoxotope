@@ -51,10 +51,10 @@ State initialize {
 		+1  > OH PsD select dye laser
 		+1	> OH power solenoids and steppers off
 		+1	> OH power 28V switched off
-		+1	> OH set etalon online position 30700
+		+1	> OH set etalon online position 30400
 		+1	> OH set etalon online delta 10
 		+1	> OH set etalon offline delta 450
-		+1	> OH set etalon altline delta 870
+		+1	> OH set etalon altline delta 950
 		# A is fixed, B is adjustable, so to speak.
 		+1  > OH adjGate 1a delay set 120
 		+1  > OH adjGate 1a width set 255
@@ -163,7 +163,7 @@ State flight	{
 		+1  > OH set etalon online delta 5
 		+1	> OH soldrv select mode 0
 	   	+1	> OH SW Status Green Peakup Enable
-		+1	Validate limbo;
+	   +90	Validate limbo;
 }
  
 ################################################################
@@ -180,7 +180,7 @@ State limbo {
 ################################################################
 # Record mode. Accessible from limbo.
 ################################################################
-State record	{
+State record NoLog	{
 			depending on (BELOW_CLOUDS) { Validate purgatory; }
 			depending on (ON_GROUND) { Validate purgatory; }
 			depending on (1 Hz) {
@@ -188,11 +188,11 @@ State record	{
 			  else Validate scan;
 			}
 			> OH Drive Etalon Online
-			> OH Scan Etalon In 70 by 5
+			> OH Scan Etalon In 75 by 5
 			> OH Drive Etalon Offline
 			Resume Lab_read;
 		+6	> OH Drive Etalon Altline
-			> OH Scan Etalon Out 70 by 5
+			> OH Scan Etalon Out 75 by 5
 		+4	Hold until (EtnFlg == 0);
 			Validate record;
 }
@@ -645,7 +645,7 @@ state etalon_init	{
 # 02/22.01 etalon_pos at 15,000 is 4.42 V
 # 07/09/02 etalon_pos at 15,000 is 5.57 V
 #
-		+5	{ if ((EtPos<(5.30*.1*65536)) || (EtPos>(6.00*.1*65536))) {
+		+5	{ if ((EtPos<(5.00*.1*65536)) || (EtPos>(6.00*.1*65536))) {
 				float etalon_pos;
 				etalon_pos=EtPos;
 				etalon_pos=(etalon_pos*10)/65536;
