@@ -4,6 +4,7 @@ TM 1/2  Hz AD8        WVBKV; /* RF Backward Power */
 TM 1/2  Hz AD8_T30K   WVFAT; /* H2O Filter Assembly Temperature */
 TM 8    Hz Ct24       WVFlr; /* 315nM PMT Monitor */
 TM 1/2  Hz AD8        WVFWV; /* RF Forward Power */
+TM 1/2  Hz DA_SPt     WVHSPt; /* Heater Set Point */
 TM 1/2  Hz AD8_5V     WVLMP; /* Lamp Pressure */
 TM 1/2  Hz AD8_T30K   WVLMT; /* Lamp Module Temperature */
 TM 1/2  Hz AD8        WVLPV; /* Lamp Photodiode Monitor */
@@ -20,6 +21,7 @@ Address WVBKV  0xD0A; /* RF Backward Power */
 Address WVFAT  0xD09; /* H2O Filter Assembly Temperature */
 Address WVFlr  0x690; /* 315nM PMT Monitor */
 Address WVFWV  0xD08; /* RF Forward Power */
+Address WVHSPt 0xE22; /* Heater Set Point */
 Address WVLMP  0xD0E; /* Lamp Pressure */
 Address WVLMT  0xD0D; /* Lamp Module Temperature */
 Address WVLPV  0xD03; /* Lamp Photodiode Monitor */
