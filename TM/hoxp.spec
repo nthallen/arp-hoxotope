@@ -57,11 +57,6 @@ TMA=*.tma laser.sol h2o.sol laserlab.sol
 TBL=*.tbl h2o.fld *.cfg
 EDF=*.edf
 
-# These are old sources which we haven't resolved yet:
-OLDSRC+=fast.edf
-
-SOURCE+=$(OLDSRC)
-
 CYCLE=cycle > $@
 ohf.o : ohf.h
 peakalgo.o : ohf.h /usr/local/include/idx64.h
