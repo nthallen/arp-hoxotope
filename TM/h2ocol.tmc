@@ -1,6 +1,9 @@
 %{
   /* h2ocol.tmc STRAT Collection for Water Vapor through ICC
    * $Log$
+   * Revision 1.1  1997/02/25 19:07:05  nort
+   * Initial revision
+   *
    */
   #include <errno.h>
   #include <sys/types.h>
@@ -45,7 +48,7 @@
 	  }
 	  set_response(resp);
 	}
-	sbw(0x690);
+	sbwa(0x690);
   }
   
   static void h2o_int_term( void ) {
@@ -68,10 +71,10 @@
   }
 
   #define COL_H2O_CTRS \
-	WVAD1 = sbw(0x698 /*  WVAD1.address */);\
-	WVAD2 = sbw(0x69A /* WVAD2.address */);\
-	WVFlr.low = sbw(0x690 /* WVFlr.address */);\
-	WVFlr.high = sbb(0x692 /* WVFlr.address+2 */)
+	WVAD1 = sbwa(0x698 /*  WVAD1.address */);\
+	WVAD2 = sbwa(0x69A /* WVAD2.address */);\
+	WVFlr.low = sbwa(0x690 /* WVFlr.address */);\
+	WVFlr.high = sbba(0x692 /* WVFlr.address+2 */)
 
   #define ONINT_INIT h2o_int_init();
   #define ONINT_TERM h2o_int_term();
