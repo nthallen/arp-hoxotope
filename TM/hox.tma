@@ -193,7 +193,7 @@ State record	{
 			Resume Lab_read;
 		+6	> OH Drive Etalon Altline
 			> OH Scan Etalon Out 70 by 5
-		+4	Hold until (EtnFlg = 0);
+		+4	Hold until (EtnFlg == 0);
 			Validate record;
 }
 
