@@ -22,6 +22,7 @@ Temps {
   HtXT2: (HtXT2,6) V;
   PhoT2: (PhoT2,6) V;
   DetT2: (DetT2,6) V;
+  VGlue 0+1;
   HBox{ -+; Title: "Etc."; +- };
   PaltP: (PaltP,6) V;
   HVPSP: (HVPSP,4) V;
@@ -56,9 +57,10 @@ MFCtr {
   HBox{ +=+; Title: "MFCtr"; +=+ };
   HBox { (flttime,9); HGlue 0+1; (MFCtr,5) }
 }
-{ HBox { ||+; [LabAna]; ||+; [AnaLab]; ||+; [Temps]; ||+;
-   { [DetAxes]; [Lamps];
-	 [MFCtr] }; ||+ };
+{ HBox { ||+; [LabAna]; ||+;
+	 { HBox { [AnaLab]; ||+; [Temps] };
+	   [MFCtr] }; ||+;
+	 { [DetAxes]; [Lamps] }; ||+ };
   =;
   (%CLIENT,0+1,1);
 }
