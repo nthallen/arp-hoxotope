@@ -107,19 +107,21 @@ State scanning_etn {
 
 State scanning_line {
   { if ( EtnFlg & IXFLAG_SCAN ) {
-      double et, x, y, x2;
-      et = EtnPs;
-	  x = n_scan;
-      y = Ratio;
-      sx += x;
-      sy += y;
-      sxy += x*y;
-      x2 = x*x;
-      sx2 += x2;
-      sx2y += x2*y;
-      sx3 += x2*x;
-      sx4 += x2*x2;
-      save_point( et, y );
+	  if ( EtnFlg == IXFLAG_SCAN ) {
+		double et, x, y, x2;
+		et = EtnPs;
+		x = n_scan;
+		y = Ratio;
+		sx += x;
+		sy += y;
+		sxy += x*y;
+		x2 = x*x;
+		sx2 += x2;
+		sx2y += x2*y;
+		sx3 += x2*x;
+		sx4 += x2*x2;
+		save_point( et, y );
+	  }
     } else {
       double k11, k12, k21, k22, R1, R2, D, C, B, A, pkx;
 	  unsigned short newstart;
@@ -164,9 +166,12 @@ State scanning_line {
 	  { unsigned xlo, xhi;
 		xlo = floor(pkx);
 		xhi = ceil(pkx);
-		if ( xlo == xhi ) PkTime = tdata[xlo];
-		else if ( xhi != xlo+1 ) nl_error( 4, "Bad Math!" );
-		else {
+		if ( xlo == xhi ) {
+		  PkTime = tdata[xlo];
+		  PkPos = etdata[xlo];
+		} else if ( xhi != xlo+1 ) {
+		  nl_error( 4, "Bad Math!" );
+		} else {
 		  PkTime = tdata[xlo] +
 			(pkx-xlo) * (tdata[xhi]-tdata[xlo]);
 		  PkPos = etdata[xlo] +
