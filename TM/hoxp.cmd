@@ -37,7 +37,7 @@
 		AdjGates[gate].value = data;
 		sbwr( AdjGates[gate].addr, data );
 	  } else {
-		msg( 1, "Set_AdjGate(%d) out of range", gate );
+		nl_error( 1, "Set_AdjGate(%d) out of range", gate );
 	  }
 	}
 	static void DitherGate( void ) {
