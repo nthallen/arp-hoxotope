@@ -1,3 +1,5 @@
+indexer status 4 Hz IXStt
+
 channel 0 Bellows
   position 1/4 Hz BlwPs
   status   1/4 Hz BlwSt Diagram BlwStFlag
@@ -20,17 +22,17 @@ channel 2 Attenuator
   scan
   chop
   disable zeroref
-channel 3 Gate Valve
-  position 1/4 Hz GtVPs
-  status   1/4 Hz GtVSt Diagram GtVStatus
-  scanstat GtVFlg
-  speed 1067 Hz
-  disable zeroref
-  scan
-channel 4 Secondary Throttle
-  position 1/4 Hz STVPs
-  status   1/4 Hz STVSt Diagram STVStFlag
-  scanstat STVFlg
+# channel 3 Gate Valve
+#   position 1/4 Hz GtVPs
+#   status   1/4 Hz GtVSt Diagram GtVStatus
+#   scanstat GtVFlg
+#   speed 1067 Hz
+#   disable zeroref
+#   scan
+channel 4 Pinch Valve
+  position 1/4 Hz PVStep
+  status   1/4 Hz PVStat Diagram PVStatFlag
+  scanstat PVScan
   scan
   disable zeroref
   speed 1067 Hz

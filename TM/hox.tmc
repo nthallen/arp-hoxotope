@@ -4,10 +4,10 @@ TM 1/16 Hz AD8        AirLP; /* AIR LOW PRESSURE */
 TM 1/16 Hz NAV_Alttd  Alttd; /* NAV Altitude */
 TM 1/4  Hz AD8        AtPos; /* ATTENUATOR POSN POT */
 TM 1/16 Hz AD8        BAPos; /* BELLOWS ACTUATOR POSITION */
-/* TM 2 Hz AD8_PSD    BmPsN;*/ /* Beam Position Monitor N */
-/* TM 2 Hz AD8_PSD    BmPsS;*/ /* Beam Position Monitor S */
-/* TM 2 Hz AD8_PSD    BmPsE;*/ /* Beam Position Monitor E */
-/* TM 2 Hz AD8_PSD    BmPsW;*/ /* Beam Position Monitor W */
+TM 2    Hz AD12_PSD   BmPsN; /* PAFF1; PRIMARY AIR FLOW FWD TEMP 1 */
+TM 2    Hz AD12_PSD   BmPsS; /* PAFF2; PRIMARY AIR FLOW FWD TEMP 2 */
+TM 2    Hz AD12_PSD   BmPsE; /* PAFF3; PRIMARY AIR FLOW FWD TEMP 3 */
+TM 2    Hz AD12_PSD   BmPsW; /* PAFF4; PRIMARY AIR FLOW FWD TEMP 4 */
 TM 2    Hz DStat      BmPsMux; /* Beam Position Mux Status */
 TM 1/16 Hz AD8_T30K   CIn_T; /* TFR COOLANT TEMPERATURE IN */
 TM 1/16 Hz AD8_T30K   COutT; /* TFR COOLANT TEMPERATURE OUT */
@@ -49,44 +49,19 @@ TM 1/16 Hz AD8_T30K   LMP_T; /* LASER (Mounting Plate?) TEMP */
 TM 1/16 Hz NAV_Angle  Lngtd; /* NAV Longitude */
 TM 1/4  Hz AD8_30A    LTE_I; /* LASER TEC CURRENT */
 TM 1/4  Hz AD8_5A     LTETV; /* LASER TEC TEMP */
-TM 1/16 Hz AD8        NO_HP; /* NO BOTTLE OUTPUT PRESS */
-TM 1    Hz AD8        NO_LP; /* NO REGULATOR OUTPUT PRESS */
-TM 1/16 Hz AD8_T30K   NOFlT; /* NO GAS FLOWMETER TEMP MON */
-TM 4    Hz AD8        NOFlw; /* NO FLOW OUTPUT */
-TM 1/16 Hz AD8_T30K   NORgT; /* NO REGULATOR TEMP */
 TM 1/16 Hz AD8        NoseP; /* LASER HOUSING PRESS */
-TM 4    Hz DA_SPt     NOSPt; /* NO Mass Flow Set Point */
 TM 1/16 Hz AD8_KV     OClHV; /* OH CELL PMT HV MONITOR */
 TM 4    Hz AD8        OClUV; /* OH CELL UV MONITOR */
 TM 1/16 Hz AD8_T30K   OHC2T; /* OH CELL TEMP 2 */
 TM 1/16 Hz AD8_T30K   OHCHT; /* OH CELL HOUSING TEMP */
 TM 1/16 Hz AD8_5A     OHCLI; /* OH CELL LAMP CURRENT */
-TM 2    Hz AD12_PSD   BmPsN; /* PAFF1; PRIMARY AIR FLOW FWD TEMP 1 */
-TM 2    Hz AD12_PSD   BmPsS; /* PAFF2; PRIMARY AIR FLOW FWD TEMP 2 */
-TM 2    Hz AD12_PSD   BmPsE; /* PAFF3; PRIMARY AIR FLOW FWD TEMP 3 */
-TM 2    Hz AD12_PSD   BmPsW; /* PAFF4; PRIMARY AIR FLOW FWD TEMP 4 */
-TM 1    Hz AD12_T30K  PAFF5; /* PRIMARY AIR FLOW FWD TEMP 5 */
-TM 1    Hz AD12_T30K  PAFF6; /* PRIMARY AIR FLOW FWD TEMP 6 */
-TM 1    Hz AD12_T30K  PAFF7; /* PRIMARY AIR FLOW FWD TEMP 7 */
 TM 1/16 Hz AD8_T10K75 PC__T; /* PC TEMPERATURE */
 TM 1/16 Hz AD8_T30K   PMonT; /* 282nm DETECTOR TEMP */
 TM 1/16 Hz AD8_T30K   PS__T; /* MAIN POWER SUPPLY TEMP */
-TM 1    Hz AD12_T10K  SAFB1; /* SECONDARY AIR FLOW B 1 */
-TM 1    Hz AD12_T10K  SAFB2; /* SECONDARY AIR FLOW B 2 */
-TM 1    Hz AD12_T10K  SAFB3; /* SECONDARY AIR FLOW B 3 */
-TM 1    Hz AD12_T10K  SAFB4; /* SECONDARY AIR FLOW B 4 */
-TM 1    Hz AD12_T10K  SAFB5; /* SECONDARY AIR FLOW B 5 */
-TM 1    Hz AD12_T10K  SAFB6; /* SECONDARY AIR FLOW B 6 */
-TM 1    Hz AD12_T10K  SAFB7; /* SECONDARY AIR FLOW B 7 */
-TM 1    Hz AD12_T10K  SAFF1; /* SECONDARY AIR FLOW FWD TEMP 1 */
-TM 1    Hz AD12_T10K  SAFF2; /* SECONDARY AIR FLOW FWD TEMP 2 */
-TM 1    Hz AD12_T10K  SAFF3; /* SECONDARY AIR FLOW FWD TEMP 3 */
-TM 1    Hz AD12_T10K  SAFF4; /* SECONDARY AIR FLOW FWD TEMP 4 */
 TM 1    Hz AD12_KTORR SD__P; /* SECONDARY DUCT PRS OUTPUT */
 TM 1    Hz AD12_DTORR SD_DP; /* SECONDARY DUCT DIFF PRS OUTPUT */
 TM 1    Hz AD12_CTORR SD_P2; /* SD 100 Torr baratron (was PD__P) */
 TM 1/16 Hz AD8_T30K   SDP_T; /* SECONDARY DUCT PRS GUAGE TEMP */
-TM 1/16 Hz AD8_T30K   SolDT; /* SOLENOID DECK TEMP */
 TM 4    Hz UCHAR      SolSt; /* Soldrv Status Byte */
 TM 1/4  Hz AD8        SVPos; /* SECONDARY THROTTLE VALVE POSN */
 TM 1    Hz UCHAR      SW_St; /* Software Status Byte */
@@ -148,13 +123,7 @@ Address LHx2T  0xC4D; /* LASER HEAT EXCH HOT TEMP */
 Address LMP_T  0xC1F; /* LASER (Mounting Plate?) TEMP */
 Address LTE_I  0xC49; /* LASER TEC CURRENT */
 Address LTETV  0xC47; /* LASER TEC TEMP */
-Address NO_HP  0xC2F; /* NO BOTTLE OUTPUT PRESS */
-Address NO_LP  0xC2D; /* NO REGULATOR OUTPUT PRESS */
-Address NOFlT  0xC2E; /* NO GAS FLOWMETER TEMP MON */
-Address NOFlw  0xC21; /* NO FLOW OUTPUT */
-Address NORgT  0xC23; /* NO REGULATOR TEMP */
 Address NoseP  0xC04; /* LASER HOUSING PRESS */
-Address NOSPt  0xE84; /* NO Mass Flow Set Point */
 Address OClHV  0xC2A; /* OH CELL PMT HV MONITOR */
 Address OClUV  0xC2C; /* OH CELL UV MONITOR */
 Address OHC2T  0xC30; /* OH CELL TEMP 2 */
@@ -164,28 +133,13 @@ Address BmPsN  0xC9C; /* PRIMARY AIR FLOW FWD TEMP 1 */
 Address BmPsS  0xC9E; /* PRIMARY AIR FLOW FWD TEMP 2 */
 Address BmPsE  0xCA0; /* PRIMARY AIR FLOW FWD TEMP 3 */
 Address BmPsW  0xCA2; /* PRIMARY AIR FLOW FWD TEMP 4 */
-Address PAFF5  0xCA4; /* PRIMARY AIR FLOW FWD TEMP 5 */
-Address PAFF6  0xCA6; /* PRIMARY AIR FLOW FWD TEMP 6 */
-Address PAFF7  0xCA8; /* PRIMARY AIR FLOW FWD TEMP 7 */
 Address PC__T  0xC3C; /* PC TEMPERATURE */
 Address PMonT  0xC1D; /* 282nm DETECTOR TEMP */
 Address PS__T  0xC32; /* MAIN POWER SUPPLY TEMP */
-Address SAFB1  0xCB2; /* SECONDARY AIR FLOW B 1 */
-Address SAFB2  0xCB4; /* SECONDARY AIR FLOW B 2 */
-Address SAFB3  0xCB6; /* SECONDARY AIR FLOW B 3 */
-Address SAFB4  0xCB8; /* SECONDARY AIR FLOW B 4 */
-Address SAFB5  0xCBA; /* SECONDARY AIR FLOW B 5 */
-Address SAFB6  0xCBC; /* SECONDARY AIR FLOW B 6 */
-Address SAFB7  0xCBE; /* SECONDARY AIR FLOW B 7 */
-Address SAFF1  0xCAA; /* SECONDARY AIR FLOW FWD TEMP 1 */
-Address SAFF2  0xCAC; /* SECONDARY AIR FLOW FWD TEMP 2 */
-Address SAFF3  0xCAE; /* SECONDARY AIR FLOW FWD TEMP 3 */
-Address SAFF4  0xCB0; /* SECONDARY AIR FLOW FWD TEMP 4 */
 Address SD__P  0xC88; /* SECONDARY DUCT PRS OUTPUT */
 Address SD_DP  0xC8A; /* SECONDARY DUCT DIFF PRS OUTPUT */
 Address SD_P2  0xC92; /* SD 100 Torr baratron (was PD__P) */
 Address SDP_T  0xC37; /* SECONDARY DUCT PRS GUAGE TEMP */
-Address SolDT  0xC46; /* SOLENOID DECK TEMP */
 Address SVPos  0xC3B; /* SECONDARY THROTTLE VALVE POSN */
 Address UVMon  0xC82; /* 282nm DETECTOR OUTPUT(DYE LASER) */
 Address V28_V  0xC35; /* +28V MONITOR */
@@ -200,10 +154,6 @@ Address X2_HV  0xC1E; /* AXIS 2 PMT VOLTS HV MON */
 Address X2DAT  0xC16; /* AXIS 2 PMT HOUSING TEMP */
 Address X2FAT  0xC18; /* AXIS 2 HOUSING TEMP */
 Address X2Las  0xC86; /* AXIS #2 X LAS(OH DETECT AXES) */
-/* Address BmPsN  0xC19; */ /* Beam Position Monitor N */
-/* Address BmPsS  0xC17; */ /* Beam Position Monitor S */
-/* Address BmPsE  0xC15; */ /* Beam Position Monitor E */
-/* Address BmPsW  0xC13; */ /* Beam Position Monitor W */
 Address BmPsMux 0x833; /* Beam Position Mux Status */
 
 Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
@@ -215,3 +165,30 @@ Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
   DigSelect( 52, (1-BmPsMux)*0xFFFF ); 
 /*  DigSelect( 52, 0 * 0xFFFF ); */
 }
+
+TM 1 Hz AD12_T30K100KU Inl_T; Address Inl_T 0xCB2; /* Inlet Temperature (SAFB1 T10K) */
+TM 1 Hz AD12 HtXT2; Address HtXT2 0xCB4; /* (SAFB2 T10K) */
+TM 1 Hz AD12 PhoT2; Address PhoT2 0xCB6; /* (SAFB3 T10K) */
+TM 1 Hz AD12 DetT2; Address DetT2 0xCB8; /* (SAFB4 T10K) */
+TM 1 Hz AD12_T1M DucT1; Address DucT1 0xCBA; /* (SAFB5 T10K) */
+TM 1 Hz AD12_T1M DucT2; Address DucT2 0xCBC; /* (SAFB6 T10K) */
+TM 1 Hz AD12 UV_1V; Address UV_1V 0xCAA; /* (SAFF1 T10K) */
+TM 1 Hz AD12 UV_2V; Address UV_2V 0xCAC; /* (SAFF2 T10K) */
+TM 1 Hz AD12 Anemo; Address Anemo 0xCAE; /* (SAFF3 T10K) */
+TM 1 Hz AD12 PAltP; Address PAltP 0xCB0; /* (SAFF4 T10K) */
+TM 1/16 Hz AD8_T30K Lmp1T; Address Lmp1T 0xC46; /* (SolDT T30K) */
+TM 1/16 Hz AD8_T30K Lmp2T; Address Lmp2T 0xC2E; /* (NOFlT T30K) */
+
+/* TM 1/16 Hz AD8 NO_HP; Address NO_HP 0xC2F; */ /* NO BOTTLE OUTPUT PRESS */
+/* TM 1 Hz AD8 NO_LP; Address NO_LP 0xC2D; */ /* NO REGULATOR OUTPUT PRESS */
+/* TM 4 Hz AD8 NOFlw; Address NOFlw 0xC21; */ /* NO FLOW OUTPUT */
+/* TM 1/16 Hz AD8_T30K NORgT; Address NORgT 0xC23; */ /* NO REGULATOR TEMP */
+/* TM 4 Hz DA_SPt NOSPt; Address NOSPt 0xE84; */ /* NO Mass Flow Set Point */
+/* TM 2 Hz AD8_PSD BmPsN; Address BmPsN 0xC19; */ /* Beam Position Monitor N */
+/* TM 2 Hz AD8_PSD BmPsS; Address BmPsS 0xC17; */ /* Beam Position Monitor S */
+/* TM 2 Hz AD8_PSD BmPsE; Address BmPsE 0xC15; */ /* Beam Position Monitor E */
+/* TM 2 Hz AD8_PSD BmPsW; Address BmPsW 0xC13; */ /* Beam Position Monitor W */
+/* TM 1 Hz AD12_T30K PAFF5; Address PAFF5 0xCA4; */ /* PRIMARY AIR FLOW FWD TEMP 5 */
+/* TM 1 Hz AD12_T30K PAFF6; Address PAFF6 0xCA6; */ /* PRIMARY AIR FLOW FWD TEMP 6 */
+/* TM 1 Hz AD12_T30K PAFF7; Address PAFF7 0xCA8; */ /* PRIMARY AIR FLOW FWD TEMP 7 */
+/* TM 1 Hz AD12_T10K SAFB7; Address SAFB7 0xCBE; */ /* SECONDARY AIR FLOW B 7 */
