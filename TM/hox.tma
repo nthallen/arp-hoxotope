@@ -78,7 +78,7 @@ State initialize {
 			  ubastep = floor(bastep);
 			  ci_sendfcmd( 0, "OH Preset Bellows Position to %u\n",
 				ubastep );
-			  etstep =  30000 - (convert(EtPos) - 6)*14285;
+			  etstep =  30000 - (convert(EtPos) - 4.91)*14285;
 			  if (etstep < 0) etstep = 0;
 			  else if (etstep > 65535) etstep = 65535;
 			  uetstep = floor(etstep);
