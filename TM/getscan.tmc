@@ -14,7 +14,7 @@ state (filter_point);
 state (not_peaking, peaking);
 
 depending on (scanning_etn once) {
-  if (last_OHCLI >= 5) {
+  if (last_OHCLI >= 8) {
 	msg(0, "Peaking up on the OH Cell");
 	validate peakup_ohcell;
   } else {
