@@ -1,5 +1,8 @@
 /* ohf.c OH filter functions
  * $Log$
+ * Revision 1.1  1997/02/25 19:06:24  nort
+ * Initial revision
+ *
  * Revision 1.2  1994/09/08  14:35:21  nort
  * Moved cic_options() into oui
  *
@@ -12,7 +15,7 @@
 #include "nortlib.h"
 #include "nl_dsp.h"
 #include "nl_dsp_ul.h"
-#include "indexer.h"
+#include "idx64.h"
 #include "ohf.h"
 #pragma off (unreferenced)
   static char rcsid[] =
@@ -255,9 +258,3 @@ void scan_options(int argc, char **argv) {
 	msg(1, "low scan limit is below high scan limit");
   msg(0, "Low Scan Limit: %u High Scan Limit %u", low_limit, high_limit);
 }
-
-/* This is an empty ci_version to disable version checking: we don't
-   have a method for verifying formatted commands anyway, so no
-   point in getting picky about compatibility!
-*/
-char ci_version[] = "";
