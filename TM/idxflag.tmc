@@ -28,11 +28,11 @@ IxDriveStat PVStatFlag; invalidate PVStatFlag; { PVStatFlag = PVStat & 0xF; Vali
 	"    ",
 	"Scan",
 	"On  ",
-	"????",
+	"S/On",
 	"Off ",
-	"????",
+	"S/Of",
 	"Alt ",
-	"????"
+	"S/Al"
   };
 %}
 TM typedef unsigned short IndxrFlag {
