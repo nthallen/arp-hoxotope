@@ -1,5 +1,7 @@
 # Test tma for valve control.
 # 12/12/2003
+#
+# Jason is a weenie
 
 { if ( SW_St == 66 ) validate shutdown;
 }
