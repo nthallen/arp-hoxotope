@@ -31,10 +31,13 @@
   int Etalon_Scanmode_Requested = 0;
   double last_scan_time = 0;
   IndxrPos last_altline = 0;
+  #define DBL_CAST(x) ((double)(x))
 %}
 
 { double EtnStep_delta; Invalidate EtnStep_delta;
-  { EtnStep_delta = convert(EtPos) - EtnPs; Validate EtnStep_delta; }
+  { EtnStep_delta = DBL_CAST(convert(EtPos)) - DBL_CAST(EtnPs);
+    Validate EtnStep_delta;
+  }
 }
 
 #----------------------------------------------------------------
@@ -201,11 +204,11 @@ state scan_failed {
 # Reinitialize the etalon if it ever hits the in limit
 #----------------------------------------------------------------
 State reset_etalon {
+      { Etalon_Scanmode_Requested = 0; }
+      Hold until valid (Etalon_Hold);
       > Peakup Off
   +3  > Stop Etalon
   +1  > Drive etalon in 64000
-      > Drive etalon in 64000
-      > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 30;
       > Drive etalon out 10000
   +3  > Preset Etalon Position to 24000
@@ -261,8 +264,24 @@ State record {
       }
 
       > SW Status Green Peakup Enable
+      "Gp = 8, Gi = 1.5 for 30 Minutes";
+      Hold until ( Scan_Mode_Always &&
+         ((dtime()-last_scan_time > 30*60) || SW_St == SWS_TIMEWARP) );
+      > Pinch Valve Set Gain Gi 2.0
+      "Gp = 8, Gi = 2.0 for 10 Minutes";
+      Hold until ( Scan_Mode_Always &&
+         ((dtime()-last_scan_time > 40*60) || SW_St == SWS_TIMEWARP) );
+      > Pinch Valve Set Gain Gi 1.0
+      "Gp = 8, Gi = 1.0 for 10 Minutes";
+      Hold until ( Scan_Mode_Always &&
+         ((dtime()-last_scan_time > 48*60) || SW_St == SWS_TIMEWARP) );
+      > Pinch Valve Set Gain Gp 7.0
+      > Pinch Valve Set Gain Gi 1.5
+      "Gp = 7, Gi = 1.5 for 10 Minutes";
       Hold until ( Scan_Mode_Always &&
          ((dtime()-last_scan_time > 55*60) || SW_St == SWS_TIMEWARP) );
+      > Pinch Valve Set Gain Gp 8.0
+      > Pinch Valve Set Gain Gi 1.5
       Validate scan;
 }
 
