@@ -46,6 +46,7 @@ prtgext : ohf.c idxflag.tmc scanning.tma getscan.tmc scan.tmg chop.tmc dither.tm
 pdoit : hox.doit
 padoit : hoxa.doit
 pbdoit : pb.doit
+inetdoit : inet.doit
 
 h2odisp : h2octr.tmc h2o.fld h2o.cfg h2o.tmg
 h2o.sft : h2o.sol
