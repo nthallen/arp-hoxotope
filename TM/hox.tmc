@@ -213,5 +213,5 @@ Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
   BmPsE = sbba(BmPsE.address);
   BmPsW = sbba(BmPsW.address);
   /* DigSelect( 52, (1-BmPsMux)*0xFFFF ); */
-  DigSelect( 52, 0 * 0xFFFF );
+  DigSelect( 52, 1 * 0xFFFF );
 }
