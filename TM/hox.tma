@@ -180,7 +180,7 @@ State scanning {
     }
     { if ( EtnStep_delta < -1000 || EtnStep_delta > 1000 ) {
         msg( 2, "Observed large etalon delta during scan: %lf", EtnStep_delta );
-	Valildate reset_etalon;
+	Validate reset_etalon;
       }
     }
 
@@ -242,7 +242,7 @@ State record {
       }
       { if ( EtnStep_delta < -1000 || EtnStep_delta > 1000 ) {
 	  msg( 2, "Observed large etalon delta during record: %lf", EtnStep_delta );
-	  Valildate reset_etalon;
+	  Validate reset_etalon;
 	}
       }
       { if ((EtnFlg & IXFLAG_ALTLINE) == IXFLAG_ONLINE && last_altline != 0) {
