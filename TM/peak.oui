@@ -2,7 +2,7 @@
 <include> client msg
 <follow> client msg
 
-<include> "indexer.h"
+<include> "idx64.h"
 <include> "ohf.h"
 
 <opts> "L:H:"
