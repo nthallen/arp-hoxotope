@@ -9,7 +9,7 @@ cmdbase = h2o.cmd topaz.cmd
 SCRIPT = Experiment.config interact runfile.1111 idx.idx64 hoxp.dccc
 SCRIPT = VERSION get_lifetimes
 NONRCS = hox.cfg hox1.cfg h2o.cfg fields.cfg
-SRC = ohf.h CmdData.h
+SRC = ohf.h CmdData.h laserlab.sol
 
 TOOL = hoxp.idx rcs2html.dat
 
@@ -53,7 +53,7 @@ CFG=VERSION Experiment.config rcs2html.dat hoxp.spec
 FRAME=hoxp.pcm $(TMCBASE)
 CMD=hoxp.cmd idx64.cmd idxdrv.cmd hox.cmd hox.slp no.cmd
 CMD+=h2o.cmd topaz.cmd
-TMA=*.tma *.sol
+TMA=*.tma laser.sol h2o.sol laserlab.sol
 TBL=*.tbl h2o.fld *.cfg
 EDF=*.edf
 
