@@ -11,7 +11,10 @@
 		{ idx64_scan($2,$3,$4,$6); }
 	: Stop &drive * { idx64_stop($2); }
 	: Drive &drive Online * { idx64_online($2); }
-	: Drive &drive Offline * { idx64_offline($2); }
+	: Drive &drive Offline * {
+		idx64_offline($2);
+		if ( $2 == 1 ) DitherGate(); /* Etalon */
+	  }
 	: Drive &drive Altline * { idx64_altline($2); }
 	: Preset &drive Position to &steps * { idx64_preset($2, $5); }
 	: Set &drive Online Position %d (Enter Online Position) *
