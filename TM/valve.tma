@@ -183,7 +183,7 @@ State SW_Stat_Wait {
 	  default:
 	  case 0: reset_it = 0; break;
 	  case 30: Validate Pinch_Valve_Sit; break;
-	  case 31: Validate Pinch_Valve_Regulate; break;
+	  /* case 31: Validate Pinch_Valve_Regulate; break; */
 	  case 32: Validate Pinch_Valve_Proportionate; break;
 	  case 66: Validate shutdown; break;
 	  case 67: Validate Pinch_Valve_Limbo; break;
