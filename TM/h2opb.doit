@@ -1,0 +1,5 @@
+playback
+display h2odisp h2o
+algorithm hoxalgo -pll
+memo
+rtg /home/hoxp/h2o.rtg

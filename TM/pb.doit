@@ -1,0 +1,8 @@
+# Hox GSE w/ algorithm w/ windows
+playback
+display hoxdisp hox hox1
+memo
+algorithm hoxalgo -p
+extraction hoxrtgext
+algorithm prtgext -p
+rtg /home/hoxp/pb.rtg

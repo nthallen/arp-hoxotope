@@ -1,0 +1,9 @@
+%{
+  #include "tmctime.h"
+%}
+RTG_REPORT( WVFlr, dtime(), convert(WVFlr) );
+RTG_REPORT( WVAD1, dtime(), convert(WVAD1) );
+RTG_REPORT( WVAD2, dtime(), convert(WVAD2) );
+RTG_REPORT( WVLPV, dtime(), convert(WVLPV) );
+RTG_REPORT( WVBKV, dtime(), convert(WVBKV) );
+RTG_REPORT( WVStt, dtime(), convert(WVStt) );

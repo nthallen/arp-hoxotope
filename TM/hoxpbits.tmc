@@ -1,0 +1,42 @@
+%{
+  char *Flow_Text[] = { "Open", "CLSD", "OPEN", "O!C!" };
+  char *Sol_Text[] = { "Clsd", "Open" };
+  char *Inj_Text[] = { "-----", " Back", "Front", "BOTH!" };
+  char *yes_no_Text[] = { " No", "Yes" };
+  char *in_out_both_Text[] = { "----", " In ", " Out", "Both" };
+  char *on_off_Text[] = { "Off", " On" };
+  #define BITS(x,y,z) ((x>>y)&z)
+%}
+
+TM typedef unsigned char FlowStat { text "%4u" Flow_Text[]; }
+TM typedef unsigned char SolStat { text "%4u" Sol_Text[]; }
+TM typedef unsigned char InjStat_t { text "%5u" Inj_Text[]; }
+TM typedef unsigned char yes_no { text "%3u" yes_no_Text[]; }
+TM typedef unsigned char in_out_both {
+  text "%4u" in_out_both_Text[]; }
+TM typedef unsigned char on_off { text "%3u" on_off_Text[]; }
+
+FlowStat NOFlowStat; Invalidate NOFlowStat;
+{ NOFlowStat = BITS(DStt0,1,3); Validate NOFlowStat; }
+SolStat NOSolStat; Invalidate NOSolStat;
+{ NOSolStat = BITS(DStt0,3,1); Validate NOSolStat; }
+SolStat AirSolStat; Invalidate AirSolStat;
+{ AirSolStat = BITS(DStt0,4,1); Validate AirSolStat; }
+InjStat_t InjStat; Invalidate InjStat;
+{ InjStat = BITS(DStt0,6,3); Validate InjStat; }
+yes_no DL_Fl; Invalidate DL_Fl;
+{ DL_Fl = BITS(DStt1,6,1); Validate DL_Fl; }
+yes_no TFRFl; invalidate TFRFl;
+{ TFRFl = BITS(DStt1,7,1); Validate TFRFl; }
+FlowStat SCV_S; invalidate SCV_S;
+{ SCV_S = BITS(DStt1,1,1) + 2*BITS(DStt1,0,1); Validate SCV_S; }
+in_out_both X1_S; invalidate X1_S;
+{ X1_S = BITS(DStt1,2,3); Validate X1_S; }
+in_out_both X2_S; invalidate X2_S;
+{ X2_S = BITS(DStt1,4,3); Validate X2_S; }
+on_off DyePS; invalidate DyePS;
+{ DyePS = BITS(DStt2,5,1); Validate DyePS; }
+on_off CooPS; invalidate CooPS;
+{ CooPS = BITS(DStt2,6,1); Validate CooPS; }
+on_off LaserS; invalidate LaserS;
+{ LaserS = BITS(DStt2,1,1); Validate LaserS; }
