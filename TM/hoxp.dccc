@@ -30,13 +30,13 @@
   STRB,   0, 0x20   ;Digio0 1A 5 5 OH NO PURGE OFF
   STRB,   0, 0x40   ;Digio0 1A 6 6 OH NO SOLENOID ON
   STRB,   0, 0x80   ;Digio0 1A 7 7 OH NO SOLENOID OFF
-  STRB,   1, 0x40   ;Digio0 1C 6 8 OH AIR SOLENOID LOOP INJECTOR ON
-  STRB,   1, 0x20   ;Digio0 1C 5 9 OH AIR SOLENOID LOOP INJECTOR OFF
-  STRB,   1, 0x10   ;Digio0 1C 4 10 H2O Wet Air On
+  STRB,   1, 0x01   ;Digio0 1C 6 8 OH AIR SOLENOID LOOP INJECTOR ON
+  STRB,   1, 0x02   ;Digio0 1C 5 9 OH AIR SOLENOID LOOP INJECTOR OFF
+  STRB,   1, 0x04   ;Digio0 1C 4 10 H2O Wet Air On
   STRB,   1, 0x08   ;Digio0 1C 3 11 H2O Wet Air Off
-  STRB,   1, 0x04   ;Digio0 1C 2 12 OH Injector Back ON
-  STRB,   1, 0x02   ;Digio0 1C 1 13 OH Injector Back OFF
-  STRB,   1, 0x01   ;Digio0 1C 0 14 OH Injector Front ON
+  STRB,   1, 0x10   ;Digio0 1C 2 12 OH Injector Back ON
+  STRB,   1, 0x20   ;Digio0 1C 1 13 OH Injector Back OFF
+  STRB,   1, 0x40   ;Digio0 1C 0 14 OH Injector Front ON
   STRB,   1, 0x80   ;Digio0 1C 7 15 OH Injector Front OFF
   STRB,   2, 0x01   ;Digio0 2A 0 16 OH SECONDARY CLOSURE VLV OPEN ON
   STRB,   2, 0x02   ;Digio0 2A 1 17 OH SECONDARY CLOSURE VLV OPEN OFF
@@ -62,13 +62,13 @@
   STRB,   4, 0x2000 ;Digio0 3A 5 37 OH LASER 2 POWER OFF
   STRB,   4, 0x4000 ;Digio0 3A 6 38 OH LASER 1 DIODE ON
   STRB,   4, 0x8000 ;Digio0 3A 7 39 OH LASER 1 DIODE OFF
-  STRB,   5, 0x4000 ;Digio0 3C 6 40 OH LASER 2 DIODE ON
-  STRB,   5, 0x2000 ;Digio0 3C 5 41 OH LASER 2 DIODE OFF
-  STRB,   5, 0x1000 ;Digio0 3C 4 42 OH TFR COOLANT PUMP ON
+  STRB,   5, 0x0100 ;Digio0 3C 6 40 OH LASER 2 DIODE ON
+  STRB,   5, 0x0200 ;Digio0 3C 5 41 OH LASER 2 DIODE OFF
+  STRB,   5, 0x0400 ;Digio0 3C 4 42 OH TFR COOLANT PUMP ON
   STRB,   5, 0x0800 ;Digio0 3C 3 43 OH TFR COOLANT PUMP OFF
-  STRB,   5, 0x0400 ;Digio0 3C 2 44 OH Power OH Cell On
-  STRB,   5, 0x0200 ;Digio0 3C 1 45 OH Power OH Cell Off
-  STRB,   5, 0x0100 ;Digio0 3C 0 46 OH Power 28V Switched On
+  STRB,   5, 0x1000 ;Digio0 3C 2 44 OH Power OH Cell On
+  STRB,   5, 0x2000 ;Digio0 3C 1 45 OH Power OH Cell Off
+  STRB,   5, 0x4000 ;Digio0 3C 0 46 OH Power 28V Switched On
   STRB,   5, 0x8000 ;Digio0 3C 7 47 OH Power 28V Switched Off
   SPARE,  6, 0x0100 ;Digio0 4A 0 48 OH Power TEC Control On
   SPARE,  6, 0x0200 ;Digio0 4A 1 49 OH Power TEC Control Off
