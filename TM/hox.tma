@@ -199,6 +199,7 @@ state scan_failed {
 #----------------------------------------------------------------
 %{
   int n_etalon_resets = 0;
+  char *et_dir;
 %}
 State reset_etalon {
       { Etalon_Scanmode_Requested = 0; }
@@ -206,17 +207,16 @@ State reset_etalon {
       > Peakup Off
   +3  > Stop Etalon
       { double etdelta;
-        char *dir;
 	etdelta = 31000. - convert(EtPos);
 	if ( etdelta < 0 ) {
-	  dir = "Out";
+	  et_dir = "Out";
 	  etdelta = -etdelta;
-	} else dir = "In";
+	} else et_dir = "In";
 	while (etdelta > 64000 ) {
-	  ci_sendfcmd( 0, "Drive Etalon %s 64000\n", dir );
+	  ci_sendfcmd( 0, "Drive Etalon %s 64000\n", et_dir );
 	  etdelta -= 64000.;
 	}
-	ci_sendfcmd( 0, "Drive Etalon %s %.0lf\n", etdelta );
+	ci_sendfcmd( 0, "Drive Etalon %s %.0lf\n", et_dir, etdelta );
       }
   +2  Hold until ( (EtnSt & 8) == 0 ) or 30;
       { double etstep;
