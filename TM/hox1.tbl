@@ -132,7 +132,7 @@ Table {
 	  -;
 	  VGlue 0+30;
 	  (%TMA:hoxalgo:1,0+1,2);
-	  (%TMA:hoxalgo:11,0+1,2);
+	  (%TMA:hoxalgo:7,0+1,2);
 	  (%CLIENT,0+1,2);
 	}
   }
