@@ -19,7 +19,7 @@
 %}
 TM typedef unsigned short NGtCt16 {
   text "%5u";
-  collect x = sbw(x.address);
+  collect x = sbwa(x.address);
 }
 TM typedef NGtCt16 GtCt16;
 
@@ -28,8 +28,8 @@ TM typedef struct {
   unsigned short low;
   unsigned char high;
 } NGtCt24 {	collect x {
-			  x.low = sbw(x.address);
-			  x.high = sbb(x.address+2);
+			  x.low = sbwa(x.address);
+			  x.high = sbba(x.address+2);
 			}
 			text "%6lu";
 			convert NGtCt32 GtCt24_32();
@@ -63,10 +63,10 @@ TM 1/4 Hz GTWID Gt1AWid, Gt1BWid;
 Group GtCt1Gt ( Gt1ADly, Gt1AWid, Gt1BDly, Gt1BWid ) {
   unsigned short word;
   
-  word = sbwa( 0x644 );
+  word = sbwa( 0x604 );
   Gt1AWid = word & 0xFF;
   Gt1ADly = ( word >> 8 ) & 0xFF;
-  word = sbwa( 0x646 );
+  word = sbwa( 0x606 );
   Gt1BWid = word & 0xFF;
   Gt1BDly = ( word >> 8 ) & 0xFF;
 }
