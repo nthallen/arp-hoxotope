@@ -317,6 +317,7 @@ PARTITION
 #     22    Static Value to advance within record
 #     23-24 Enable/Disable Green Power Peakup (grnpw.tma peakalgo)
 #     25-26 Auto/Off H2O Lamp
+#     27    Begin Green Power Scan (grnpw.tma)
 ################################################################
 State SW_Stat_Wait {
   { int reset_it;
