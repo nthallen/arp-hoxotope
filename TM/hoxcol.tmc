@@ -21,7 +21,9 @@ Collect SW_St = CmdData.SW_St;
 
 Collect IOSwS = read_switches();
 
-Collect DStt0 = sbb(DStt0.address) ^ 6; /* Flip NOFlC & NOFlO */
+/* Collect DStt0 = sbba(DStt0.address) ^ 6; */ /* Flip NOFlC & NOFlO */
+Collect DStt0 = sbba(DStt0.address) ^ 0x58; /* Flip InjBack,Air,NO */
+Collect DStt1 = sbba(DStt1.address) ^ 0xFF; /* Flip Everything */
 
 %{
   #define DG_CUSTOM_INIT Ct64_init()
@@ -29,4 +31,15 @@ Collect DStt0 = sbb(DStt0.address) ^ 6; /* Flip NOFlC & NOFlO */
 	sbwr( 0x600, 0x0300 ); /* GtCtr 1, 4 Hz */
 	sbwr( 0x640, 0x0300 ); /* GtCtr 2, 4 Hz */
   }
+  static unsigned short Gt1A, Gt1B;
+  static unsigned short Gt2A, Gt2B;
 %}
+
+Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
+  BmPsMux = ( sbba(BmPsMux.address) & 0x10 ) ? 1 : 0;
+  BmPsN = sbba(BmPsN.address);
+  BmPsS = sbba(BmPsS.address);
+  BmPsE = sbba(BmPsE.address);
+  BmPsW = sbba(BmPsW.address);
+  DigSelect( 52, (1-BmPsMux)*0xFFFF );
+}
