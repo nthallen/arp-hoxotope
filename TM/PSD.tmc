@@ -9,17 +9,17 @@
 %}
 
 TM typedef int PSD_pos_t { text "%3d"; }
-TM typedef unsigned int PSD_pwr_t { text "%4d"; }
+TM typedef unsigned int PSD_pwr_t { text "%5d"; }
 
 PSD_pos_t XL_X; invalidate XL_X;
 PSD_pos_t XL_Y; invalidate XL_Y;
 PSD_pwr_t XL_TP; invalidate XL_TP;
 if ( BmPsMux == 0 ) {
   XL_X = (BmPsE + BmPsW > 0) ?
-	((( iconvert(BmPsE) - iconvert(BmPsW) ) * 99 ) / ( BmPsE + BmPsW )) :
+	((( BmPsE - BmPsW ) * 99 ) / ( BmPsE + BmPsW )) :
 	9999;
   XL_Y = (BmPsN + BmPsS > 0) ?
-	((( iconvert(BmPsN) - iconvert(BmPsS) ) * 99 ) / ( BmPsN + BmPsS )) :
+	((( BmPsN - BmPsS ) * 99 ) / ( BmPsN + BmPsS )) :
 	9999;
   XL_TP = BmPsN + BmPsS + BmPsE + BmPsW;
   validate XL_X;
@@ -32,10 +32,10 @@ PSD_pos_t DL_Y; invalidate DL_Y;
 PSD_pwr_t DL_TP; invalidate DL_TP;
 if ( BmPsMux != 0 ) {
   DL_X = (BmPsE || BmPsW ) ?
-	(( iconvert(BmPsE) - iconvert(BmPsW) ) * 99 ) / ( BmPsE + BmPsW ) :
+	(( BmPsE - BmPsW ) * 99 ) / ( BmPsE + BmPsW ) :
 	9999;
   DL_Y = (BmPsN || BmPsS ) ?
-	(( iconvert(BmPsN) - iconvert(BmPsS) ) * 99 ) / ( BmPsN + BmPsS ) :
+	(( BmPsN - BmPsS ) * 99 ) / ( BmPsN + BmPsS ) :
 	9999;
   DL_TP = BmPsN + BmPsS + BmPsE + BmPsW;
   validate DL_X;
