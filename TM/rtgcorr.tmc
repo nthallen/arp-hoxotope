@@ -1,11 +1,11 @@
 %{
   #include <math.h>
-  /* REP_RATE is the REP_RATE per 1/4 second, since that's our sample   */
-  /* It should be specified as a real constant (i.e. with a decimal pt. */
-  #define REP_RATE 1500.
-  unsigned short ctcorr(unsigned short S) {
-	if (S < REP_RATE)
-	  return((unsigned short)(-REP_RATE*log(1 - S/REP_RATE)));
+  /* rep_rate is the REP_RATE per 1/4 second, since that's our sample */
+  unsigned short ctcorr(unsigned short S, unsigned short rep_rate) {
+	if (rep_rate == 0 ) return 0;
+	else if (S < rep_rate)
+	  return((unsigned short)
+		(-1.*rep_rate*log(1 - S/((double)rep_rate))));
 	else return 0xFFFF;
   }
 %}
@@ -17,15 +17,35 @@ invalidate SX1FGc;
 invalidate SX2FGc;
 invalidate SOCFGc;
 invalidate LABFGc;
-{ SX1FGc = ctcorr(SX1FG);
+{ SX1FGc = ctcorr(SX1FG, RepRate1);
   validate SX1FGc;
 }
-{ SX2FGc = ctcorr(SX2FG);
+{ SX2FGc = ctcorr(SX2FG, RepRate1);
   validate SX2FGc;
 }
-{ SOCFGc = ctcorr(SOCFG);
+{ SOCFGc = ctcorr(SOCFG, RepRate1);
   validate SOCFGc;
 }
-{ LABFGc = ctcorr(LABFG);
+{ LABFGc = ctcorr(LABFG, RepRate1);
   validate LABFGc;
+}
+Ct16 SX1AGc;
+Ct16 SX2AGc;
+Ct16 SOCAGc;
+Ct16 LABAGc;
+invalidate SX1AGc;
+invalidate SX2AGc;
+invalidate SOCAGc;
+invalidate LABAGc;
+{ SX1AGc = ctcorr(SX1AG, RepRate1);
+  validate SX1AGc;
+}
+{ SX2AGc = ctcorr(SX2AG, RepRate1);
+  validate SX2AGc;
+}
+{ SOCAGc = ctcorr(SOCAG, RepRate1);
+  validate SOCAGc;
+}
+{ LABAGc = ctcorr(LABAG, RepRate1);
+  validate LABAGc;
 }

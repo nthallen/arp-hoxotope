@@ -1,9 +1,9 @@
-# Hox GSE w/ algorithm w/o windows
-statusscreen
-display hoxdisp hox hox1 hox2
-display h2odisp h2o
+# Hox GSE w/ algorithm w/ windows
+batchfile runfile.1111
+display hoxdisp hox hox1
 client hoxpclt
 memo
-algorithm hoxalgo
-# extraction hoxrtgext
-# rtg //13/home/hoxp/hox.rtg
+algorithm hoxalgo -p
+extraction hoxrtgext
+algorithm prtgext -p
+rtg //35/home/hoxp/hox.rtg

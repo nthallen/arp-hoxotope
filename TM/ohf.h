@@ -1,5 +1,8 @@
 /* ohf.h include file for OH filter functions
  * $Log$
+ * Revision 1.1  1997/02/25 19:06:17  nort
+ * Initial revision
+ *
  * Revision 1.2  1994/09/08  14:35:38  nort
  * Removed statements made obsolete by OUI
  *
@@ -25,8 +28,8 @@ long ohf_peak_filter(void);
 unsigned short ohf_pos(void);
 unsigned long ohf_ratio(void);
 long ohf_filter(void);
-#ifndef INDEXER_H_INCLUDED
-  #error Must include indexer.h before ohf.h
+#ifndef IDX64_H_INCLUDED
+  #error Must include idx64.h before ohf.h
 #endif
 void ohf_another_scan(step_t from, step_t length, step_t by);
 void ohf_set_position(step_t steps);

@@ -1,14 +1,39 @@
 %{
-  #include "idx64.h"
+  char *IxDrive_text[] = {
+	"  <  ",
+	"| <  ",
+	"  < |",
+	"| < |",
+	"  >  ",
+	"| >  ",
+	"  > |",
+	"| > |",
+	"<----",  /* driving in */
+	"|<---",  /* driving in against in limit */
+	"<---|",  /* driving in from out limit */
+	"|<--|",  /* driving in both limits. Broke */
+	"---->",  /* driving out */
+	"|--->",  /* driving out from in limit */
+	"--->|",  /* driving out agains out limit */
+	"|-->|"   /* driving out both limits. Broke */
+  };
+%}
+TM typedef unsigned char IxDriveStat { text "%5d" IxDrive_text[]; }
+IxDriveStat BlwStFlag; invalidate BlwStFlag; { BlwStFlag = BlwSt & 0xF; Validate BlwStFlag; }
+IxDriveStat EtnStFlag; invalidate EtnStFlag; { EtnStFlag = EtnSt & 0xF; Validate EtnStFlag; }
+IxDriveStat AtnStFlag; invalidate AtnStFlag; { AtnStFlag = AtnSt & 0xF; Validate AtnStFlag; }
+IxDriveStat GtVStatus; invalidate GtVStatus; { GtVStatus = GtVSt & 0xF; Validate GtVStatus; }
+IxDriveStat STVStFlag; invalidate STVStFlag; { STVStFlag = STVSt & 0xF; Validate STVStFlag; }
+%{
   char *IdxFlgTxt[8] = {
 	"    ",
 	"Scan",
 	"On  ",
-	"3???",
+	"????",
 	"Off ",
-	"5???",
+	"????",
 	"Alt ",
-	"7???"
+	"????"
   };
 %}
 TM typedef unsigned short IndxrFlag {
@@ -21,36 +46,7 @@ IndxrFlag EtnFlg; invalidate EtnFlg;
 { EtnFlg = ( IXStt >> 1 ) & 7; validate EtnFlg; }
 IndxrFlag AtnFlg; invalidate AtnFlg;
 { AtnFlg = ( IXStt >> 4 ) & 7; validate AtnFlg; }
+IndxrFlag GtVFlg; invalidate GtVFlg;
+{ GtVFlg = ( IXStt >> 7 ) & 1; validate GtVFlg; }
 IndxrFlag STVFlg; invalidate STVFlg;
-{ STVFlg = ( IXStt >> 7 ) & 1; validate STVFlg; }
-
-%{
-  char *IxDrive_text[] = {
-	"  <  ",
-	"| <  ",
-	"  < |",
-	"|~~~|",
-	"  >  ",
-	"| >  ",
-	"  > |",
-	"|~~~|",
-	"<----",  /* driving in */
-	"|<---",  /* driving in against in limit */
-	"<---|",  /* driving in from out limit */
-	"|<--|",  /* driving in both limits. Broke */
-	"---->",  /* driving out */
-	"|--->",  /* driving out from in limit */
-	"--->|",  /* driving out agains out limit */
-	"|-->|"   /* driving out both limits. Broke */
-  };
-%}
-TM typedef unsigned char IxDriveStat { text "%5d" IxDrive_text[]; }
-
-IxDriveStat EtnStFlag; Invalidate EtnStFlag;
-{ EtnStFlag = EtnSt & 0xF; validate EtnStFlag; }
-IxDriveStat AtnStFlag; Invalidate AtnStFlag;
-{ AtnStFlag = AtnSt & 0xF; validate AtnStFlag; }
-IxDriveStat BlwStFlag; Invalidate BlwStFlag;
-{ BlwStFlag = BlwSt & 0xF; validate BlwStFlag; }
-IxDriveStat STVStFlag; Invalidate STVStFlag;
-{ STVStFlag = STVSt & 0xF; validate STVStFlag; }
+{ STVFlg = ( IXStt >> 8 ) & 1; validate STVFlg; }

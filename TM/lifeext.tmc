@@ -36,28 +36,30 @@
 		msg(MSG, "Using Time Delta of %lf", ext_delta);
 	  }
 	}
-	lifediff = edf_ss_open( "lifediff", 5 );
+	lifediff = edf_ss_open( "lifediff", 7 );
 	ss_set_column(lifediff, 0, "%14.11lt", "Time");
 	ss_set_column(lifediff, 1, "%5.1lf", "Gt2BDly");
 	ss_set_column(lifediff, 2, "%6.1lf", "OHLife");
 	ss_set_column(lifediff, 3, "%6.1lf", "LABLife");
 	ss_set_column(lifediff, 4, "%6.1lf", "N2Life");
+	ss_set_column(lifediff, 5, "%6.1lf", "EtnPs");
   }
   void terminate(void) {
 	ss_close(lifediff);
   }
 %}
-{
+depending on ( 1 Hz, Gt2BDly_OOn once, OHLife once, EtnPs_OOn once ) {
   ss_insert_value( lifediff, Time_OOn+ext_delta, 2 );
   ss_set(lifediff, 1, Gt2BDly_OOn);
   ss_set(lifediff, 2, convert( OHLife));
+  ss_set(lifediff, 5, EtnPs_OOn);
 }
-{
+depending on ( 1 Hz, Gt2BDly_LOn once, LABLife once ) {
   ss_insert_value( lifediff, Time_LOn+ext_delta, 2 );
   ss_set(lifediff, 1, Gt2BDly_LOn);
   ss_set(lifediff, 3, convert( LABLife));
 }
-{
+depending on ( 1 Hz, Gt2BDly_N once, N2Life once ) {
   ss_insert_value( lifediff, Time_N+ext_delta, 2 );
   ss_set(lifediff, 1, Gt2BDly_N);
   ss_set(lifediff, 4, convert( N2Life));
