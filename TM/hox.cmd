@@ -4,11 +4,19 @@
 	: Analog Output 0 Set &set_point * { sbwr(0xE80, $5); }
 	: Analog Output 1 Set &set_point * { sbwr(0xE82, $5); }
 	: Analog Output 2 Set &set_point * { sbwr(0xE84, $5); }
-	: Analog Output 3 Set &set_point * { sbwr(0xE86, $5); }
-	: Analog Output 4 Set &set_point * { sbwr(0xE90, $5); }
-	: Analog Output 5 Set &set_point * { sbwr(0xE92, $5); }
-	: Analog Output 6 Set &set_point * { sbwr(0xE94, $5); }
-	: Analog Output 7 Set &set_point * { sbwr(0xE96, $5); }
+
+#	: Analog Output 3 Set &set_point * { sbwr(0xE86, $5); }
+#	: Analog Output 4 Set &set_point * { sbwr(0xE90, $5); }
+#	: Analog Output 5 Set &set_point * { sbwr(0xE92, $5); }
+#	: Analog Output 6 Set &set_point * { sbwr(0xE94, $5); }
+#	: Analog Output 7 Set &set_point * { sbwr(0xE96, $5); }
+
+	: Pinch Valve Set Gain Gp &PVGain * { sbwr(0xE86, $6); }
+	: Pinch Valve Set Gain Gi &PVGain * { sbwr(0xE90, $6); }
+	: Pinch Valve Set n_steps &set_point * { sbwr(0xE92, $5); }
+	: Pinch Valve Set n_p_set &set_point * { sbwr(0xE94, $5); }
+	: Pinch Valve Set Pressure SetPoint &set_point * { sbwr(0xE96, $6); }
+
 #	: AXIS 1 FILTER IN OFF * { send_dascmd(DCT_SCDC, 21, 0); }
 #	: AXIS 1 FILTER IN ON * { send_dascmd(DCT_SCDC, 20, 0); }
 #	: AXIS 1 FILTER OUT OFF * { send_dascmd(DCT_SCDC, 23, 0); }
@@ -52,4 +60,8 @@
 	: Soldrv Select Mode %d (Enter Mode Number) * { send_dascmd(DCT_SOLDRV_A, $4, 0); }
 	: Laser COOLANT PUMP OFF * { send_dascmd(DCT_SCDC, 43, 0); }
 	: Laser COOLANT PUMP ON * { send_dascmd(DCT_SCDC, 42, 0); }
+	;
+
+&PVGain <int>
+	: %f (Specify gain in Steps/Torr) { $0 = (int) floor($1*10 + .5); }
 	;

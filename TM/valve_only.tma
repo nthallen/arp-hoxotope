@@ -1,0 +1,55 @@
+# valve_only.tma
+#   For use together with valve.tma when not using hox.tma
+
+%{
+  #include "CmdData.h"
+%}
+
+State Initialize {
+	 > telemetry start
+  +1 > fail 0
+  +1 > power solenoids and steppers Off
+  +1 > power 28V switched off
+  +1 > power solenoids and steppers On
+	 Validate Pinch_Valve_Close;
+}
+
+State shutdown {
+  +1 Validate Pinch_Valve_Sit;
+  +1 > Drive Pinch Valve to 5000
+  +5 > power solenoids and steppers Off
+  +1 > quit
+}
+
+PARTITION
+# PARTITION 2: SW_St control
+#---------------------------------------------------------------
+# SW_St control
+#   Cases handled elsewhere:
+#     1-4   Altitude Control
+#     20-21 Peakup On/Off (scanning.tma)
+#     22    Static Value to advance within record
+#     23-24 Enable/Disable Green Power Peakup (grnpw.tma peakalgo)
+#     25-26 Auto/Off H2O Lamp
+#     27    Begin Green Power Scan (grnpw.tma)
+#---------------------------------------------------------------
+State SW_Stat_Wait {
+  { int reset_it;
+	reset_it = 1;
+	switch (SW_St) {
+	  default:
+	  case 0: reset_it = 0; break;
+	  case SWS_PV_CLOSE: Validate Pinch_Valve_Close; break;
+	  case SWS_PV_STEPS: Validate Pinch_Valve_Steps_Init; break;
+	  case SWS_PV_PI: Validate Pinch_Valve_PI_Init; break;
+	  case SWS_SHUTDOWN: Validate shutdown; break;
+	 }
+	if (reset_it) Validate SW_Stat_Reset;
+  }
+}
+
+State SW_Stat_Reset {
+  > SW Status Value to 0
+  Hold until (SW_St == 0) or 10;
+  Validate SW_Stat_wait;
+}

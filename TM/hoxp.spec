@@ -20,8 +20,8 @@ OBJ = hox2.cfg index.html
 
 hoxpcol : hoxcol.tmc nav.tmc navcol.tmc idxcol.tmc topaz.c topazcol.tmc
 hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc flttime.tmc hox.tbl hox1.tbl topaztxt.c hox2.tbl
-hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma
-valvealgo : valve.tma
+hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma valve.tma
+valvealgo : valve_only.tma valve.tma
 # laser.sft : hox.slp laser.sol
 hoxrtgext : rtgcorr.tmc PSD.tmc hox.tmg
 hox1ext : hox1.edf

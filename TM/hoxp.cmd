@@ -107,9 +107,12 @@
 	: Green Peakup Enable { $0 = 23; }
 	: Green Peakup Disable { $0 = 24; }
 	: Green Peakup Scan { $0 = 27; }
+	: Pinch Valve Close { $0 = SWS_PV_CLOSE; }
+	: Pinch Valve Regulate by Steps { $0 = SWS_PV_STEPS; }
+	: Pinch Valve Regulate by PI { $0 = SWS_PV_PI; }
 	: Shutoff { $0 = 255; }
 	;
-#
+
 #&command
 #	: H2O &h2ocmd
 #	: H2O * &h2ocmds *
