@@ -8,7 +8,7 @@ cmdbase = h2o.cmd topaz.cmd
 
 SCRIPT = Experiment.config interact runfile.1111 idx.idx64 hoxp.dccc
 SCRIPT = VERSION get_lifetimes
-NONRCS = hox.cfg hox1.cfg fields.cfg
+NONRCS = hox.cfg hox1.cfg h2o.cfg fields.cfg
 SRC = ohf.h CmdData.h
 
 TOOL = hoxp.idx
@@ -22,7 +22,7 @@ SRC = scan_ss.tmc
 MNC = hoxpcrnt
 DISTRIB = hox.cfg hox1.cfg h2o.cfg
 TGTDIR = $(TGTNODE)/home/hoxp
-OBJ = hox2.cfg
+OBJ = hox2.cfg index.html
 
 hoxpcol : hoxcol.tmc h2ocol.tmc nav.tmc navcol.tmc idxcol.tmc handler.c topaz.c topazcol.tmc
 hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc flttime.tmc hox.tbl hox1.tbl topaztxt.c
@@ -55,6 +55,14 @@ h2opbdoit : h2opb.doit
 
 %%
 MODEL=l
+CFG=VERSION Experiment.config rcs2html.dat hoxp.spec
+FRAME=hoxp.pcm $(TMCBASE)
+CMD=hoxp.cmd idx64.cmd idxdrv.cmd hox.cmd hox.slp no.cmd
+CMD+=h2o.cmd topaz.cmd
+TMA=*.tma
+TBL=*.tbl *.cfg
+EDF=*.edf
+
 CYCLE=cycle > $@
 ohf.o : ohf.h
 peakalgo.o : ohf.h /usr/local/include/idx64.h
@@ -68,3 +76,6 @@ handler.o : handler.c
 	$(COMPILE.c) -Wc,-s -zu handler.c
 hoxattr.tmc : hox.fld
 h2oattr.tmc : h2o.fld
+index.html : $(SOURCE)
+	rcs2html "HOx v1.3"
+	mv -f source.html index.html
