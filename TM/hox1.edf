@@ -13,13 +13,14 @@ spreadsheet sd_pt 8
 	4 SAFB1 %5.1lf 
 	5 SD_P2 %6.4lf 
 
-spreadsheet ohcell 8
+spreadsheet ohcell 9
 	1 SOCFG %5.0lf To_Double
 	2 OClUV %4.2lf 
 	3 AtnPs %5.0lf To_Double
 	4 EtnPs %5.0lf To_Double
 	5 EtPos %6.4lf 
 	7 RepRate1 %5.0lf
+	8 Et_LW %6.4lf
 
 spreadsheet htgasrdy 19
 	1 X1DAT %5.1lf 
