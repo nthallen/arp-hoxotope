@@ -1,13 +1,13 @@
 &ohcmd 
 	: AIR SOLENOID LOOP INJECTOR OFF * { send_dascmd(DCT_SCDC, 9, 0); }
 	: AIR SOLENOID LOOP INJECTOR ON * { send_dascmd(DCT_SCDC, 8, 0); }
-	: Analog Output 0 Set &set_point * { sbwr(0xE40, $5); }
-	: Analog Output 1 Set &set_point * { sbwr(0xE42, $5); }
-	: Analog Output 3 Set &set_point * { sbwr(0xE46, $5); }
-	: Analog Output 4 Set &set_point * { sbwr(0xE50, $5); }
-	: Analog Output 5 Set &set_point * { sbwr(0xE52, $5); }
-	: Analog Output 6 Set &set_point * { sbwr(0xE54, $5); }
-	: Analog Output 7 Set &set_point * { sbwr(0xE56, $5); }
+	: Analog Output 0 Set &set_point * { sbwr(0xE80, $5); }
+	: Analog Output 1 Set &set_point * { sbwr(0xE82, $5); }
+	: Analog Output 3 Set &set_point * { sbwr(0xE86, $5); }
+	: Analog Output 4 Set &set_point * { sbwr(0xE90, $5); }
+	: Analog Output 5 Set &set_point * { sbwr(0xE92, $5); }
+	: Analog Output 6 Set &set_point * { sbwr(0xE94, $5); }
+	: Analog Output 7 Set &set_point * { sbwr(0xE96, $5); }
 	: AXIS 1 FILTER IN OFF * { send_dascmd(DCT_SCDC, 21, 0); }
 	: AXIS 1 FILTER IN ON * { send_dascmd(DCT_SCDC, 20, 0); }
 	: AXIS 1 FILTER OUT OFF * { send_dascmd(DCT_SCDC, 23, 0); }
