@@ -55,7 +55,7 @@ State laser_eval_on {
 		# Assume 28V Switched has been on and OK
     +1  > Power 28V Switched On
     +1  > Topaz Frequency 0
-    +1  > Topaz KDP SetPoint 2400
+    +1  > Topaz KDP SetPoint 3000
         { if ( RLHist0 != 2 && RLHist0 != 4 )
             Validate laser_talking;
         }
@@ -146,10 +146,10 @@ State laser_talking {
         > Topaz Emission Off
     +1  > Topaz Current 0 Amps
     +1  > Topaz Frequency 0
-    +1  > Topaz KDP SetPoint 2400
-        depending on ( ON_GROUND) { Validate laser_high_setpoint; }
+    +1  > Topaz KDP SetPoint 3000
+        # depending on ( ON_GROUND) { Validate laser_high_setpoint; }
     +1  > Topaz Diode 1 Temperature 26.0 C
-    +1  > Topaz Diode 2 Temperature 27.0 C
+    +1  > Topaz Diode 2 Temperature 28.0 C
         "Holding for NIRVANA";
         Hold until (RLHist0 != 0) or 5:00
           else {
@@ -220,15 +220,19 @@ State laser_reports_ready {
           }
         }
     +1  > Topaz Diode 1 Temperature 26.0 C
-    +1  > Topaz Diode 2 Temperature 27.0 C
+    +1  > Topaz Diode 2 Temperature 28.0 C
         "Holding to make sure real setpoints get through";
         Hold until (convert(RLSD1T) < 26.0+1 &&
-                    convert(RLSD2T) < 27.0+1) or 2:00
+		    convert(RLSD1T) > 26.0-1 &&
+                    convert(RLSD2T) < 28.0+1 &&
+		    convert(RLSD2T) > 28.0-1) or 2:00
           else Validate laser_reports_ready;
         Validate laser_ready;
 }
 
 State laser_ready {
+    +1  > Topaz Diode 1 Temperature 26.0 C
+    +1  > Topaz Diode 2 Temperature 28.0 C
         { if ( RLHist0 == 1 ) Validate PowerModeA;
           else if (RLHist0 != NIRVANA) {
             msg( 2,
@@ -263,7 +267,7 @@ State laser_diodes_turn_on {
           else Validate laser_reboot;
         "Warmup Time...";
    +60  > Topaz Current 15.0 Amps
-   +60  > Topaz Current 18.0 Amps
+   +60  > Topaz Current 19.0 Amps
    +30  Validate laser_diodes_on;
 }
 
