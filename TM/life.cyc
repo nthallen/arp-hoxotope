@@ -1,5 +1,18 @@
 Rate 4 Hz;
 
+Trigger M3 {
+  Start: (SolSt == 21);
+  Region OOff [  .25, 3.75 ];
+  Region OOn  [ 4.25, 7.75 ];
+}
+
+Trigger M3b {
+  Start: (SolSt == 20);
+  Region OOff [  .25, 3.75 ];
+  Region OOn  [ 4.25, 7.75 ];
+}
+
+
 Trigger M5A {
   Start: (SolSt == 0);
   Region N [ 1, 15 ];
@@ -20,6 +33,12 @@ Trigger M6 {
   Region LOff [  .25,  2.75 ];
   Region OOn  [ 3.25, 14.75 ];
   Region LOn  [ 3.25, 14.75 ];
+}
+
+Trigger M9 {
+  Start: ( SolSt ==  17 );
+  Region OOn  [   .25,  5.75 ];
+  Region OOff [  6.25, 11.75 ];
 }
 
 Average SOCAGc, SOCFGc Over OOn, OOff;
