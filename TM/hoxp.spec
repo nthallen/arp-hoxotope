@@ -11,7 +11,7 @@ SCRIPT = VERSION get_lifetimes
 NONRCS = hox.cfg hox1.cfg h2o.cfg fields.cfg
 SRC = ohf.h CmdData.h
 
-TOOL = hoxp.idx
+TOOL = hoxp.idx rcs2html.dat
 
 MNC = hoxpcrnt
 DISTRIB = hox.cfg hox1.cfg h2o.cfg
