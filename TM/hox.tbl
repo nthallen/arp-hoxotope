@@ -30,8 +30,8 @@ DetAxes {
   Adjst: (SX1AG,5) (SX2AG,5) (LABAG,5);
   Bkgnd: (SX1BG,6) (SX2BG,6) (LABBG,6);
   "X*FAT:" (X1FAT,5) (X2FAT,5) >"øC";
-  "X*Las:" (X1Las,6) (X2Las,6) >Std;
-  HBox { "("; (XL_X,4); ","; (XL_Y,4); ") "; (XL_TP,4) };
+  "X*Las:" (XL_TP,5) (X2Las,6) >Std;
+  HBox { "("; (XL_X,4); ","; (XL_Y,4); ") " };
 }
 DyeLas {
   DLooT (DLooT,5) "C";
@@ -67,7 +67,7 @@ LasDiodes {
 }
 Laser {
   HBox{ +=+; Title: Laser; +=+ };
-  GrnP1: (GrnP1,4) V;
+  XL_TP: (XL_TP,5) V;
   CIn_T: (CIn_T,5) C;
   COutT: (COutT,5) C;
   KDPTSP: (RKDPTSP,4);
@@ -94,6 +94,10 @@ RLHist {
   (RLHist1,50+1);
   (RLHist0,50+1);
 }
+MFCtr {
+  HBox{ +=+; Title: "MFCtr"; +=+ };
+  HBox { (flttime,9); HGlue 0+1; (MFCtr,5) }
+}
 
 Table {
   HBox {
@@ -114,8 +118,7 @@ Table {
 	{
 	  [Laser];
 	  [OHCell];
-	  +=+;
-	  >MFCtr: (MFCtr,5);
+	  [MFCtr];
 	};
 	||+;
   };
