@@ -3,9 +3,11 @@ Hsk1 {
   V28I1: (V28I1,4) A;
   V28I2: (V28I2,4) A;
   V28_V: (V28_V,4) V;
-  Lab_1: (Lab_1,4) V;
-  Lab_2: (Lab_2,4) V;
-  Lab_3: (Lab_3,4) V;
+}
+Hsk1A {
+   >DHX<      >LHX<;
+  (DHX1T,5) (LHX1T,5) C;
+  (DHX2T,5) (LHX2T,5) C;
 }
 Hsk2 {
   PC__T: (PC__T,5) C;
@@ -18,7 +20,7 @@ Hsk2 {
 }
 Housekeeping {
   HBox{ +=+; Title: "Housekeeping"; +=+ };
-  HBox { [Hsk1]; |; [Hsk2] };
+  HBox { { [Hsk1]; [Hsk1A] }; |; [Hsk2] };
 }
 DetAxes {
   HBox{ +=+; Title: "Detection Axes"; +=+ };
@@ -29,12 +31,14 @@ DetAxes {
   Bkgnd: (SX1BG,6) (SX2BG,6) (LABBG,6);
   "X*FAT:" (X1FAT,5) (X2FAT,5) >"øC";
   "X*Las:" (X1Las,6) (X2Las,6) >Std;
+  HBox { "("; (XL_X,3); ","; (XL_Y,3); ") "; (XL_TP,4) };
 }
 DyeLas {
   DLooT (DLooT,5) "C";
   UVMon (UVMon,6) "";
   DLH_P (DLH_P,6) "V";
   Et_LW (Et_LW,6) "V";
+  HBox { "("; (DL_X,3); ","; (DL_Y,3); ") "; (DL_TP,4) };
 }
 LasIdx {
   Header:

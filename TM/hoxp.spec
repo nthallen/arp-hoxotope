@@ -9,7 +9,7 @@ cmdbase = h2o.cmd topaz.cmd
 SCRIPT = Experiment.config interact runfile.1111 idx.idx64 hoxp.dccc
 SCRIPT = VERSION get_lifetimes
 NONRCS = hox.cfg hox1.cfg fields.cfg
-SRC = ohf.h CmdData.h hox.tbl hox1.tbl
+SRC = ohf.h CmdData.h
 
 TOOL = hoxp.idx
 
@@ -25,7 +25,7 @@ TGTDIR = $(TGTNODE)/home/hoxp
 OBJ = hox2.cfg
 
 hoxpcol : hoxcol.tmc h2ocol.tmc nav.tmc navcol.tmc idxcol.tmc handler.c topaz.c topazcol.tmc
-hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc hox.tbl hox1.tbl topaztxt.c
+hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc hox.tbl hox1.tbl topaztxt.c
 hoxalgo : hoxpbits.tmc idxflag.tmc hox.tma laser.tma
 laser.sft : hox.slp laser.sol
 hoxrtgext : rtgcorr.tmc hox.tmg
