@@ -1,0 +1,49 @@
+spreadsheet nortBP 8
+	condition depending on (2Hz)
+	1 BmPsN %8.4lf
+	2 BmPsS %8.4lf
+	3 BmPsE %8.4lf
+	4 BmPsW %8.4lf
+	5 BmPsMux %5.0lf
+	6 UVMon  %8.4lf
+
+spreadsheet test 4
+	condition depending on (2Hz)
+	1 GtVSt %6lf
+	2 SW_St  %6lf
+
+#spreadsheet nort 6
+#	1 GtCt1Stat %7.0lf 0xC000&
+#	2 RepRate1 %7.0lf
+#	3 GtCt2Stat %7.0lf 0xC000&
+#	4 RepRate2 %7.0lf
+#	5 LabNG %8.0lf
+
+#spreadsheet nortGt 5 separate
+#	1 GtCt2Stat %9X 0xC000&
+#	2 Gt2BDly %7.0lf
+
+#spreadsheet nortTop 3
+#	1 TopazSecs %5.0lf
+#	2 RLHist0 %5.0lf
+
+#spreadsheet nortT 20
+#	1  LMP_T %6.1lf
+#	2  CIn_T %6.1lf
+#	3  COutT %6.1lf
+#	4  DHx1T %6.1lf
+#	5  DHx2T %6.1lf
+#	6  LHx1T %6.1lf
+#	7  LHx2T %6.1lf
+#	8  DLH1T %6.1lf
+#	9  DLH2T %6.1lf
+#	10  DLooT %6.1lf
+#	11  DRs_T %6.1lf
+#	12  NOFlT %6.1lf
+#	13  NORgT %6.1lf
+#	14  OHC2T %6.1lf
+#	15  OHCHT %6.1lf
+#	16  PMonT %6.1lf
+#	17  OHCHT %6.1lf
+#	18  RKDPTSP %6.0lf
+#	19  KDP_H %6.2lf
