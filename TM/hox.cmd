@@ -3,6 +3,7 @@
 #	: AIR SOLENOID LOOP INJECTOR ON * { send_dascmd(DCT_SCDC, 8, 0); }
 	: Analog Output 0 Set &set_point * { sbwr(0xE80, $5); }
 	: Analog Output 1 Set &set_point * { sbwr(0xE82, $5); }
+	: Analog Output 2 Set &set_point * { sbwr(0xE84, $5); }
 	: Analog Output 3 Set &set_point * { sbwr(0xE86, $5); }
 	: Analog Output 4 Set &set_point * { sbwr(0xE90, $5); }
 	: Analog Output 5 Set &set_point * { sbwr(0xE92, $5); }

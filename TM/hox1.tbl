@@ -6,7 +6,7 @@ Housekeeping {
   V28_V: (V28_V,4) V;
   # Lab_1: (Lab_1,4) V;
   # Lab_2: (Lab_2,4) V;
-  Lab_3: (Lab_3,4) V;
+  # Lab_3: (Lab_3,4) V;
 }
 PMTs {
   Title: >"PMTs"<
@@ -23,7 +23,7 @@ TEC {
   "*HX2T" (DHX2T,5) (LHX2T,5) C;
   "*Rs_T" (DRs_T,5)    -      C;
   "*TETV" (DTETV,4) (LTETV,4) C;
-  "*TEST" (Lab_5,4) (Lab_4,4) V;
+  "*TEST" (DTEST,4) (LTEST,4) V;
   "*TE_I" (DTE_I,4) (LTE_I,4);
   "PumpS" (DyePS,3);
   "FlowS" (DL_Fl,3);
@@ -84,7 +84,7 @@ OtherT {
   HD__T (HD__T,5);
 # SolDT (SolDT,5);
   SDP_T (SDP_T,5);
-  PumpT (PumpT,5);
+  PumpT (PumpT,4);
   Lmp1T (Lmp1T,5);
   Lmp2T (Lmp2T,5);
 }

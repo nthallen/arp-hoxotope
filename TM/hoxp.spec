@@ -2,7 +2,7 @@ tmcbase = types.tmc hox.tmc HOX_1M.tmc hoxpcts.tmc idx.tmc hoxl.tmc topaz.tmc
 
 cmdbase = $(LIBSRC)/root.cmd hoxp.cmd
 cmdbase = idx64.cmd idxdrv.cmd
-cmdbase = hox.cmd hox.slp no.cmd
+cmdbase = hox.cmd
 cmdbase = topaz.cmd
 
 SCRIPT = Experiment.config interact runfile.1111 idx.idx64 hoxp.dccc
@@ -22,7 +22,7 @@ hoxpcol : hoxcol.tmc nav.tmc navcol.tmc idxcol.tmc topaz.c topazcol.tmc
 hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc flttime.tmc hox.tbl hox1.tbl topaztxt.c hox2.tbl
 hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma
 valvealgo : valve.tma
-laser.sft : hox.slp laser.sol
+# laser.sft : hox.slp laser.sol
 hoxrtgext : rtgcorr.tmc PSD.tmc hox.tmg
 hox1ext : hox1.edf
 hox2ext : hox2.edf

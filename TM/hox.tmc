@@ -37,8 +37,8 @@ TM 1    Hz AD12       L12CV; /* LAB 12-BIT C */
 TM 1    Hz AD8        Lab_1; /* LAB 1 8-BIT CHANNEL */
 TM 1    Hz AD8        Lab_2; /* LAB 2 8-BIT CHANNEL */
 TM 1    Hz AD8        Lab_3; /* LAB 3 8-BIT CHANNEL */
-TM 1    Hz AD8        Lab_4; /* LAB 4 (SPARE CH 1) */
-TM 1    Hz AD8        Lab_5; /* LAB 5 (SPARE CH 2) */
+TM 1    Hz AD8        LTEST; /* (LAB 4) (SPARE CH 1) */
+TM 1    Hz AD8        DTEST; /* (LAB 5) (SPARE CH 2) */
 TM 1    Hz AD8        Lab_6; /* LAB 6 (SPARE CH 3) */
 TM 1    Hz AD8        Lab_7; /* LAB 7 (SPARE CH 4) */
 TM 1    Hz AD8        Lab_8; /* LAB 8 (SPARE CH 5) */
@@ -113,8 +113,8 @@ Address L12CV  0xC9A; /* LAB 12-BIT C */
 Address Lab_1  0xC33; /* LAB 1 8-BIT CHANNEL */
 Address Lab_2  0xC31; /* LAB 2 8-BIT CHANNEL */
 Address Lab_3  0xC3E; /* LAB 3 8-BIT CHANNEL */
-Address Lab_4  0xC44; /* LAB 4 (SPARE CH 1) */
-Address Lab_5  0xC42; /* LAB 5 (SPARE CH 2) */
+Address LTEST  0xC44; /* (LAB 4) (SPARE CH 1) */
+Address DTEST  0xC42; /* (LAB 5) (SPARE CH 2) */
 Address Lab_6  0xC40; /* LAB 6 (SPARE CH 3) */
 Address Lab_7  0xC5F; /* LAB 7 (SPARE CH 4) */
 Address Lab_8  0xC5D; /* LAB 8 (SPARE CH 5) */
@@ -186,7 +186,6 @@ TM 1 Hz AD12 PVPos; Address PVPos 0xCA4; /* Pinch Valve Pot Position (PAFF5 T30K
 /* TM 1 Hz AD8 NO_LP; Address NO_LP 0xC2D; */ /* NO REGULATOR OUTPUT PRESS */
 /* TM 4 Hz AD8 NOFlw; Address NOFlw 0xC21; */ /* NO FLOW OUTPUT */
 /* TM 1/16 Hz AD8_T30K NORgT; Address NORgT 0xC23; */ /* NO REGULATOR TEMP */
-/* TM 4 Hz DA_SPt NOSPt; Address NOSPt 0xE84; */ /* NO Mass Flow Set Point */
 /* TM 2 Hz AD8_PSD BmPsN; Address BmPsN 0xC19; */ /* Beam Position Monitor N */
 /* TM 2 Hz AD8_PSD BmPsS; Address BmPsS 0xC17; */ /* Beam Position Monitor S */
 /* TM 2 Hz AD8_PSD BmPsE; Address BmPsE 0xC15; */ /* Beam Position Monitor E */

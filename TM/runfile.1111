@@ -17,7 +17,7 @@
 					   nav -c0 -C -vs /dev/ser1 &
 					   namewait -p $! -t 20 nav
 					  fi
- Launch -             soldrv -v -c0 -h "OH" $TMBINDIR/laser.sft
+#Launch -             soldrv -v -c0 -h "OH" $TMBINDIR/laser.sft
  Launch -             topaz -vc0 /dev/ser2
 
  Launch db            bfr -v -c0
