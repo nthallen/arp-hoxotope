@@ -83,6 +83,9 @@
 	: SW Status &SWFlags * { CmdData.SW_St = $3; }
 	: Peakup On * { CmdData.SW_St = SWS_PKUP_ON; }
 	: Peakup Off * { CmdData.SW_St = SWS_PKUP_OFF; }
+	: Pinch Valve Set Pressure Setpoint &pvgain * { CmdData.PV_SetP = $6; }
+	: Pinch Valve Set Gain Gi &pvgain * { CmdData.PV_Gi = $6; }
+	: Pinch Valve Set Gain Gp &pvgain * { CmdData.PV_Gp = $6; }
 	;
 
 &SWFlags <int>
@@ -99,13 +102,14 @@
 	: Laser Power Off { $0 = SWS_LASER_OFF; }
 	: Peakup On { $0 = SWS_PKUP_ON; }
 	: Peakup Off { $0 = SWS_PKUP_OFF; }
-	: Proceed { $0 = SWS_TIMEWARP; }
+	: Timewarp { $0 = SWS_TIMEWARP; }
 	: Green Peakup Enable { $0 = SWS_GRNPK_ON; }
 	: Green Peakup Disable { $0 = SWS_GRNPK_OFF; }
 	: Green Peakup Scan { $0 = SWS_GRNPK_SCAN; }
 	: Pinch Valve Close { $0 = SWS_PV_CLOSE; }
 	: Pinch Valve Regulate by Steps { $0 = SWS_PV_STEPS; }
 	: Pinch Valve Regulate by PI { $0 = SWS_PV_PI; }
+	: Pinch Valve Scan { $0 = SWS_PV_SCAN; }
 	: Shutoff { $0 = 255; }
 	;
 

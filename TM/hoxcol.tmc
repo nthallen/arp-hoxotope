@@ -18,6 +18,9 @@ Collect SolSt = *SolStPtr;
 %}
 TM "Receive" CmdData 0;
 Collect SW_St = CmdData.SW_St;
+Collect PV_SetP = CmdData.PV_SetP;
+Collect PV_Gi = CmdData.PV_Gi;
+Collect PV_Gp = CmdData.PV_Gp;
 
 Collect IOSwS = read_switches();
 

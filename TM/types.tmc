@@ -6,7 +6,7 @@ TM typedef double VOLTS { text "%4.1lf"; }
 TM typedef double KELVIN { text "%5.1lf"; }
 TM typedef double CELCIUS { text "%5.1lf"; }
 TM typedef double TORR { text "%5.1lf"; }
-TM typedef double EtnStep_d { test "%5.0lf"; }
+TM typedef double EtnStep_d { text "%5.0lf"; }
 TM typedef unsigned short RPM { text "%4d"; }
 TM typedef unsigned short UINT { text "%5u"; }
 TM typedef signed short SINT { text "%6d"; }
@@ -362,6 +362,9 @@ Calibration ( AD8_LSDT, CELCIUS ) {
    51,   0.709,
    52,   0.105
 }
+
+TM typedef unsigned short PV_Gain_t { text "%5.1lf"; }
+TM typedef AD12 AD12_PaltP { text "%5.1lf"; }
 
 TM 0 Hz UINT  MFCtr;
 TM 0 Hz UINT  Synch;
