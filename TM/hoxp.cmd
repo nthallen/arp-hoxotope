@@ -75,6 +75,8 @@
 			sizeof( CmdData ) );
 		Col_send( CmdData_id );
 	  }
+	: PSD Select Dye Laser * { DigSelect( 52, 0xFFFF ); }
+	: PSD Select XLas * { DigSelect( 52, 0x0000 ); }
 	;
 &CmdData
 	: SW Status Value to %d * { CmdData.SW_St = $5; }
