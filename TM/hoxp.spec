@@ -1,39 +1,32 @@
-tmcbase = types.tmc hox.tmc hoxpcts.tmc idx.tmc hoxl.tmc
+tmcbase = types.tmc hox.tmc hoxpcts.tmc idx.tmc hoxl.tmc topaz.tmc
 tmcbase = h2o.tmc h2ogrp.tmc
 
 cmdbase = $(LIBSRC)/root.cmd hoxp.cmd
 cmdbase = idx64.cmd idxdrv.cmd
 cmdbase = hox.cmd hox.slp no.cmd
-cmdbase = h2o.cmd
+cmdbase = h2o.cmd topaz.cmd
 
 SCRIPT = Experiment.config interact runfile.1111 idx.idx64 hoxp.dccc
-NONRCS = hox.cfg hox1.cfg
-SRC = ohf.h CmdData.h
+SCRIPT = VERSION get_lifetimes
+NONRCS = hox.cfg hox1.cfg fields.cfg
+SRC = ohf.h CmdData.h hox.tbl hox1.tbl
 
-# These are new sources that may not have been used.
 TOOL = hoxp.idx
 
 # These are old sources which we haven't resolved yet:
-SRC = hox2.fld hoxlcts.tmc hox.tma ohf.c
-SRC = bellows.tmc
-SRC = dither.tmc
+SRC = hox2.fld hoxlcts.tmc hox.tma hox.pl
 SRC = fast.edf
-SRC = fastext.tmc
-SRC = getscan.tmc
-SRC = peak.oui
-SRC = peakalgo.c
-SRC = peakext.c
 SRC = scan.tmg
 SRC = scan_ss.tmc
 
-MNC = hoxp
+MNC = hoxpcrnt
 DISTRIB = hox.cfg hox1.cfg h2o.cfg
 TGTDIR = $(TGTNODE)/home/hoxp
 OBJ = hox2.cfg
 
-hoxpcol : hoxcol.tmc h2ocol.tmc nav.tmc navcol.tmc idxcol.tmc handler.c
-hoxdisp : BGcts.tmc hox.cfg hox.fld hox1.fld
-# hoxalgo : hox.tma
+hoxpcol : hoxcol.tmc h2ocol.tmc nav.tmc navcol.tmc idxcol.tmc handler.c topaz.c topazcol.tmc
+hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc hox.tbl hox1.tbl topaztxt.c
+hoxalgo : hoxpbits.tmc idxflag.tmc hox.tma laser.tma
 laser.sft : hox.slp laser.sol
 hoxrtgext : rtgcorr.tmc hox.tmg
 h2oext : h2o.edf
@@ -43,30 +36,34 @@ hox3ext : hox3.edf
 hox4ext : hox4.edf
 hox5ext : hox5.edf
 hox6ext : hox6.edf
-lwext : lw.edf
+nortext : rtgcorr.tmc nort.edf
+lifeext : time.tmc rtgcorr.tmc life.cyc lifeavg.tmc lifeext.tmc
 # fastext : fast.edf
-scanext : idxflag.tmc scanning.tmc scanext.tmc
-# peakalgo : ohf.c idxflag.tmc scanning.tmc getscan.tmc dither.tmc bellows.tmc peak.oui
-# peakext : ohf.c idxflag.tmc scanning.tmc getscan.tmc scan_ss.tmc dither.tmc bellows.tmc peak.oui
-# prtgext : ohf.c idxflag.tmc scanning.tmc getscan.tmc scan.tmg dither.tmc bellows.tmc peak.oui
+scanext : idxflag.tmc scanning.tma scanext.tmc
+peakalgo : ohf.c idxflag.tmc chop.tmc scanning.tma getscan.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
+peakext : ohf.c idxflag.tmc chop.tmc scanning.tma getscan.tmc scan_ss.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
+prtgext : ohf.c idxflag.tmc scanning.tma getscan.tmc scan.tmg chop.tmc dither.tmc bellows.tmc peak.oui
 pdoit : hox.doit
 padoit : hoxa.doit
-pwdoit : hoxw.doit
-pwadoit : hoxwa.doit
+pbdoit : pb.doit
 
-h2odisp : h2octr.tmc h2o.fld h2o.cfg
+h2odisp : h2octr.tmc h2o.fld h2o.cfg h2o.tmg
 h2o.sft : h2o.sol
 h2odoit : h2o.doit
+h2opbdoit : h2opb.doit
 
 %%
-TMCALGO=tmcalgoR1 -o $@
+MODEL=l
+CYCLE=cycle > $@
 ohf.o : ohf.h
 peakalgo.o : ohf.h /usr/local/include/idx64.h
 peakext.o : ohf.h /usr/local/include/idx64.h
 pdoit : hox.fld hox1.fld hox2.fld
 padoit : hox.fld hox1.fld hox2.fld
-pwdoit : hox.fld hox1.fld hox2.fld
-pwadoit : hox.fld hox1.fld hox2.fld
+pbdoit : hox.fld hox1.fld hox2.fld
 h2odoit : h2o.fld
+h2opbdoit : h2o.fld
 handler.o : handler.c
 	$(COMPILE.c) -Wc,-s -zu handler.c
+hoxattr.tmc : hox.fld
+h2oattr.tmc : h2o.fld
