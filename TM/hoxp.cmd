@@ -106,6 +106,7 @@
 	: Proceed { $0 = 22; }
 	: Green Peakup Enable { $0 = 23; }
 	: Green Peakup Disable { $0 = 24; }
+	: Green Peakup Scan { $0 = 27; }
 	: Shutoff { $0 = 255; }
 	;
 
