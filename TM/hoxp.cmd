@@ -86,7 +86,7 @@
 	;
 
 &SWFlags <int>
-	: Altitude Takeoff { $0 = 1; }
+	: Altitude Takeoff, eh? { $0 = 1; }
 	: Altitude Cruise { $0 = 2; }
 	: Altitude Descend { $0 = 3; }
 	: Altitude Land { $0 = 4; }
