@@ -50,15 +50,15 @@ State Pinch_Valve_Close2 {
      else { msg( 2, "Pinch Valve step did not reset" ); }
      > Preset Pinch Valve Position to 0
      { if ( AC_S ) Validate Pinch_Valve_Closed; }
- +1  Hold until valid (ABOVE_CLOUDS);
  +1  Hold until ( convert(PumpT) < 60 && convert(PumpT) >= 25 );
  +1  > Pump Close
  +2  > AC On
- +15 > Pump Open
-     Validate Pinch_Valve_Closed;
+ +15 depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Closed; }
+     depending on (ABOVE_CLOUDS) { Validate Pinch_Valve_Closed; }
 }
 
 State Pinch_Valve_Closed {
+  > Pump Open
   depending on (shutdown) { Validate Pinch_Valve_Shutdown; }
   { if ( convert(PumpT) > 75 )
       Validate Pinch_Valve_Pump_Overtemp;

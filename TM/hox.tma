@@ -207,7 +207,7 @@ State reset_etalon {
       > Peakup Off
   +3  > Stop Etalon
       { double etdelta;
-        if ( EtnStep_delta < -50 || EtnStep_delta > 50 ||
+        if ( EtnStep_delta < -200 || EtnStep_delta > 200 ||
 	      EtnPs < 25000 || EtnPs > 35000 ) {
 	  msg( 2, "Will use etalon defaults" );
 	  use_defaults = 1;
@@ -217,9 +217,9 @@ State reset_etalon {
 
 	etdelta = 31000. - convert(EtPos);
 	if ( etdelta < 0 ) {
-	  et_dir = "Out";
+	  et_dir = "In";
 	  etdelta = -etdelta;
-	} else et_dir = "In";
+	} else et_dir = "Out";
 	while (etdelta > 64000 ) {
 	  ci_sendfcmd( 0, "Drive Etalon %s 64000\n", et_dir );
 	  etdelta -= 64000.;
