@@ -1,9 +1,9 @@
 # Hox GSE w/ algorithm w/ windows
 batchfile runfile.1111
-display hoxdisp hox hox1
+display hoxdisp hox hox1 hox2
 client hoxpclt
 memo
 algorithm hoxalgo -p
 extraction hoxrtgext
-algorithm prtgext -p
+algorithm p2rtgext -p
 rtg //35/home/hoxp/hox.rtg
