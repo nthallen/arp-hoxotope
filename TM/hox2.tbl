@@ -19,6 +19,9 @@ LabAna {
   A5SPt: (A5SPt,5);
   A6SPt: (A6SPt,5);
   A7SPt: (A7SPt,5);
+  SD_P2: (SD_P2,6);
+  SD__P: (SD__P,5);
+  UVMon: (UVMon,5);
 }
 AnaLab {
   HBox{ +=+; Title: "Analog Inputs"; +=+ };
