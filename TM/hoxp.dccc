@@ -74,7 +74,7 @@
   SPARE,  6, 0x0200 ;Digio0 4A 1 49 OH Power TEC Control Off
   STRB,   6, 0x0400 ;Digio0 4A 2 50 OH Power Solenoids and Steppers On
   STRB,   6, 0x0800 ;Digio0 4A 3 51 OH Power Solenoids and Steppers Off
-  SPARE,  6, 0x1000 ;Digio0 4A 4 52 OH SPARE COMMAND
+  SELECT, 6, 0x1000 ;Digio0 4A 4 52 OH Beam Position Mux Selector
   SPARE,  6, 0x2000 ;Digio0 4A 5 53 OH SPARE COMMAND
   SPARE,  6, 0x4000 ;Digio0 4A 6 54 OH SPARE COMMAND
   SPARE,  6, 0x8000 ;Digio0 4A 7 55 OH SPARE COMMAND
