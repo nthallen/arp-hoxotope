@@ -1,0 +1,211 @@
+# Test tma for valve control.
+# 12/12/2003
+
+{ if ( SW_St == 66 ) validate shutdown;
+}
+
+State initialize {
+			> telemetry start
+		+1	> fail 0
+		+1	> OH power solenoids and steppers Off
+		+1	> OH power 28V switched off
+		+1	> OH preset Secondary Throttle Position to 5000
+		+1	> OH power solenoids and steppers On
+# Output 5 = number of steps per increment;
+# Output 6 = number of seconds integration;
+# Output 7 = pressure setpoint in torr
+		+1	> OH analog Output 5 set 1
+		+1	> OH analog Output 6 set 4
+		+1	> OH analog Output 7 set 20
+		+1	> OH Set secondary Throttle Speed 1067 Hz
+}
+
+State shutdown {
+		+1  Validate Pinch_Valve_Sit;
+		+1  > OH Drive Secondary Throttle to 5000
+		+5	> OH power solenoids and steppers Off
+		+1  > quit
+}
+
+PARTITION
+# PARTITION X: Pinch Valve
+################################################################
+# Pinch valve regulate.  Set to fixed P = 50 torr.
+# Drives pinch valve in (higher P) or out (lower P).  
+################################################################
+
+
+%{ /* definitions */
+  int n_p_rats = 0;
+  int n_p_set = 4;	
+  int n_steps = 3;
+  double est_steps = 0;
+  int est2_steps;
+  double P_sum = 0;
+  double P_avg = 0;
+  double P_diff = 0;
+  double P_set = 50;
+  double P_amb = 0;
+  double del_set = 0;
+  double set_point = 0;
+  double pot_limitout = 2.6;
+  double pot_limitin = 5.5;
+  double pot_pos = 2.7;
+  int stepper_pos = 0;
+  double stepper_pos_raw = 0;
+
+  #include <math.h> /* for fabs */
+%}
+
+
+################################################################
+# Pinch valve control subroutine.
+################################################################
+
+State Pinch_Valve_Sit { { msg(1, "Pinch Valve Sit"); }}
+
+
+State Pinch_Valve_Regulate {
+  { n_p_rats++;
+	P_sum += convert(SD_P2);
+	n_p_set = A6SPt;
+	n_steps = floor(A5SPt);
+	P_set = A7SPt/1.0;
+	if (n_p_rats >= n_p_set) {
+	  P_avg = (P_sum/n_p_rats);
+	  P_diff = P_avg - P_set;
+		  
+	if (fabs(P_diff) > (0.01*P_set)){
+			if (P_diff > 0) 
+			{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", n_steps*2); }
+  	 	else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", n_steps*2); 
+		}
+  	P_avg = P_sum = n_p_rats = 0;
+	}
+  }
+
+}
+
+State Pinch_Valve_Limbo {
+  {	msg(1, "Pinch Valve Limbo");
+	n_p_rats++;
+	P_sum += convert(SD_P2);
+	n_p_set = A6SPt;
+	n_steps = A5SPt;
+	P_set = A7SPt/1.0;
+	if (n_p_rats >= n_p_set) {
+		P_avg = (P_sum/n_p_rats);
+	
+		if (P_avg < 145) { 
+  	 		Validate Pinch_Valve_Initialize;
+		}
+	
+  		P_avg = P_sum = n_p_rats = 0;
+	}
+  }
+}
+
+State Pinch_Valve_Initialize {
+  { pot_pos = convert(L12BV);
+	stepper_pos_raw = 1097.8*pot_pos -2206.1 + 0.5;
+	stepper_pos = floor(stepper_pos_raw);
+	ci_sendfcmd(0,"OH preset Secondary Throttle Position to %u\n", stepper_pos);
+
+  	Validate Pinch_Valve_Proportionate;
+  }
+}	
+
+
+State Pinch_Valve_Proportionate {
+
+{if  ((Convert(L12BV) > 6.65) || (Convert(L12BV) < 2.85) )
+	Validate Pinch_Valve_Sit;
+} 
+ 
+
+{if ( (convert(L12CV)*100) > 150) { 
+	ci_sendfcmd(0,"OH Drive Secondary Throttle to %u\n", 1000); 
+  	Validate Pinch_Valve_Limbo;	
+
+    }
+}
+
+
+ { n_p_rats++;
+	P_sum += convert(SD_P2);
+	n_p_set = A6SPt;
+	n_steps = A5SPt;
+	P_set = A7SPt/1.0;
+	pot_pos = L12BV;
+	P_amb = convert(L12CV)*100;
+	
+		if (n_p_rats >= n_p_set) {
+	 		P_avg = (P_sum/n_p_rats);
+	  		P_diff = P_avg - P_set;	  
+
+	  		est_steps = ( 240*(fabs(P_diff))/P_avg )*n_steps ;    	
+			if (est_steps < 300) {
+				est2_steps = floor(est_steps);
+			} else {
+				est2_steps = 300;
+			}
+
+
+			if (fabs(P_diff) >= (0.2)){
+				if (P_diff > 0) 
+					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", 
+						est2_steps );  }
+  					else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", 
+						est2_steps ); 
+			}
+ 			if ( (fabs(P_diff) < (0.2)) && (fabs(P_diff) > (0.05)) ){
+				if (P_diff > 0) 
+					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", n_steps); }
+  	 				else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", n_steps); 
+			}
+  	
+			P_avg = P_sum = n_p_rats = 0;
+
+
+		}
+	
+  }
+
+}
+
+PARTITION
+# PARTITION 2: SW_St control
+################################################################
+# SW_St control
+#   Cases handled elsewhere:
+#     1-4   Altitude Control
+#     20-21 Peakup On/Off (scanning.tma)
+#     22    Static Value to advance within record
+#     23-24 Enable/Disable Green Power Peakup (grnpw.tma peakalgo)
+#     25-26 Auto/Off H2O Lamp
+#     27    Begin Green Power Scan (grnpw.tma)
+################################################################
+State SW_Stat_Wait {
+  { int reset_it;
+	reset_it = 1;
+	switch (SW_St) {
+	  default:
+	  case 0: reset_it = 0; break;
+	  case 30: Validate Pinch_Valve_Sit; break;
+	  case 31: Validate Pinch_Valve_Regulate; break;
+	  case 32: Validate Pinch_Valve_Proportionate; break;
+	  case 66: Validate shutdown; break;
+	  case 67: Validate Pinch_Valve_Limbo; break;
+	  case 68: Validate Pinch_Valve_Initialize; break;
+	 }
+	if (reset_it) Validate SW_Stat_Reset;
+  }
+}
+
+State SW_Stat_Reset {
+  > OH SW Status Value to 0
+  Hold until (SW_St == 0) or 10;
+  Validate SW_Stat_wait;
+}
+
+
