@@ -4,14 +4,14 @@ TM 1/16 Hz AD8        AirLP; /* AIR LOW PRESSURE */
 TM 1/16 Hz NAV_Alttd  Alttd; /* NAV Altitude */
 TM 1/4  Hz AD8        AtPos; /* ATTENUATOR POSN POT */
 TM 1/16 Hz AD8        BAPos; /* BELLOWS ACTUATOR POSITION */
-TM 1    Hz AD8        BmPsE; /* QUAD CELL DETECTOR OUTPUT C */
-TM 1    Hz AD8        BmPsN; /* QUAD CELL DETECTOR OUTPUT A */
-TM 1    Hz AD8        BmPsS; /* QUAD CELL DETECTOR OUTPUT B */
-TM 1    Hz AD8        BmPsW; /* QUAD CELL DETECTOR OUTPUT D */
-TM 4    Hz AD8        C3F6P; /* C3F6 BOTTLE OUTPUT */
-TM 1/16 Hz AD8_T30K   C3F6T; /* C3F6 BOTTLE TEMP */
+TM 2    Hz AD8        BmPsN; /* Beam Position Monitor N */
+TM 2    Hz AD8        BmPsS; /* Beam Position Monitor S */
+TM 2    Hz AD8        BmPsE; /* Beam Position Monitor E */
+TM 2    Hz AD8        BmPsW; /* Beam Position Monitor W */
+TM 2    Hz DStat      BmPsMux; /* Beam Position Mux Status */
 TM 1/16 Hz AD8_T30K   CIn_T; /* TFR COOLANT TEMPERATURE IN */
 TM 1/16 Hz AD8_T30K   COutT; /* TFR COOLANT TEMPERATURE OUT */
+TM 1    Hz AD8        KDP_H; /* Doubler Temp from Laser Head */
 TM 1/4  Hz AD8_T30K   DHx1T; /* DYE LASER HEAT EXCH COLD TEMP */
 TM 1/4  Hz AD8_T30K   DHx2T; /* DYE LASER HEAT EXCH HOT TEMP */
 TM 1    Hz AD12_uGg   DLH_P; /* DYE LASER HOUSING PRESSURE */
@@ -27,10 +27,9 @@ TM 1/4  Hz AD8_10A    DTE_I; /* DYE LASER TEC CURRENT */
 TM 1/4  Hz AD8_5A     DTETV; /* DYE LASER TEC TEMP */
 TM 4    Hz AD12       Et_LW; /* 282nm DETECTOR OUTPUT(DIAGNOSTIC) */
 TM 4    Hz AD12       EtPos; /* ETALON TUNE POSITION(DYE LASER) */
-TM 1    Hz AD8        GrnP1; /* 523nm DETECTOR MON 1 */
-TM 1    Hz AD8        GrnP2; /* 523nm DETECTOR MON 2 */
+TM 1    Hz AD8        GrnP1; /* 523nm DETECTOR MON 2 */
 TM 1/16 Hz AD8_T30K   HD__T; /* HARD DISK TEMP */
-TM 1/16 Hz AD8_T30K   ICC_T; /* ICC TEMPERATURE */
+TM 1/16 Hz AD8_T10K75 ICC_T; /* ICC TEMPERATURE */
 TM 1/4  Hz DStat      IOSwS; /* I/O and Cockpit Switches */
 TM 1    Hz AD12       L12AV; /* LAB 12-BIT A */
 TM 1    Hz AD12       L12BV; /* LAB 12-BIT B */
@@ -62,14 +61,14 @@ TM 4    Hz AD8        OClUV; /* OH CELL UV MONITOR */
 TM 1/16 Hz AD8_T30K   OHC2T; /* OH CELL TEMP 2 */
 TM 1/16 Hz AD8_T30K   OHCHT; /* OH CELL HOUSING TEMP */
 TM 1/16 Hz AD8_5A     OHCLI; /* OH CELL LAMP CURRENT */
-TM 1    Hz AD12_T10K  PAFF1; /* PRIMARY AIR FLOW FWD TEMP 1 */
-TM 1    Hz AD12_T10K  PAFF2; /* PRIMARY AIR FLOW FWD TEMP 2 */
-TM 1    Hz AD12_T10K  PAFF3; /* PRIMARY AIR FLOW FWD TEMP 3 */
-TM 1    Hz AD12_T10K  PAFF4; /* PRIMARY AIR FLOW FWD TEMP 4 */
-TM 1    Hz AD12_T10K  PAFF5; /* PRIMARY AIR FLOW FWD TEMP 5 */
-TM 1    Hz AD12_T10K  PAFF6; /* PRIMARY AIR FLOW FWD TEMP 6 */
-TM 1    Hz AD12_T10K  PAFF7; /* PRIMARY AIR FLOW FWD TEMP 7 */
-TM 1/16 Hz AD8_T30K   PC__T; /* PC TEMPERATURE */
+TM 1    Hz AD12_T30K  PAFF1; /* PRIMARY AIR FLOW FWD TEMP 1 */
+TM 1    Hz AD12_T30K  PAFF2; /* PRIMARY AIR FLOW FWD TEMP 2 */
+TM 1    Hz AD12_T30K  PAFF3; /* PRIMARY AIR FLOW FWD TEMP 3 */
+TM 1    Hz AD12_T30K  PAFF4; /* PRIMARY AIR FLOW FWD TEMP 4 */
+TM 1    Hz AD12_T30K  PAFF5; /* PRIMARY AIR FLOW FWD TEMP 5 */
+TM 1    Hz AD12_T30K  PAFF6; /* PRIMARY AIR FLOW FWD TEMP 6 */
+TM 1    Hz AD12_T30K  PAFF7; /* PRIMARY AIR FLOW FWD TEMP 7 */
+TM 1/16 Hz AD8_T10K75 PC__T; /* PC TEMPERATURE */
 TM 1/16 Hz AD8_T30K   PMonT; /* 282nm DETECTOR TEMP */
 TM 1/16 Hz AD8_T30K   PS__T; /* MAIN POWER SUPPLY TEMP */
 TM 1    Hz AD12_T10K  SAFB1; /* SECONDARY AIR FLOW B 1 */
@@ -85,22 +84,14 @@ TM 1    Hz AD12_T10K  SAFF3; /* SECONDARY AIR FLOW FWD TEMP 3 */
 TM 1    Hz AD12_T10K  SAFF4; /* SECONDARY AIR FLOW FWD TEMP 4 */
 TM 1    Hz AD12_KTORR SD__P; /* SECONDARY DUCT PRS OUTPUT */
 TM 1    Hz AD12_DTORR SD_DP; /* SECONDARY DUCT DIFF PRS OUTPUT */
+TM 1    Hz AD12_CTORR SD_P2; /* SD 100 Torr baratron (was PD__P) */
 TM 1/16 Hz AD8_T30K   SDP_T; /* SECONDARY DUCT PRS GUAGE TEMP */
 TM 1/16 Hz AD8_T30K   SolDT; /* SOLENOID DECK TEMP */
-TM 4    Hz DStat      SolSt; /* Soldrv Status Byte */
+TM 4    Hz UCHAR      SolSt; /* Soldrv Status Byte */
 TM 1/4  Hz AD8        SVPos; /* SECONDARY THROTTLE VALVE POSN */
-TM 1    Hz DStat      SW_St; /* Software Status Byte */
+TM 1    Hz UCHAR      SW_St; /* Software Status Byte */
 TM 1/16 Hz NAV_Knots  TASpd; /* NAV True Air Speed */
 TM 1/16 Hz SINT       TDrft; /* NAV Time Drift */
-TM 1/16 Hz AD8        TFR_P; /* TFR LASER VESSEL PRS */
-TM 1/16 Hz AD8_TFRI   TFR1I; /* TFR 1 DIODE CURRENT */
-TM 1/4  Hz AD8        TFR1O; /* TFR 1 DIODE POWER */
-TM 1/16 Hz AD8_T30K   TFR1T; /* TFR 1 POWER SUPPLY TEMP */
-TM 1/16 Hz AD8_TFRT   TFR1V; /* TFR 1 LASER DIODE TEMPERATURE */
-TM 1/16 Hz AD8_TFRI   TFR2I; /* TFR 2 DIODE CURRENT */
-TM 1/4  Hz AD8        TFR2O; /* TFR 2 DIODE POWER */
-TM 1/16 Hz AD8_T30K   TFR2T; /* TFR 2 POWER SUPPLY TEMP */
-TM 1/16 Hz AD8_TFRT   TFR2V; /* TFR 2 LASER DIODE TEMPERATURE */
 TM 4    Hz AD12       UVMon; /* 282nm DETECTOR OUTPUT(DYE LASER) */
 TM 1    Hz AD8_51V    V28_V; /* +28V MONITOR */
 TM 1    Hz AD8_30A    V28I1; /* +28V CURRENT ZONE 1 */
@@ -119,14 +110,9 @@ Address AirHP  0xC29; /* AIR HIGH PRESSURE */
 Address AirLP  0xC27; /* AIR LOW PRESSURE */
 Address AtPos  0xC1B; /* ATTENUATOR POSN POT */
 Address BAPos  0xC06; /* BELLOWS ACTUATOR POSITION */
-Address BmPsE  0xC15; /* QUAD CELL DETECTOR OUTPUT C */
-Address BmPsN  0xC19; /* QUAD CELL DETECTOR OUTPUT A */
-Address BmPsS  0xC17; /* QUAD CELL DETECTOR OUTPUT B */
-Address BmPsW  0xC13; /* QUAD CELL DETECTOR OUTPUT D */
-Address C3F6P  0xC2B; /* C3F6 BOTTLE OUTPUT */
-Address C3F6T  0xC48; /* C3F6 BOTTLE TEMP */
 Address CIn_T  0xC01; /* TFR COOLANT TEMPERATURE IN */
 Address COutT  0xC0E; /* TFR COOLANT TEMPERATURE OUT */
+Address KDP_H  0xC0A; /* Doubler Temp from Laser Head (was TFR2O) */
 Address DHx1T  0xC45; /* DYE LASER HEAT EXCH COLD TEMP */
 Address DHx2T  0xC43; /* DYE LASER HEAT EXCH HOT TEMP */
 Address DLH_P  0xC8C; /* DYE LASER HOUSING PRESSURE */
@@ -134,16 +120,15 @@ Address DLH1T  0xC02; /* DYE LASER HOUSING TEMP 1 */
 Address DLH2T  0xC00; /* DYE LASER HOUSING TEMP 2 */
 Address DLooT  0xC8E; /* DYE LOOP COOLANT TEMP */
 Address DRs_T  0xC41; /* DYE LASER RESERVOIR TEMP */
-Address DStt0  0x862; /* OH Status Byte 0 */
-Address DStt1  0x884; /* OH Status Byte 1 */
-Address DStt2  0x863; /* OH Status Byte 2 */
-Address DStt3  0x885; /* OH Status Byte 3 */
+Address DStt0  0x811; /* OH Status Byte 0 */
+Address DStt1  0x815; /* OH Status Byte 1 */
+Address DStt2  0x831; /* OH Status Byte 2 */
+Address DStt3  0x835; /* OH Status Byte 3 */
 Address DTE_I  0xC4E; /* DYE LASER TEC CURRENT */
 Address DTETV  0xC4C; /* DYE LASER TEC TEMP */
 Address Et_LW  0xC90; /* 282nm DETECTOR OUTPUT(DIAGNOSTIC) */
 Address EtPos  0xC80; /* ETALON TUNE POSITION(DYE LASER) */
-Address GrnP1  0xC09; /* 523nm DETECTOR MON 1 */
-Address GrnP2  0xC0B; /* 523nm DETECTOR MON 2 */
+Address GrnP1  0xC09; /* 523nm DETECTOR MON 2 */
 Address HD__T  0xC4A; /* HARD DISK TEMP */
 Address ICC_T  0xC10; /* ICC TEMPERATURE */
 Address IOSwS  0x31C; /* I/O and Cockpit Switches */
@@ -169,7 +154,7 @@ Address NOFlT  0xC2E; /* NO GAS FLOWMETER TEMP MON */
 Address NOFlw  0xC21; /* NO FLOW OUTPUT */
 Address NORgT  0xC23; /* NO REGULATOR TEMP */
 Address NoseP  0xC04; /* LASER HOUSING PRESS */
-Address NOSPt  0xE44; /* NO Mass Flow Set Point */
+Address NOSPt  0xE84; /* NO Mass Flow Set Point */
 Address OClHV  0xC2A; /* OH CELL PMT HV MONITOR */
 Address OClUV  0xC2C; /* OH CELL UV MONITOR */
 Address OHC2T  0xC30; /* OH CELL TEMP 2 */
@@ -198,18 +183,10 @@ Address SAFF3  0xCAE; /* SECONDARY AIR FLOW FWD TEMP 3 */
 Address SAFF4  0xCB0; /* SECONDARY AIR FLOW FWD TEMP 4 */
 Address SD__P  0xC88; /* SECONDARY DUCT PRS OUTPUT */
 Address SD_DP  0xC8A; /* SECONDARY DUCT DIFF PRS OUTPUT */
+Address SD_P2  0xC92; /* SD 100 Torr baratron (was PD__P) */
 Address SDP_T  0xC37; /* SECONDARY DUCT PRS GUAGE TEMP */
 Address SolDT  0xC46; /* SOLENOID DECK TEMP */
 Address SVPos  0xC3B; /* SECONDARY THROTTLE VALVE POSN */
-Address TFR_P  0xC07; /* TFR LASER VESSEL PRS */
-Address TFR1I  0xC0F; /* TFR 1 DIODE CURRENT */
-Address TFR1O  0xC0C; /* TFR 1 DIODE POWER */
-Address TFR1T  0xC3A; /* TFR 1 POWER SUPPLY TEMP */
-Address TFR1V  0xC05; /* TFR 1 LASER DIODE TEMPERATURE */
-Address TFR2I  0xC0D; /* TFR 2 DIODE CURRENT */
-Address TFR2O  0xC0A; /* TFR 2 DIODE POWER */
-Address TFR2T  0xC38; /* TFR 2 POWER SUPPLY TEMP */
-Address TFR2V  0xC03; /* TFR 2 LASER DIODE TEMPERATURE */
 Address UVMon  0xC82; /* 282nm DETECTOR OUTPUT(DYE LASER) */
 Address V28_V  0xC35; /* +28V MONITOR */
 Address V28I1  0xC24; /* +28V CURRENT ZONE 1 */
@@ -223,3 +200,8 @@ Address X2_HV  0xC1E; /* AXIS 2 PMT VOLTS HV MON */
 Address X2DAT  0xC16; /* AXIS 2 PMT HOUSING TEMP */
 Address X2FAT  0xC18; /* AXIS 2 HOUSING TEMP */
 Address X2Las  0xC86; /* AXIS #2 X LAS(OH DETECT AXES) */
+Address BmPsN  0xC19; /* Beam Position Monitor N */
+Address BmPsS  0xC17; /* Beam Position Monitor S */
+Address BmPsE  0xC15; /* Beam Position Monitor E */
+Address BmPsW  0xC13; /* Beam Position Monitor W */
+Address BmPsMux 0x833; /* Beam Position Mux Status */
