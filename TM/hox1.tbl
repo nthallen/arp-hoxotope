@@ -50,7 +50,7 @@ AirFlow {
   VGlue 0+1;
   HBox { -; Title: Pinch; - };
   #VGlue 0+1;
-  >{(PVStep)       "[PVP]";
+  >{(PVStep)       (PVPos,6);
     (PVStatFlag,5) (PVScan,4);
   }<;
 # Title: >Gate<;
@@ -83,7 +83,7 @@ OtherT {
   HD__T (HD__T,5);
 # SolDT (SolDT,5);
   SDP_T (SDP_T,5);
-  PumpT (PumpT,4);
+  PumpT (PumpT,5);
   Lmp1T (Lmp1T,5);
   Lmp2T (Lmp2T,5);
 }

@@ -177,8 +177,8 @@ TM 1 Hz AD12 PAltP; Address PAltP 0xCB0; /* (SAFF4 T10K) */
 TM 1/16 Hz AD8_T30K Lmp1T; Address Lmp1T 0xC46; /* (SolDT T30K) */
 TM 1/16 Hz AD8_T30K Lmp2T; Address Lmp2T 0xC2E; /* (NOFlT T30K) */
 TM 1 Hz AD8 HVPSP; Address HVPSP 0xC2B; /* High Voltage Power Supply Pressure (C3FCP) */
-TM 1 Hz AD8 PumpT; Address PumpT 0xC48; /* Pump Temperature (C3F6T) */
-TM 1 Hz AD12 PVPos; Address PVPos 0xCA4; /* Pinch Valve Pot Position (PAFF5 T30K) */
+TM 1 Hz AD8_T30K PumpT; Address PumpT 0xC48; /* Pump Temperature (C3F6T) */
+TM 1 Hz AD12 PVPos; Address PVPos 0xCA8; /* Pinch Valve Pot Position (PAFF7 T30K) */
 
 /* TM 1/16 Hz AD8 NO_HP; Address NO_HP 0xC2F; */ /* NO BOTTLE OUTPUT PRESS */
 /* TM 1 Hz AD8 NO_LP; Address NO_LP 0xC2D; */ /* NO REGULATOR OUTPUT PRESS */
@@ -188,7 +188,7 @@ TM 1 Hz AD12 PVPos; Address PVPos 0xCA4; /* Pinch Valve Pot Position (PAFF5 T30K
 /* TM 2 Hz AD8_PSD BmPsS; Address BmPsS 0xC17; */ /* Beam Position Monitor S */
 /* TM 2 Hz AD8_PSD BmPsE; Address BmPsE 0xC15; */ /* Beam Position Monitor E */
 /* TM 2 Hz AD8_PSD BmPsW; Address BmPsW 0xC13; */ /* Beam Position Monitor W */
+/* TM 1 Hz AD12_T30K PAFF5; Address PAFF5 0xCA4; */ /* PRIMARY AIR FLOW FWD TEMP 5 */
 /* TM 1 Hz AD12_T30K PAFF6; Address PAFF6 0xCA6; */ /* PRIMARY AIR FLOW FWD TEMP 6 */
-/* TM 1 Hz AD12_T30K PAFF7; Address PAFF7 0xCA8; */ /* PRIMARY AIR FLOW FWD TEMP 7 */
 /* TM 1 Hz AD12_T10K SAFB7; Address SAFB7 0xCBE; */ /* SECONDARY AIR FLOW B 7 */
 /* TM 1/4 Hz AD8 SVPos; Address SVPos  0xC3B; */ /* SECONDARY THROTTLE VALVE POSN */
