@@ -26,21 +26,31 @@ spreadsheet lsrsys 30
 	18 OHC2T %5.1lf 
 	19 OHCHT %5.1lf 
 	20 OHCLI %4.2lf 
-	21 TFR1I %5.1lf 
-	22 TFR1O %4.2lf 
-	23 TFR1V %5.2lf 
-	24 TFR2I %5.1lf 
-	25 TFR2O %4.2lf 
-	26 TFR2V %5.2lf 
+	21 RLSD1I %6.2lf 
+	22 RLSD1T %6.2lf 
+;	23 TFR1V %5.2lf 
+	24 RLSD2I %6.2lf 
+	25 RLSD2T %6.2lf 
+;	26 TFR2V %5.2lf 
 	27 X1_HV %5.2lf 
 	28 X2_HV %5.2lf 
 	29 PMonT %5.1lf 
 
+spreadsheet lsrstpt 9
+	1 RLSD1ISP %6.2lf
+	2 RLSD2ISP %6.2lf
+	3 RLSD1TSP %6.2lf
+	4 RLSD2TSP %6.2lf
+	5 KDP_H %4lf
+	6 RKDPTSP %4lf
+	7 RepRtSP %5lf
+	8 TopazSecs %3lf
+
 spreadsheet flowtemp 19
-	1 PAFF1 %5.1lf 
-	2 PAFF2 %5.1lf 
-	3 PAFF3 %5.1lf 
-	4 PAFF4 %5.1lf 
+	1 BmPsN %5.1lf 
+	2 BmPsS %5.1lf 
+	3 BmPsE %5.1lf 
+	4 BmPsW %5.1lf 
 	5 PAFF5 %5.1lf 
 	6 PAFF6 %5.1lf 
 	7 PAFF7 %5.1lf 
@@ -55,4 +65,13 @@ spreadsheet flowtemp 19
 	16 SAFB5 %5.1lf 
 	17 SAFB6 %5.1lf 
 	18 SAFB7 %5.1lf 
+
+spreadsheet bmps 7
+	condition depending on (2Hz)
+	1 BmPsN %8.4lf
+	2 BmPsS %8.4lf
+	3 BmPsE %8.4lf
+	4 BmPsW %8.4lf
+	5 BmPsMux %5.0lf
+	6 UVMon  %8.4lf
 

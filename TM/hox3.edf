@@ -17,12 +17,10 @@ spreadsheet power 7
 	2 V28I1 %4.1lf 
 	3 V28I2 %4.1lf 
 	4 V300I %4.2lf 
-	6 SDP_T %5.1lf 
-
+	
 spreadsheet nav 6
 	1 Lattd %6.1lf 
 	2 Lngtd %6.1lf 
 	3 TASpd %6.1lf .1*convert
 	4 TDrft %6.0lf 
 	5 Alttd %6.1lf 
-

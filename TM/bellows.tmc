@@ -39,10 +39,9 @@
   #define BF_NSTEPS "1000"
 %}
 
-{ unsigned short This_stat, Reset_counts;
+{ unsigned short Reset_counts;
   
-  This_stat = IxStt & (ETN_CHOP_BIT|ETN_SUPP_BIT);
-  Reset_counts = This_stat == 0 || (IxStt & NO_LOOPS_BIT) != 0;
+  Reset_counts = ( EtnFlg == 0 ) || !( Peakup_On );
   if (!Reset_counts) {
 	unsigned short x;
 	unsigned long y;
@@ -52,7 +51,7 @@
 	sum_x += x;
 	sum_y += y;
 	sum_xy += x * y;
-	if (This_stat == ETN_CHOP_BIT) sum_online++;
+	if (EtnFlg == IXFLAG_ONLINE) sum_online++;
 	if (sum_count++ >= BF_NPOINTS &&
 		sum_online >= BF_MINPOINTS &&
 		sum_count - sum_online >= BF_MINPOINTS) {

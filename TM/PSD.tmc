@@ -5,6 +5,8 @@
 	 DL_X DL_Y DL_TP
 	 This operation will be based on the assumption that
 	 BmPsMux == 0 => XL, 1 => DL, but that can be changed here.
+	 Because of PSD orientation, X and Y directions are defined:
+	 XL_X=BmPsN-BmPsS; XL_Y=BmPsE-BmPsW; DL_X=BmPsN-BmPsS; DL_Y=BmPsW-BmPsE;
   */
   #include <math.h> /* For floor() which is auto-generated */
 %}
@@ -22,10 +24,10 @@ PSD_pos_t XL_X; invalidate XL_X;
 PSD_pos_t XL_Y; invalidate XL_Y;
 PSD_pwr_t XL_TP; invalidate XL_TP;
 if ( BmPsMux == 0 ) {
-  XL_X = (BmPsE + BmPsW > 0) ?
+  XL_Y = (BmPsE + BmPsW > 0) ?
 	((( BmPsE - BmPsW ) * 999. ) / ( BmPsE + BmPsW )) :
 	99999;
-  XL_Y = (BmPsN + BmPsS > 0) ?
+  XL_X = (BmPsN + BmPsS > 0) ?
 	((( BmPsN - BmPsS ) * 999. ) / ( BmPsN + BmPsS )) :
 	99999;
   XL_TP = BmPsN + BmPsS + BmPsE + BmPsW;
@@ -38,10 +40,10 @@ PSD_pos_t DL_X; invalidate DL_X;
 PSD_pos_t DL_Y; invalidate DL_Y;
 PSD_pwr_t DL_TP; invalidate DL_TP;
 if ( BmPsMux != 0 ) {
-  DL_X = (BmPsE || BmPsW ) ?
-	(( BmPsE - BmPsW ) * 999. ) / ( BmPsE + BmPsW ) :
+  DL_Y = (BmPsE || BmPsW ) ?
+	(( BmPsW - BmPsE ) * 999. ) / ( BmPsE + BmPsW ) :
 	99999;
-  DL_Y = (BmPsN || BmPsS ) ?
+  DL_X = (BmPsN || BmPsS ) ?
 	(( BmPsN - BmPsS ) * 999. ) / ( BmPsN + BmPsS ) :
 	99999;
   DL_TP = BmPsN + BmPsS + BmPsE + BmPsW;

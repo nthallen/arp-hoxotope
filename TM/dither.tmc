@@ -5,16 +5,13 @@
   static int last_drive_out;
 %}
 
-state (etn_is_offline, etn_is_online);
 validate etn_is_offline;
 
 {
-  unsigned short This_stat;
-  This_stat = IxStt & (ETN_CHOP_BIT|ETN_SUPP_BIT);
   depending on (etn_is_offline) {
-	if (This_stat == ETN_CHOP_BIT)
+	if (EtnFlg == IXFLAG_ONLINE)
 	  validate etn_is_online;
-  } else if (This_stat != ETN_CHOP_BIT)
+  } else if (EtnFlg != IXFLAG_ONLINE)
 	validate etn_is_offline;
 }
 

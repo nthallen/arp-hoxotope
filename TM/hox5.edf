@@ -1,9 +1,24 @@
-spreadsheet unused 2
-	1  SOCNG %6.0lf 
-
-spreadsheet bmps 5
-	1 BmPsN %4.2lf 
-	2 BmPsS %4.2lf 
-	3 BmPsE %4.2lf 
-	4 BmPsW %4.2lf 
-
+spreadsheet whathappened 25
+	1  UVMon %6.0lf 
+	2  X1Las %6.4lf 
+	3  X2Las %6.4lf 
+	4  DL_X  %8.4lf
+	5  DL_Y  %8.4lf
+	6  DL_TP %8.4lf
+	7  BmPsN %8.4lf
+	8  BmPsS %8.4lf
+	9  BmPsE %8.4lf
+	10  BmPsW %8.4lf
+	11  LMP_T %6.1lf
+	12 COutT %6.1lf
+	13 SAFF1 %5.1lf 
+	14 SAFF2 %5.1lf 
+	15 Alttd %6.1lf 
+	16 SD__P %6.4lf 
+	17 SD_P2 %6.4lf
+	18 SD_DP %6.4lf
+	19 GtVPs %5.0lf 
+	20 SVPos %4.2lf 
+	21 STVPs %5.0lf To_Double
+	22 LMP_T %5.1lf
+	23 COutT %5.1lf
