@@ -29,7 +29,7 @@ TEC {
   "FlowS" (DL_Fl,3);
 }
 GasDeck {
-  Title: >"Gas Deck"<;
+  HBox { +-; Title: "Gas Deck"; -+ };
   Header:
    "" >HP<      >LP<      >RgT<;
   #NO (NO_HP,4) (NO_LP,4) (NORgT,5);
@@ -48,9 +48,8 @@ AirFlow {
   Anemo (Anemo,6);
 # SCV   (SCV_S,4);
   VGlue 0+1;
-  { HGlue 0+1 HBox{-;-} HGlue 0+1 };
-  VGlue 0+1;
-  Title: >Pinch<;
+  HBox { -; Title: Pinch; - };
+  #VGlue 0+1;
   >{(PVStep)       "[PVP]";
     (PVStatFlag,5) (PVScan,4);
   }<;
@@ -89,7 +88,7 @@ OtherT {
   Lmp2T (Lmp2T,5);
 }
 Software {
-  Title: >Software<;
+  HBox { +-; Title: Software; -+ };
   Sol:   (SolSt,3);
   SW:    (SW_St,3);
 }
@@ -112,7 +111,7 @@ Table {
 		+|+;
 		Table {
 		  [TEC];
-		  [HBar];
+		  # [HBar];
 		  [GasDeck];
 		};
 		+|+;
@@ -120,16 +119,16 @@ Table {
 		+|+;
 		Table {
 		  [Laser];
-		  [HBar];
-		  [Status];
+		  VGlue 0+1;
+                  [Software];
+		  # [Status];
 		};
 		+|+;
 		Table {
 		  [OtherT];
 		  [HBar];
-		  [Software];
-		  [HBar];
-		  {	MFCtr: (MFCtr,5) };
+		  { >(flttime,9);
+		    MFCtr: (MFCtr,5) };
 		};
 		+|+;
 	  };
