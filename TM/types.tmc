@@ -196,7 +196,7 @@ TM typedef AD12 AD12_KTORR { convert TORR; text "%5.1lf"; }
 	65536, 1000.0
   }
 
-TM typedef AD12 AD12_CTORR { convert TORR; text "%5.1lf"; }
+TM typedef AD12 AD12_CTORR { convert TORR; text "%6.2lf"; }
   Calibration (AD12_CTORR, TORR) {
 		0,      0,
 	65536,  200.0
