@@ -14,7 +14,7 @@
 	"|<--|",  /* driving in both limits. Broke */
 	"---->",  /* driving out */
 	"|--->",  /* driving out from in limit */
-	"--->|",  /* driving out agains out limit */
+	"--->|",  /* driving out against out limit */
 	"|-->|"   /* driving out both limits. Broke */
   };
 %}
@@ -29,11 +29,11 @@ IxDriveStat STVStFlag; invalidate STVStFlag; { STVStFlag = STVSt & 0xF; Validate
 	"    ",
 	"Scan",
 	"On  ",
-	"????",
+	"S/On",
 	"Off ",
-	"????",
+	"S/Of",
 	"Alt ",
-	"????"
+	"S/Al"
   };
 %}
 TM typedef unsigned short IndxrFlag {
