@@ -1,20 +1,20 @@
 ; hox.slp defines soldrv/hoxsrvr interface
 Command_Set = 'A'
 Proxy Etalon {
-  O: OH Drive Etalon Online
-  _: OH Drive Etalon Offline
-  +: OH Drive Etalon Altline
+  O: Drive Etalon Online
+  _: Drive Etalon Offline
+  +: Drive Etalon Altline
 }
 Proxy NOPre {
-  0: OH NO FLOW SET 0
-  A: OH NO FLOW PRESET 0
-  B: OH NO FLOW PRESET 1
-  C: OH NO FLOW PRESET 2
-  D: OH NO FLOW PRESET 3
-  E: OH NO FLOW PRESET 4
+  0: NO FLOW SET 0
+  A: NO FLOW PRESET 0
+  B: NO FLOW PRESET 1
+  C: NO FLOW PRESET 2
+  D: NO FLOW PRESET 3
+  E: NO FLOW PRESET 4
 }
 Proxy Bellow {
-  O: OH Drive Bellows Online
-  _: OH Drive Bellows Offline
-  +: OH Drive Bellows Altline
+  O: Drive Bellows Online
+  _: Drive Bellows Offline
+  +: Drive Bellows Altline
 }

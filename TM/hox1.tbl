@@ -32,7 +32,7 @@ GasDeck {
   Title: >"Gas Deck"<;
   Header:
    "" >HP<      >LP<      >RgT<;
-  NO (NO_HP,4) (NO_LP,4) (NORgT,5);
+  #NO (NO_HP,4) (NO_LP,4) (NORgT,5);
   Air (AirHP,4) (AirLP,4) (A_RgT,5);
 }
 AirFlow {
@@ -40,20 +40,24 @@ AirFlow {
   SD__P (SD__P,5);
   SD_DP (SD_DP,6);
   SD_P2 (SD_P2,6);
-  SAFB1 (SAFB1,5);
-  SAFB2 (SAFB2,5);
-  SCV   (SCV_S,4);
+# SAFB1 (SAFB1,5);
+# SAFB2 (SAFB2,5);
+  DucT1 (DucT1,5);
+  DucT2 (DucT2,5);
+  "A/C" (AC_S,3);
+  Anemo (Anemo,6);
+# SCV   (SCV_S,4);
   VGlue 0+1;
   { HGlue 0+1 HBox{-;-} HGlue 0+1 };
   VGlue 0+1;
-  Title: >Throttle<;
-  >{(STVPs)       (SVPos,4);
-	(STVStFlag,5) (STVFlg,4);
+  Title: >Pinch<;
+  >{(PVStep)       "[PVP]";
+    (PVStatFlag,5) (PVScan,4);
   }<;
-  Title: >Gate<;
-  >{(GtVPs) "";
-	(GtVStatus,5) (GtVFlg,4);
-  }<;
+# Title: >Gate<;
+# >{(GtVPs) "";
+# (GtVStatus,5) (GtVFlg,4);
+# }<;
 }
 Laser {
   Title: >Laser<;
@@ -74,12 +78,15 @@ Status {
 }
 OtherT {
   Title: >"Other T (øC)"<;
-  NOFlT (NOFlT,5);
+# NOFlT (NOFlT,5);
   OHCHT (OHCHT,5);
   OHC2T (OHC2T,5);
   HD__T (HD__T,5);
-  SolDT (SolDT,5);
+# SolDT (SolDT,5);
   SDP_T (SDP_T,5);
+  PumpT (PumpT,5);
+  Lmp1T (Lmp1T,5);
+  Lmp2T (Lmp2T,5);
 }
 Software {
   Title: >Software<;

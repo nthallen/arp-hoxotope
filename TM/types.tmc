@@ -235,6 +235,10 @@ Calibration ( AD12_T30K100KU, CELCIUS ) {
   58864, -39.96197
 }
 
+TM typedef AD12 AD12_T1M { convert CELCIUS; text "%5.1lf"; }
+TM typedef AD12_T1M AD12_DucT1;
+TM typedef AD12_T1M AD12_DucT2;
+
 TM typedef AD12 AD12_DTORR;
 TM typedef AD12 AD12_uGg;
 

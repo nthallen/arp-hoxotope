@@ -32,7 +32,7 @@ State GreenPeakInit {
 
 State GreenPeak_Start {
 		> Log Green Power Peakup Enabled
-		> OH SW Status Value to 0
+		> SW Status Value to 0
 		Hold until ( SW_St == 0 );
 		Validate GreenPeak;
 }
@@ -83,7 +83,7 @@ State GreenPeak {
 			if ( new_dir == 0 ) Validate GreenPeakWait;
 			else {
 			  GP_new_DubT += GP_SMALL_STEP * new_dir;
-			  ci_sendfcmd( 2, "OH Topaz KDP SetPoint %d\n", 
+			  ci_sendfcmd( 2, "Topaz KDP SetPoint %d\n", 
 							  GP_new_DubT );
 			}
 		  }
@@ -103,7 +103,7 @@ State GreenPeakWait {
 
 State GreenPeak_Stop {
 		> Log Green Power Peakup Disabled
-		> OH SW Status Value to 0
+		> SW Status Value to 0
 		Hold until ( SW_St == 0 );
 		Validate GreenPeakInit;
 }
@@ -114,7 +114,7 @@ State GreenPeakSeek {
 		{ if ( SW_St == GP_SCAN ) Validate GreenPeak_Scan; }
 		{ GP_crnt_KDPTSP = convert( RKDPTSP ); }
 		{ GP_Sum = 0; GP_Count = 0; GP_Delay = 0; }
-		{ ci_sendfcmd( 2, "OH Topaz KDP SetPoint %d\n", 
+		{ ci_sendfcmd( 2, "Topaz KDP SetPoint %d\n", 
 									GP_MAX_KDPTSP ); }
 
 		depending on (1 Hz, DL_TP Once) {
@@ -130,7 +130,7 @@ State GreenPeakSeek {
 				GP_new_DubT = GP_crnt_KDPTSP - GP_KDPTSP_SEEK_STEP;
 				if ( GP_new_DubT < GP_MIN_KDPTSP )
 				  GP_new_DubT = GP_MAX_KDPTSP;
-				ci_sendfcmd( 2, "OH Topaz KDP SetPoint %d\n", 
+				ci_sendfcmd( 2, "Topaz KDP SetPoint %d\n", 
 										  GP_new_DubT );
 				GP_Delay = GP_Count = 0; GP_Sum = 0;
 			  } else {
@@ -146,11 +146,11 @@ State GreenPeak_Scan {
 		{ if ( SW_St == GP_DISABLE ) Validate GreenPeak_Stop; }
 		{ GP_crnt_KDPTSP = convert( RKDPTSP ); }
 		{ GP_Delay = 0; }
-		{ ci_sendfcmd( 2, "OH Topaz KDP SetPoint %d\n", 
+		{ ci_sendfcmd( 2, "Topaz KDP SetPoint %d\n", 
 									GP_MIN_KDPTSP ); }
 
 		> Log Green Peakup Scan Initiated
-		> OH SW Status Value to 0
+		> SW Status Value to 0
 		depending on ( 1 Hz ) {
 		  if ( GP_Delay < GP_DELAY_PTS+GP_AVERAGE_PTS ) GP_Delay++;
 		  else {
@@ -159,7 +159,7 @@ State GreenPeak_Scan {
 			if ( GP_new_DubT > GP_MAX_KDPTSP ) {
 			  Validate GreenPeakSeek;
 			} else {
-			  ci_sendfcmd( 2, "OH Topaz KDP SetPoint %d\n", 
+			  ci_sendfcmd( 2, "Topaz KDP SetPoint %d\n", 
 										GP_new_DubT );
 			  GP_Delay = 0;
 			}

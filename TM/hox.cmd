@@ -32,8 +32,8 @@
 #	: NO PURGE ON * { send_dascmd(DCT_SCDC, 4, 0); }
 #	: NO SOLENOID OFF * { send_dascmd(DCT_SCDC, 7, 0); }
 #	: NO SOLENOID ON * { send_dascmd(DCT_SCDC, 6, 0); }
-	: Enable HV1 Off * { send_dascmd(DCT_SCDC, 7, 0); }
-	: Enable HV1 On * { send_dascmd(DCT_SCDC, 6, 0); }
+	: Enable HV2 Off * { send_dascmd(DCT_SCDC, 7, 0); }
+	: Enable HV2 On * { send_dascmd(DCT_SCDC, 6, 0); }
 	: Power 28V Switched Off * { send_dascmd(DCT_SCDC, 47, 0); }
 	: Power 28V Switched On * { send_dascmd(DCT_SCDC, 46, 0); }
 	: Power OH Cell Off * { send_dascmd(DCT_SCDC, 45, 0); }

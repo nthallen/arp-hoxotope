@@ -9,40 +9,57 @@ DetAxes {
   "X*Las:" (XL_TP,5) (X2Las,6) >Std;
   HBox { "("; (XL_X,4); ","; (XL_Y,4); ") " };
 }
+Lamps {
+  HBox{ +=+; Title: "Lamps"; +=+ };
+  Header:
+   ""    {>Enable<} {>UV<} {>T<};
+  "1:"   (EHV1S,3) (UV_1V,6) (Lmp1T,5);
+  "2:"   (EHV2S,3) (UV_2V,6) (Lmp2T,5);
+}
+Temps {
+  HBox{ +=+; Title: "Temps"; +=+ };
+  Inl_T: (Inl_T,5) C;
+  HtXT2: (HtXT2,6) V;
+  PhoT2: (PhoT2,6) V;
+  DetT2: (DetT2,6) V;
+  HBox{ -+; Title: "Etc."; +- };
+  PaltP: (PaltP,6) V;
+  HVPSP: (HVPSP,4) V;
+}
 LabAna {
   HBox{ +=+; Title: "Analog Outputs"; +=+ };
-  A0SPt: (A0SPt,5);
-  A1SPt: (A1SPt,5);
-  NOSPt: (NOSPt,5);
-  A3SPt: (A3SPt,5);
-  A4SPt: (A4SPt,5);
-  A5SPt: (A5SPt,5);
-  A6SPt: (A6SPt,5);
-  A7SPt: (A7SPt,5);
+  A0SPt: (A0SPt,4);
+  A1SPt: (A1SPt,4);
+# NOSPt: (NOSPt,4);
+  A3SPt: (A3SPt,4);
+  A4SPt: (A4SPt,4);
+  A5SPt: (A5SPt,4);
+  A6SPt: (A6SPt,4);
+  A7SPt: (A7SPt,4);
   SD_P2: (SD_P2,6);
   SD__P: (SD__P,5);
-  UVMon: (UVMon,5);
+  UVMon: (UVMon,6);
 }
 AnaLab {
   HBox{ +=+; Title: "Analog Inputs"; +=+ };
-  L12AV: (L12AV,5);
-  L12BV: (L12BV,5);
-  L12CV: (L12CV,5);
-  Lab_1: (Lab_1,5);
-  Lab_2: (Lab_2,5);
-  Lab_3: (Lab_3,5);
-  Lab_4: (Lab_4,5);
-  Lab_5: (Lab_5,5);
-  Lab_6: (Lab_6,5);
-  Lab_7: (Lab_7,5);
-  Lab_8: (Lab_8,5);
+  L12AV: (L12AV,6);
+  L12BV: (L12BV,6);
+  L12CV: (L12CV,6);
+  Lab_1: (Lab_1,4);
+  Lab_2: (Lab_2,4);
+  Lab_3: (Lab_3,4);
+  Lab_4: (Lab_4,4);
+  Lab_5: (Lab_5,4);
+  Lab_6: (Lab_6,4);
+  Lab_7: (Lab_7,4);
+  Lab_8: (Lab_8,4);
 }
 MFCtr {
   HBox{ +=+; Title: "MFCtr"; +=+ };
   HBox { (flttime,9); HGlue 0+1; (MFCtr,5) }
 }
-{ HBox { ||+; [LabAna]; ||+; [AnaLab]; ||+;
-   { [DetAxes];
+{ HBox { ||+; [LabAna]; ||+; [AnaLab]; ||+; [Temps]; ||+;
+   { [DetAxes]; [Lamps];
 	 [MFCtr] }; ||+ };
   =;
   (%CLIENT,0+1,1);

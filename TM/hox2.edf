@@ -1,8 +1,8 @@
 spreadsheet pressure 6
 	1 AirHP %4.2lf 
 	2 AirLP %4.2lf 
-	3 NO_HP %4.2lf 
-	4 NO_LP %4.2lf 
+;	3 NO_HP %4.2lf 
+;	4 NO_LP %4.2lf 
 	5 NoseP %4.2lf 
 
 spreadsheet lsrsys 30
@@ -51,20 +51,20 @@ spreadsheet flowtemp 19
 	2 BmPsS %5.1lf 
 	3 BmPsE %5.1lf 
 	4 BmPsW %5.1lf 
-	5 PAFF5 %5.1lf 
-	6 PAFF6 %5.1lf 
-	7 PAFF7 %5.1lf 
-	8 SAFF1 %5.1lf 
-	9 SAFF2 %5.1lf 
-	10 SAFF3 %5.1lf 
-	11 SAFF4 %5.1lf 
-	12 SAFB1 %5.1lf 
-	13 SAFB2 %5.1lf 
-	14 SAFB3 %5.1lf 
-	15 SAFB4 %5.1lf 
-	16 SAFB5 %5.1lf 
-	17 SAFB6 %5.1lf 
-	18 SAFB7 %5.1lf 
+;	5 PAFF5 %5.1lf 
+;	6 PAFF6 %5.1lf 
+;	7 PAFF7 %5.1lf 
+;	8 SAFF1 %5.1lf 
+;	9 SAFF2 %5.1lf 
+;	10 SAFF3 %5.1lf 
+;	11 SAFF4 %5.1lf 
+;	12 SAFB1 %5.1lf 
+;	13 SAFB2 %5.1lf 
+;	14 SAFB3 %5.1lf 
+;	15 SAFB4 %5.1lf 
+;	16 SAFB5 %5.1lf 
+;	17 SAFB6 %5.1lf 
+;	18 SAFB7 %5.1lf 
 
 spreadsheet bmps 7
 	condition depending on (2Hz)

@@ -11,14 +11,16 @@ spreadsheet whathappened 25
 	10  BmPsW %8.4lf
 	11  LMP_T %6.1lf
 	12 COutT %6.1lf
-	13 SAFF1 %5.1lf 
-	14 SAFF2 %5.1lf 
+;	13 SAFF1 %5.1lf 
+;	14 SAFF2 %5.1lf 
 	15 Alttd %6.1lf 
 	16 SD__P %6.4lf 
 	17 SD_P2 %6.4lf
 	18 SD_DP %6.4lf
-	19 GtVPs %5.0lf 
-	20 SVPos %4.2lf 
-	21 STVPs %5.0lf To_Double
+;	19 GtVPs %5.0lf 
+;	20 SVPos %4.2lf 
+;	21 STVPs %5.0lf To_Double
+	20 PVPos %4.2lf 
+	21 PVStep %5.0lf To_Double
 	22 LMP_T %5.1lf
 	23 COutT %5.1lf

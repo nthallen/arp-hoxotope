@@ -8,9 +8,12 @@ spreadsheet indexer 13
 	7 EtnSt %2.0X To_Double
 	8 EtPos %6.4lf 
 	9 EtnPs %5.0lf To_Double
-	10 STVSt %2.0X To_Double
-	11 SVPos %4.2lf 
-	12 STVPs %5.0lf To_Double
+;	10 STVSt %2.0X To_Double
+;	11 SVPos %4.2lf 
+;	12 STVPs %5.0lf To_Double
+	10 PVStat %2.0X To_Double
+	11 PVPos %4.2lf 
+	12 PVStep %5.0lf To_Double
 
 spreadsheet power 7
 	1 V28_V %4.1lf 

@@ -8,23 +8,23 @@
 State initialize {
 			> telemetry start
 		+1	> fail 0
-		+1	> OH power solenoids and steppers Off
-		+1	> OH power 28V switched off
-		+1	> OH preset Secondary Throttle Position to 5000
-		+1	> OH power solenoids and steppers On
+		+1	> power solenoids and steppers Off
+		+1	> power 28V switched off
+		+1	> preset Pinch Valve Position to 5000
+		+1	> power solenoids and steppers On
 # Output 5 = number of steps per increment;
 # Output 6 = number of seconds integration;
 # Output 7 = pressure setpoint in torr
-		+1	> OH analog Output 5 set 1
-		+1	> OH analog Output 6 set 4
-		+1	> OH analog Output 7 set 20
-		+1	> OH Set secondary Throttle Speed 1067 Hz
+		+1	> analog Output 5 set 1
+		+1	> analog Output 6 set 4
+		+1	> analog Output 7 set 20
+		+1	> Set Pinch Valve Speed 1067 Hz
 }
 
 State shutdown {
 		+1  Validate Pinch_Valve_Sit;
-		+1  > OH Drive Secondary Throttle to 5000
-		+5	> OH power solenoids and steppers Off
+		+1  > Drive Pinch Valve to 5000
+		+5	> power solenoids and steppers Off
 		+1  > quit
 }
 
@@ -97,7 +97,7 @@ State Pinch_Valve_Initialize {
   { pot_pos = convert(L12BV);     
 	stepper_pos_raw = 1097.8*pot_pos -2206.1 + 0.5;
 	stepper_pos = floor(stepper_pos_raw);
-	ci_sendfcmd(0,"OH preset Secondary Throttle Position to %u\n", stepper_pos);
+	ci_sendfcmd(0,"preset Pinch Valve Position to %u\n", stepper_pos);
 
   	Validate Pinch_Valve_Proportionate;
   }
@@ -115,7 +115,7 @@ State Pinch_Valve_Proportionate {
 } 
  
 {if ( (convert(L12CV)*100) > 150) { 
-	ci_sendfcmd(0,"OH Drive Secondary Throttle to %u\n", 1000); 
+	ci_sendfcmd(0,"Drive Pinch Valve to %u\n", 1000); 
   	Validate Pinch_Valve_Limbo;	
 
     }
@@ -144,15 +144,15 @@ State Pinch_Valve_Proportionate {
 			/* proportional steps */
 			if (fabs(P_diff) >= (0.2)){
 				if (P_diff > 0) 
-					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", est2_steps );  }
-  					else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", est2_steps ); 
+					{ ci_sendfcmd(0,"Drive Pinch Valve In %u\n", est2_steps );  }
+  					else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", est2_steps ); 
 			}
 
 			/* tiny steps */
  			if ( (fabs(P_diff) < (0.2)) && (fabs(P_diff) > (0.05)) ){
 				if (P_diff > 0) 
-					{ ci_sendfcmd(0,"OH Drive Secondary Throttle In %u\n", n_steps); }
-  	 				else ci_sendfcmd(0,"OH Drive Secondary Throttle Out %u\n", n_steps); 
+					{ ci_sendfcmd(0,"Drive Pinch Valve In %u\n", n_steps); }
+  	 				else ci_sendfcmd(0,"Drive Pinch Valve Out %u\n", n_steps); 
 			}
   	
 			P_avg = P_sum = n_p_rats = 0;
@@ -194,7 +194,7 @@ State SW_Stat_Wait {
 }
 
 State SW_Stat_Reset {
-  > OH SW Status Value to 0
+  > SW Status Value to 0
   Hold until (SW_St == 0) or 10;
   Validate SW_Stat_wait;
 }

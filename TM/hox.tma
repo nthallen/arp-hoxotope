@@ -49,26 +49,25 @@
 State initialize {
 			> telemetry start
 		+1	> fail 0
-		+1  > OH PsD select dye laser
-		+1	> OH power solenoids and steppers off
-		+1	> OH power 28V switched off
-		+1	> OH set etalon online position 30400
-		+1	> OH set etalon online delta 10
-		+1	> OH set etalon offline delta 450
-		+1	> OH set etalon altline delta 950
+		+1  > PsD select dye laser
+		+1	> power solenoids and steppers off
+		+1	> power 28V switched off
+		+1	> set etalon online position 30400
+		+1	> set etalon online delta 10
+		+1	> set etalon offline delta 450
+		+1	> set etalon altline delta 950
 		# A is fixed, B is adjustable, so to speak.
-		+1  > OH adjGate 1a delay set 120
-		+1  > OH adjGate 1a width set 255
-		+1  > OH adjGate 1b delay set 120
-		+1  > OH adjgate 1b width set 255
-		+1  > OH adjGate 2a delay set 150
-		+1  > OH adjGate 2a width set 255
-		+1  > OH adjGate 2b delay set 0
-		+1  > OH adjgate 2b width set 20
-		+1  > OH NO FLOW PEAK 1200
-		+1  > OH NO FLOW SPREAD 150
-		+1  > OH power solenoids and steppers on
-		+1  > OH scan gate Valve out 3000 by 100
+		+1  > adjGate 1a delay set 120
+		+1  > adjGate 1a width set 255
+		+1  > adjGate 1b delay set 120
+		+1  > adjgate 1b width set 255
+		+1  > adjGate 2a delay set 150
+		+1  > adjGate 2a width set 255
+		+1  > adjGate 2b delay set 0
+		+1  > adjgate 2b width set 20
+		+1  > NO FLOW PEAK 1200
+		+1  > NO FLOW SPREAD 150
+		+1  > power solenoids and steppers on
 		+3	{ double bastep;
 			  double etstep;
 			  unsigned short ubastep;
@@ -77,13 +76,13 @@ State initialize {
 			  if (bastep < 0) bastep = 0;
 			  else if (bastep > 65535) bastep = 65535;
 			  ubastep = floor(bastep);
-			  ci_sendfcmd( 0, "OH Preset Bellows Position to %u\n",
+			  ci_sendfcmd( 0, "Preset Bellows Position to %u\n",
 				ubastep );
 			  etstep =  30000 - (convert(EtPos) - 4.91)*14285;
 			  if (etstep < 0) etstep = 0;
 			  else if (etstep > 65535) etstep = 65535;
 			  uetstep = floor(etstep);
-			  ci_sendfcmd(0,"OH Preset Etalon Position to %u\n",
+			  ci_sendfcmd(0,"Preset Etalon Position to %u\n",
 				uetstep );	
   			  Validate instrument_start;
 			}
@@ -94,37 +93,12 @@ State initialize {
 ################################################################
 state instrument_start {
 			{ laser_on_requested = 1; }
-		+1	> OH NO flow closed off
-		+1	> OH NO flow closed on
-		+1	{ if (NOFlowStat != 1) msg(1, "NO closed not observed"); }
-		+1	> OH air solenoid loop injector on
-		+1	> OH injector front on
-		+1	{ if (AirSolStat==0) msg(1, "Air solenoid not observed"); }
-		+1	{ if (InjStat!=2) msg(1, "Front NO injector not observed"); }
-		+1	> OH air solenoid loop injector off
-		+1	> OH injector front off
-		+1	> OH axis 1 filter in on
-		+3	> OH axis 1 filter in off
-		+1	> OH axis 1 filter out on
-		+3	> OH axis 1 filter out off
-		+1	{ if (X1_S != 2) msg(1, "Axis 1 Out not observed"); }
-		+1	> OH axis 1 filter in on
-		+3	> OH axis 1 filter in off
-		+1	{ if (X1_S != 1) msg(1, "Axis 1 In not observed"); }
-		+1	> OH axis 2 filter in on
-		+3	> OH axis 2 filter in off
-		+1	> OH axis 2 filter out on
-		+3	> OH axis 2 filter out off
-		+1	{ if (X2_S != 2) msg(1, "Axis 2 Out not observed"); }
-	  	+1	> OH axis 2 filter in on
-		+3	> OH axis 2 filter in off
-		+1	{ if (X2_S != 1) msg(1, "Axis 2 In not observed"); }
-		+1	> OH drive attenuator in 6500
-		+3	> OH drive attenuator out 320
-		+3  > OH drive attenuator to 3600
+		+1	> drive attenuator in 6500
+		+3	> drive attenuator out 320
+		+3  > drive attenuator to 3600
 	   +14	{ if (convert(AtPos)<6.2 || convert(AtPos)>6.4)
 			  msg(1,"Attenuator zero position out of range"); }
-#		+1  > OH drive attenuator to 4000
+#		+1  > drive attenuator to 4000
 #
 # Validate etalon_init.  One init cycle takes 27 seconds, maximum
 # 3 cycles.  Do not issue etalon commands for 90 seconds after
@@ -148,22 +122,22 @@ state instrument_start {
 State flight	{
 		depending on (ON_GROUND) { Validate shutdown; }
 
-		+1	> OH power oh cell on
-		+1	> OH power 28V switched on
+		+1	> power oh cell on
+		+1	> power 28V switched on
 			{ diodes_on_requested = 1; }
 		+1	Hold until valid (laser_diodes_on);
 			Validate bellows_eval;
-#	   +55	> OH scan etalon out 45000 by 200
-#	   +60	> OH Drive etalon in 10000
-#		+5	> OH Drive etalon to 28000
-#		+3	> OH Peakup On
-#	   +10	> OH scan etalon out 4000 by 20
-#	  +300	> OH Peakup Off
-#		+3	> OH Stop Etalon
-#		+1	> OH Peakup On
-		+1  > OH set etalon online delta 5
-		+1	> OH soldrv select mode 0
-	   	+1	> OH SW Status Green Peakup Enable
+#	   +55	> scan etalon out 45000 by 200
+#	   +60	> Drive etalon in 10000
+#		+5	> Drive etalon to 28000
+#		+3	> Peakup On
+#	   +10	> scan etalon out 4000 by 20
+#	  +300	> Peakup Off
+#		+3	> Stop Etalon
+#		+1	> Peakup On
+		+1  > set etalon online delta 5
+		+1	> soldrv select mode 0
+	   	+1	> SW Status Green Peakup Enable
 	   +90	Validate limbo;
 }
  
@@ -188,12 +162,12 @@ State record NoLog	{
 			  depending on (laser_diodes_on ) {}
 			  else Validate scan;
 			}
-			> OH Drive Etalon Online
-			> OH Scan Etalon In 75 by 5
-			> OH Drive Etalon Offline
+			> Drive Etalon Online
+			> Scan Etalon In 75 by 5
+			> Drive Etalon Offline
 			Resume Lab_read;
-		+6	> OH Drive Etalon Altline
-			> OH Scan Etalon Out 75 by 5
+		+6	> Drive Etalon Altline
+			> Scan Etalon Out 75 by 5
 		+4	Hold until (EtnFlg == 0);
 			Validate record;
 }
@@ -211,9 +185,9 @@ State add_c3f6	{
 			  else Validate scan;
 			}
 		+1	Validate throttle_medium;
-		+2	> OH soldrv select mode 9
+		+2	> soldrv select mode 9
 	   +33	Validate throttle_fast;
-	   +30	> OH soldrv select mode 4
+	   +30	> soldrv select mode 4
 		+6	{ if (convert(SD__P) < 350. || Scan_Mode_Always)
 				Validate scan;
 			  else Validate record;	}
@@ -239,38 +213,33 @@ State scan	{
 			Hold until valid (laser_diodes_on);
 		+1  Validate valve_close;	
 		+1	Validate throttle_scan;	
-	   +10  > OH soldrv select mode 0 
+	   +10  > soldrv select mode 0 
 	   +20	Validate valve_open;	
 #  we now do some stuff to check laser performance
-		+1	> OH topaz diode 1 temperature 26.0 C
-		+1	> OH topaz diode 2 temperature 27.0 C
-		+1	> OH topaz diode 2 temperature 27.0 C
+		+1	> topaz diode 1 temperature 26.0 C
+		+1	> topaz diode 2 temperature 27.0 C
+		+1	> topaz diode 2 temperature 27.0 C
 	   	+1	Hold until valid (laser_diodes_on);
 		+1  { if (DL_TP < 6500) 
-				ci_sendcmd("OH Topaz current 17.5 amps\n",0);}
+				ci_sendcmd("Topaz current 17.5 amps\n",0);}
 	   +10  { if (convert(UVMon) > 5.0)
-				ci_sendcmd("OH Topaz current 17.0 amps\n",0);}  
-		+1	> OH drive etalon to 36700
+				ci_sendcmd("Topaz current 17.0 amps\n",0);}  
+		+1	> drive etalon to 36700
 		+5	{ if (convert(EtPos) > 3.40 || convert(EtPos) < 2.80)
 				Validate etalon_init;
 			}
 		+2	Hold until valid (etalon_sit);
-		+1	> OH Drive Etalon to 29000
-		+1	> OH Peakup on
-		+1	> OH Air solenoid loop injector on
-			> OH NO flow closed off
-			> OH NO solenoid on
-			> OH Injector back on
-			> OH NO flow set 1300
-		+1	> OH set etalon online delta 20
-		+1	> OH scan etalon out 3000 by 10
+		+1	> Drive Etalon to 29000
+		+1	> Peakup on
+		+1	> set etalon online delta 20
+		+1	> scan etalon out 3000 by 10
 # Make sure scan is longer than throttle scan (3 minutes min.)!
 # Make sure there is enough time to find the line.
-	  +180	> OH peakup off
-		+3	> OH stop etalon
-		+1	> OH peakup on
-		+1	> OH set etalon online delta 10
-		+1	> OH drive attenuator to 4000
+	  +180	> peakup off
+		+3	> stop etalon
+		+1	> peakup on
+		+1	> set etalon online delta 10
+		+1	> drive attenuator to 4000
 		+2	Validate record;
 }
 
@@ -279,13 +248,11 @@ State scan	{
 ################################################################
 
 State purgatory	{
-		+1	> OH peakup off
-		+1	> OH stop etalon
-		+1	> OH soldrv select mode 4
+		+1	> peakup off
+		+1	> stop etalon
+		+1	> soldrv select mode 4
 		+5 	Validate throttle_shut;
-		+1  > OH scan gate Valve in 3000 by 100
-		+6  > OH scan gate Valve out 3000 by 100
-	    +13	> OH peakup on
+	    +13	> peakup on
 			Validate limbo;
 }
 
@@ -294,20 +261,17 @@ State purgatory	{
 ################################################################
 
 State shutdown {
-		+1	> OH soldrv select mode 0
-		+2	> OH soldrv select mode 4
+		+1	> soldrv select mode 0
+		+2	> soldrv select mode 4
 		+1	Validate throttle_shut;
-		+2  > OH scan gate Valve in 3000 by 100
-		+10	> h2o heater set 0
 			{ diodes_on_requested = 0;
 			  laser_on_requested = 0;
 			}
-		+5	> OH power oh cell off
-		+5	> OH power 28v switched off
+		+5	> power oh cell off
+		+5	> power 28v switched off
 #		+1	Validate valve_close;
-		+10	> h2o lamp off
-		+1	> OH power oh cell off
-		+2	> OH power solenoids and steppers off
+		+1	> power oh cell off
+		+2	> power solenoids and steppers off
 		+5	> telemetry logging suspend
 			> Fail 1
 		+1	> quit
@@ -350,7 +314,7 @@ State SW_Stat_Wait {
 }
 
 State SW_Stat_Reset {
-  > OH SW Status Value to 0
+  > SW Status Value to 0
   Hold until (SW_St == 0) or 10;
   Validate SW_Stat_wait;
 }
@@ -396,7 +360,7 @@ State bellows_eval {
   }
 }
 State bellows_pump_up {
-			> OH Drive bellows out 1000
+			> Drive bellows out 1000
 		+2	{ if (DLH_P >= Dye_P_Low) {
 			  msg(0, "Dye laser pumped up");
 			  validate bellows_idle;
@@ -407,7 +371,7 @@ State bellows_pump_up {
 		}
 }
 State bellows_pump_out {
-			> OH Drive bellows in 1000
+			> Drive bellows in 1000
 		+2	{ if (DLH_P <= Dye_P_High) {
 			  msg(0, "Dye laser pumped out");
 			  validate bellows_idle;
@@ -483,18 +447,18 @@ PARTITION
 State valve_close {
 			depending on (ABOVE_CLOUDS,record) { Validate valve_open; }
 			depending on (ABOVE_CLOUDS,flight) { Validate valve_open; }
-#		+5	> OH scan gate Valve in 30000 by 100
+#		+5	> scan gate Valve in 30000 by 100
 	+20:00	Validate valve_close;
 }
 
 State valve_open {
 			depending on (BELOW_CLOUDS) { Validate valve_close; }
 			depending on (ON_GROUND) { Validate valve_close; }
-		+5	> OH scan gate Valve out 2000 by 100
-	 +2:00	{ if ( (GtVSt & 2) == 0 )  {
-				msg(1,"Stupid Gate Valve did not open");
-					Validate valve_open; }
-			}  
+#		+5	> scan gate Valve out 2000 by 100
+#	 +2:00	{ if ( (GtVSt & 2) == 0 )  {
+#				msg(1,"Stupid Gate Valve did not open");
+#					Validate valve_open; }
+#			}  
 }
 
 PARTITION
@@ -526,20 +490,15 @@ PARTITION
   int n_p_rats = 0;
   unsigned long DP_sum = 0, P_sum = 0;
   #define RATIO_SETPOINT 13000
-  #define STVPs_MIN 2500
+  /* #define STVPs_MIN 2500 */
 %}
 
-{ IndxrPos STVPs_; }
-{ STVPs_ = STVPs; }
 ################################################################
 # Throttle control subroutine.
 ################################################################
 
 State throttle_init	{
 			Hold until valid (ABOVE_CLOUDS);
-	   +20	> OH drive secondary throttle in 10000
-		+5	> OH drive secondary throttle out 2000
-		+5	> OH drive secondary throttle to 4200
 			Validate STV_Sit;
 }
 
@@ -564,49 +523,44 @@ State STV_reset_ct {
 # non-record full-operational state.
 #----------------------------------------------------------------
 State STV_OFF	{
-			> OH drive secondary throttle to 3500
+#			> drive secondary throttle to 3500
 }
 State throttle_fast	{
-			> OH drive secondary throttle to 3500
+#			> drive secondary throttle to 3500
 			Validate STV_Sit;
 }
 State throttle_medium	{
-			> OH drive secondary throttle to 2500
+#			> drive secondary throttle to 2500
 			Validate STV_Sit;
 }
 State throttle_slow	{
-			> OH drive secondary throttle to 1000
+#			> drive secondary throttle to 1000
 			Validate STV_Sit;
 }
 State throttle_shut	{
-			> OH drive secondary throttle in 65000
+#			> drive secondary throttle in 65000
 			Validate STV_Sit;
 }
 State throttle_scan	{
-			> OH drive secondary throttle in 6500
-	   +25  > OH drive secondary throttle out 2000
-	    +5  > OH drive secondary throttle to 4200
-	  1:00	> OH drive secondary throttle to 2700
-	  2:00	> OH drive secondary throttle to 2500
 	  3:00	Validate STV_reset_ct;
 }
 
 State STV_regulate {
-  { n_p_rats++;
-	DP_sum += SD_DP;
-	P_sum += SD__P;
-	if (n_p_rats >= 30) {
-	  P_sum = (P_sum/(30*16)) - P0;
-	  P_sum *= P_sum;
-	  DP_sum = (DP_sum*2048)/P_sum;
-	  msg(-4, "Ratio value is %u", DP_sum);
-	  if (DP_sum > RATIO_SETPOINT) {
-		if (STVPs_ > STVPs_MIN)
-		  ci_sendcmd("OH Drive Secondary Throttle In 50\n", 2);
-	  } else ci_sendcmd("OH Drive Secondary Throttle Out 50\n", 2);
-	  DP_sum = P_sum = n_p_rats = 0;
-	}
-  }
+#  { n_p_rats++;
+#	DP_sum += SD_DP;
+#	P_sum += SD__P;
+#	if (n_p_rats >= 30) {
+#	  P_sum = (P_sum/(30*16)) - P0;
+#	  P_sum *= P_sum;
+#	  DP_sum = (DP_sum*2048)/P_sum;
+#	  msg(-4, "Ratio value is %u", DP_sum);
+#	  if (DP_sum > RATIO_SETPOINT) {
+#		if (STVPs_ > STVPs_MIN)
+#		  ci_sendcmd("Drive Secondary Throttle In 50\n", 2);
+#	  } else ci_sendcmd("Drive Secondary Throttle Out 50\n", 2);
+#	  DP_sum = P_sum = n_p_rats = 0;
+#	}
+#  }
   depending on (BELOW_CLOUDS) { Validate STV_sit; }
   depending on (1 Hz) { if (convert(SD_DP) < 0.03)
 	Validate STV_OFF;	}
@@ -628,17 +582,17 @@ PARTITION
 state etalon_sit	{	}
 
 state etalon_init	{
-		+1  > OH drive etalon out 10000
-		+5	> OH drive etalon in 65000
-		+5	> OH drive etalon in 65000
-		+5	> OH drive etalon out 6400
+		+1  > drive etalon out 10000
+		+5	> drive etalon in 65000
+		+5	> drive etalon in 65000
+		+5	> drive etalon out 6400
 		+5	{ if ((EtnPs < 3900) || (EtnPs > 5600))	{
 				int zero_pos;
 				zero_pos=EtnPs;
 				msg(1,"Etalon zero position out of range EtnPs=%d",zero_pos);
 			  }
 			}
-		+5	> OH drive etalon to 15000
+		+5	> drive etalon to 15000
 #
 # 04/26/97 etalon_pos at 15,000 is 4.57 V.  Set range to +/- 1000 steps
 # 06/14/99 etalon_pos at 15,000 is 4.53 V.

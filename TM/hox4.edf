@@ -13,12 +13,14 @@ spreadsheet jumbo 100
 	10 SD_P2 %6.4lf
 	11 SD_DP %6.4lf
 	12 SDP_T %5.1lf 
-	13 GtVPs %5.1lf
-	14 GtVSt %6f
-	15 SVPos %4.2lf 
-	16 STVPs %5.0lf To_Double
-	17 SAFF1 %5.1lf 
-	18 SAFB1 %5.1lf 
+;	13 GtVPs %5.1lf
+;	14 GtVSt %6f
+;	15 SVPos %4.2lf 
+;	16 STVPs %5.0lf To_Double
+	15 PVPos %4.2lf 
+	16 PVStep %5.0lf To_Double
+;	17 SAFF1 %5.1lf 
+;	18 SAFB1 %5.1lf 
 	19 NoseP %4.2lf 
 	20 Alttd %6.1lf 
 	21 Lattd %6.1lf 
@@ -26,31 +28,31 @@ spreadsheet jumbo 100
 	23 TASpd %6.1lf .1*convert
 	24 TDrft %6.0lf 
 ; Secndary Duct Thermisters & Roving Temperatures & 12-bit BmPs
-	25 SAFF1 %5.1lf 
-	26 SAFF2 %5.1lf 
-	27 SAFF3 %5.1lf 
-	28 SAFF4 %5.1lf 
-	29 SAFB1 %5.1lf 
-	30 SAFB2 %5.1lf 
-	31 SAFB3 %5.1lf 
-	32 SAFB4 %5.1lf 
-	33 SAFB5 %5.1lf 
-	34 SAFB6 %5.1lf 
-	35 SAFB7 %5.1lf 
-	36 PAFF5 %5.1lf 
-	37 PAFF6 %5.1lf 
-	38 PAFF7 %5.1lf 
+;	25 SAFF1 %5.1lf 
+;	26 SAFF2 %5.1lf 
+;	27 SAFF3 %5.1lf 
+;	28 SAFF4 %5.1lf 
+;	29 SAFB1 %5.1lf 
+;	30 SAFB2 %5.1lf 
+;	31 SAFB3 %5.1lf 
+;	32 SAFB4 %5.1lf 
+;	33 SAFB5 %5.1lf 
+;	34 SAFB6 %5.1lf 
+;	35 SAFB7 %5.1lf 
+;	36 PAFF5 %5.1lf 
+;	37 PAFF6 %5.1lf 
+;	38 PAFF7 %5.1lf 
 ; Gas Addition System Diagnositcs (Temp. & Press.)
 	39 A_RgT %5.1lf 
-	40 NOFlT %5.1lf 
-	41 NORgT %5.1lf 
-	42 SolDT %5.1lf 
+;	40 NOFlT %5.1lf 
+;	41 NORgT %5.1lf 
+;	42 SolDT %5.1lf 
 	43 AirHP %4.2lf 
 	44 AirLP %4.2lf 
-	45 NO_HP %4.2lf 
-	46 NO_LP %4.2lf 
-	47 NOFlw %4.2lf 
-	48 NOSPt %4.0lf 
+;	45 NO_HP %4.2lf 
+;	46 NO_LP %4.2lf 
+;	47 NOFlw %4.2lf 
+;	48 NOSPt %4.0lf 
 ; OH Cell Diagnostics
 	49 OClHV %5.2lf 
 	50 OHC2T %5.1lf 

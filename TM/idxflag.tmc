@@ -14,7 +14,7 @@
 	"|<--|",  /* driving in both limits. Broke */
 	"---->",  /* driving out */
 	"|--->",  /* driving out from in limit */
-	"--->|",  /* driving out against out limit */
+	"--->|",  /* driving out agains out limit */
 	"|-->|"   /* driving out both limits. Broke */
   };
 %}
@@ -22,18 +22,17 @@ TM typedef unsigned char IxDriveStat { text "%5d" IxDrive_text[]; }
 IxDriveStat BlwStFlag; invalidate BlwStFlag; { BlwStFlag = BlwSt & 0xF; Validate BlwStFlag; }
 IxDriveStat EtnStFlag; invalidate EtnStFlag; { EtnStFlag = EtnSt & 0xF; Validate EtnStFlag; }
 IxDriveStat AtnStFlag; invalidate AtnStFlag; { AtnStFlag = AtnSt & 0xF; Validate AtnStFlag; }
-IxDriveStat GtVStatus; invalidate GtVStatus; { GtVStatus = GtVSt & 0xF; Validate GtVStatus; }
-IxDriveStat STVStFlag; invalidate STVStFlag; { STVStFlag = STVSt & 0xF; Validate STVStFlag; }
+IxDriveStat PVStatFlag; invalidate PVStatFlag; { PVStatFlag = PVStat & 0xF; Validate PVStatFlag; }
 %{
   char *IdxFlgTxt[8] = {
 	"    ",
 	"Scan",
 	"On  ",
-	"S/On",
+	"????",
 	"Off ",
-	"S/Of",
+	"????",
 	"Alt ",
-	"S/Al"
+	"????"
   };
 %}
 TM typedef unsigned short IndxrFlag {
@@ -46,7 +45,5 @@ IndxrFlag EtnFlg; invalidate EtnFlg;
 { EtnFlg = ( IXStt >> 1 ) & 7; validate EtnFlg; }
 IndxrFlag AtnFlg; invalidate AtnFlg;
 { AtnFlg = ( IXStt >> 4 ) & 7; validate AtnFlg; }
-IndxrFlag GtVFlg; invalidate GtVFlg;
-{ GtVFlg = ( IXStt >> 7 ) & 1; validate GtVFlg; }
-IndxrFlag STVFlg; invalidate STVFlg;
-{ STVFlg = ( IXStt >> 8 ) & 1; validate STVFlg; }
+IndxrFlag PVScan; invalidate PVScan;
+{ PVScan = ( IXStt >> 7 ) & 1; validate PVScan; }

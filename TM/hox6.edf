@@ -12,8 +12,8 @@ spreadsheet labstat 20
 	11 Lab_2 %4.0lf
 	12 Lab_3 %4.0lf
 	13 SW_St %2.0X To_Double
-	14 NOSPt %4.0lf
-	15 NOFlw %4.2lf
+;	14 NOSPt %4.0lf
+;	15 NOFlw %4.2lf
 	16 LABNG %6.0lf
 
 spreadsheet scanstat 22
@@ -40,4 +40,5 @@ spreadsheet pinchvalve 6
 	2 L12BV %4.2lf
 	3 L12CV %4.2lf
 	4 SD_P2 %4.2lf
-	5 STVPs %4.2lf
+;	5 STVPs %4.2lf
+	5 PVStep %4.2lf

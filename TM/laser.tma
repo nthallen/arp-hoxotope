@@ -20,7 +20,7 @@ PARTITION
 
 #		  Validate laser failed instead of laser_eval;
 State dye_pump_start {
-	 +1 > OH dye pump on
+	 +1 > Dye pump on
 		{	if (dye_count++ > DYE_COUNT_LIMIT ) {
 		  msg(2, "dye pump timed out" );	
 		  Validate laser_failed;	
@@ -36,8 +36,8 @@ State dye_pump_start {
 
 State dye_pump_failed {
 		{ msg(1, "Dye flow not observed"); }
-		> OH Topaz Emission Off
-		> OH dye pump off
+		> Topaz Emission Off
+		> Dye pump off
 	 +5 Validate dye_pump_start;
 }
 
@@ -49,8 +49,8 @@ State laser_eval {
 
 State laser_eval_on {
 		{ laser_on_requested = 1; }
-	+1	> OH Topaz Frequency 10000
-	+1	> OH Topaz KDP SetPoint 2400
+	+1	> Topaz Frequency 10000
+	+1	> Topaz KDP SetPoint 2400
 		{ if ( RLHist0 != 2 && RLHist0 != 4 )
 			Validate laser_talking;
 		}
@@ -60,7 +60,7 @@ State laser_eval_on {
 
 State laser_off {
 		{ turn_on_cycles = 0; }
-		> OH Laser Power Off
+		> Laser Power Off
 		depending on (1 Hz) {
 		  if (laser_on_requested)
 			Validate laser_on;
@@ -68,13 +68,13 @@ State laser_off {
 }
 
 State laser_on {
-		> OH Laser Power Off
+		> Laser Power Off
 		{ if ( turn_on_cycles++ >= TURN_ON_LIMIT ) {
 			msg( 2, "Laser never talked to us!" );
 			Validate laser_failed;
 		  }
 		}
-	+10	> OH Laser Power On
+	+10	> Laser Power On
 		Validate laser_init;
 }
 
@@ -109,13 +109,13 @@ State laser_talking {
 		  D2T_OK = 0;
 		}
 		{ if ( RLHist0 == 1 ) Validate PowerModeA; }
-		> OH Topaz Emission Off
-	+1	> OH Topaz Current 0 Amps
-	+1	> OH Topaz Frequency 10000
-	+1	> OH Topaz KDP SetPoint 2400
+		> Topaz Emission Off
+	+1	> Topaz Current 0 Amps
+	+1	> Topaz Frequency 10000
+	+1	> Topaz KDP SetPoint 2400
 		depending on ( ON_GROUND) { Validate laser_high_setpoint; }
-	+1	> OH Topaz Diode 1 Temperature 26.0 C
-	+1	> OH Topaz Diode 2 Temperature 27.0 C
+	+1	> Topaz Diode 1 Temperature 26.0 C
+	+1	> Topaz Diode 2 Temperature 27.0 C
 		"Holding for NIRVANA";
 		Hold until (RLHist0 != 0) or 5:00
 		  else {
@@ -137,19 +137,19 @@ State laser_high_setpoint {
 		{ if ( convert(RLSD1T) > T1_SP-1 ) D1T_OK = 1; }
 		{ if ( convert(RLSD2T) > T2_SP-1 ) D2T_OK = 1; }
 		{ if ( RLHist0 == 1 ) Validate PowerModeA; }
-		"OH Topaz Diode 1 Temperature xx.x C";
+		"Topaz Diode 1 Temperature xx.x C";
 	+1	{ if ( !D1T_OK )
 			ci_sendfcmd( 0,
-			  "OH Topaz Diode 1 Temperature %.1lf C\n",
+			  "Topaz Diode 1 Temperature %.1lf C\n",
 			  T1_SP ); }
-		"OH Topaz Diode 2 Temperature xx.x C";
+		"Topaz Diode 2 Temperature xx.x C";
 	+1	{ if ( !D2T_OK )
 			ci_sendfcmd( 0,
-			  "OH Topaz Diode 2 Temperature %.1lf C\n",
+			  "Topaz Diode 2 Temperature %.1lf C\n",
 			  T2_SP); }
 	+5	{ if ( !D2T_OK )
 			ci_sendfcmd( 0,
-			  "OH Topaz Diode 2 Temperature %.1lf C\n",
+			  "Topaz Diode 2 Temperature %.1lf C\n",
 			  T2_SP); }
 		"Holding to see if temp setpoints got through";
 		Hold until (( D1T_OK && D2T_OK ) ||	RLHist0 != 0 ) or 1:00
@@ -183,8 +183,8 @@ State laser_reports_ready {
 			Validate laser_reboot;
 		  }
 		}
-	+1	> OH Topaz Diode 1 Temperature 26.0 C
-	+1	> OH Topaz Diode 2 Temperature 27.0 C
+	+1	> Topaz Diode 1 Temperature 26.0 C
+	+1	> Topaz Diode 2 Temperature 27.0 C
 		"Holding to make sure real setpoints get through";
 		Hold until (convert(RLSD1T) < 26.0+1 &&
 					convert(RLSD2T) < 27.0+1) or 2:00
@@ -219,14 +219,14 @@ State laser_diodes_turn_on {
 		  if ( ! (laser_on_requested && diodes_on_requested) )
 			Validate laser_diodes_off;
 		}
-	+1	> OH Topaz Current 10 Amps
-	+1	> OH Topaz Emission Start
+	+1	> Topaz Current 10 Amps
+	+1	> Topaz Emission Start
 		"Holding to Observe Current Mode";
 		Hold Until (RLHist0 == 2 || RLHist0 == 4) or 30
 		  else Validate laser_reboot;
 		"Warmup Time...";
-   +60	> OH Topaz Current 15.0 Amps
-   +60	> OH Topaz Current 18.0 Amps
+   +60	> Topaz Current 15.0 Amps
+   +60	> Topaz Current 18.0 Amps
    +30  Validate laser_diodes_on;
 }
 
@@ -240,8 +240,8 @@ State laser_diodes_on {
 }
 
 State laser_diodes_off {
-	+1	> OH Topaz Emission Off
-	+1	> OH Topaz Current 0 Amps
+	+1	> Topaz Emission Off
+	+1	> Topaz Current 0 Amps
 		Hold until (RLHist0 == NIRVANA) or 10
 		  else {
 			msg( 2,
@@ -253,8 +253,8 @@ State laser_diodes_off {
 
 State laser_reboot {
 		{ if ( ! laser_on_requested ) Validate laser_off; }
-		> OH Topaz Emission Off
-	+3	> OH Topaz Reboot
+		> Topaz Emission Off
+	+3	> Topaz Reboot
 		Validate laser_init;
 }
 

@@ -18,8 +18,8 @@ TM typedef unsigned char on_off { text "%3u" on_off_Text[]; }
 
 FlowStat NOFlowStat; Invalidate NOFlowStat;
 { NOFlowStat = BITS(DStt0,1,3); Validate NOFlowStat; }
-SolStat NOSolStat; Invalidate NOSolStat;
-{ NOSolStat = BITS(DStt0,3,1); Validate NOSolStat; }
+on_off EHV2S; Invalidate EHV2S; /* (NOSolStat) */
+{ EHV2S = BITS(DStt0,3,1); Validate EHV2S; }
 SolStat AirSolStat; Invalidate AirSolStat;
 { AirSolStat = BITS(DStt0,4,1); Validate AirSolStat; }
 InjStat_t InjStat; Invalidate InjStat;
@@ -28,8 +28,10 @@ yes_no DL_Fl; Invalidate DL_Fl;
 { DL_Fl = BITS(DStt1,6,1); Validate DL_Fl; }
 yes_no TFRFl; invalidate TFRFl;
 { TFRFl = BITS(DStt1,7,1); Validate TFRFl; }
-FlowStat SCV_S; invalidate SCV_S;
-{ SCV_S = BITS(DStt1,1,1) + 2*BITS(DStt1,0,1); Validate SCV_S; }
+on_off AC_S; invalidate AC_S; /* (SCV_S) */
+{ AC_S = BITS(DStt1,0,1); Validate AC_S; }
+on_off EHV1S; invalidate EHV1S; /* (SCV_S) */
+{ EHV1S = BITS(DStt1,1,1); Validate EHV1S; }
 in_out_both X1_S; invalidate X1_S;
 { X1_S = BITS(DStt1,2,3); Validate X1_S; }
 in_out_both X2_S; invalidate X2_S;

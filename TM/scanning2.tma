@@ -191,7 +191,7 @@ State scanning_line {
 	  }
 	  newstart = PkPos - (etdata[n_scan-1]-etdata[0])/2;
 	  if ( newstart != line_start ) {
-		ci_sendfcmd( 0, "OH Set Etalon %s Position %u\n",
+		ci_sendfcmd( 0, "Set Etalon %s Position %u\n",
 		  which_line == IXFLAG_ONLINE ? "Online" : "Altline",
 		  newstart );
 	  }
@@ -225,7 +225,7 @@ State PeakupCtrl_Wait {
 }
 
 State PeakupCtrl_Ack {
-  > OH SW Status Value to 0
+  > SW Status Value to 0
   Hold until ( SW_St == 0 ) or 10;
   Validate PeakupCtrl_Wait;
 }

@@ -54,15 +54,15 @@
   #endif
 %}
 &command
-	: OH * &ohcmds *
-	: OH &ohcmdset
+#	: OH * &ohcmds *
+	: &ohcmdset
 	: Fail %d (1 = Operate Fail  2 = Record Fail  3 = Both) *
 		{ set_failure( $2 & 3 ); }
 	;
-&ohcmds
-	:
-	: &ohcmds &ohcmdset
-	;
+# &ohcmds
+#	:
+#	: &ohcmds &ohcmdset
+#	;
 &ohcmdset
 	: &ohcmd
 	: &indexer_cmd
@@ -109,23 +109,23 @@
 	: Green Peakup Scan { $0 = 27; }
 	: Shutoff { $0 = 255; }
 	;
-
-&command
-	: H2O &h2ocmd
-	: H2O * &h2ocmds *
-	;
-&h2ocmds
-	:
-	: &h2ocmds &h2ocmd
-	;
-&h2ocmd
-	: Analog Output &adchan Set Point &set_point5 * { sbwr( $3, $6 ); }
-	;
-&adchan <unsigned short>
-	: 4 { $0 = 0xE50; }
-	: 5 { $0 = 0xE52; }
-	: 6 { $0 = 0xE54; }
-	;
+#
+#&command
+#	: H2O &h2ocmd
+#	: H2O * &h2ocmds *
+#	;
+#&h2ocmds
+#	:
+#	: &h2ocmds &h2ocmd
+#	;
+#&h2ocmd
+#	: Analog Output &adchan Set Point &set_point5 * { sbwr( $3, $6 ); }
+#	;
+#&adchan <unsigned short>
+#	: 4 { $0 = 0xE50; }
+#	: 5 { $0 = 0xE52; }
+#	: 6 { $0 = 0xE54; }
+#	;
 
 &AdjGate <unsigned short>
 	: 1A { $0 = Gt1A; }

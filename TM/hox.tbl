@@ -38,7 +38,7 @@ DyeLas {
   UVMon (UVMon,6) "";
   DLH_P (DLH_P,6) "V";
   Et_LW (Et_LW,6) "V";
-  HBox { "("; (DL_X,4); ","; (DL_Y,4); ") "; (DL_TP,4) };
+  HBox { "("; (DL_X,4); ","; (DL_Y,4); ") "; (DL_TP,5) };
 }
 LasIdx {
   Header:
@@ -108,7 +108,7 @@ Table {
 		Table {
 		  HBox{ +=+; Title: "Dye Laser"; +=+ };
 		  HBox { [DyeLas]; |; [LasIdx] };
-		  [GasDeck];
+		  # [GasDeck];
 		};
 		||+;
 		[LasDiodes];

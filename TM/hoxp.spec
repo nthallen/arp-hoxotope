@@ -1,4 +1,4 @@
-tmcbase = types.tmc hox.tmc hoxpcts.tmc idx.tmc hoxl.tmc topaz.tmc
+tmcbase = types.tmc hox.tmc HOX_1M.tmc hoxpcts.tmc idx.tmc hoxl.tmc topaz.tmc
 
 cmdbase = $(LIBSRC)/root.cmd hoxp.cmd
 cmdbase = idx64.cmd idxdrv.cmd
