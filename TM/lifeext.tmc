@@ -1,0 +1,64 @@
+%{ /* edf2ext.awk reading life.edf */
+  #include <stdlib.h>
+  #include "ssp.h"
+  #include "tmctime.h"
+
+  #define EXTRACTION_INIT initialize()
+  #define EXTRACTION_TERM terminate()
+  #define ALL_SPSS
+
+  static double ext_delta = 0.;
+
+  static sps_ptr edf_ss_open( char *name, int width ) {
+	sps_ptr ss;
+
+	ss = ss_open( name );
+	if ( ss_error( ss ) ) {
+	  ss = ss_create( name, SPT_INCREASING, width, 0 );
+	  if ( ss_error( ss ) )
+	    msg( 3, "Unable to create spreadsheet %s", name );
+	  errno = 0;
+	  msg( 0, "Creating spreadsheet %s.sps", name );
+	} else if ( ss_width( ss ) != width )
+	  msg( 3,
+	    "Existing spreadsheet %s.sps not of width %d", width );
+	else msg( 0, "Appending to spreadsheet %s.sps", name );
+	return ss;
+  }
+
+  sps_ptr lifediff;
+  void initialize(void) {
+	{
+	  char *s;
+	  s = getenv("EXT_DELTA");
+	  if (s != NULL) {
+		ext_delta=atof(s);
+		msg(MSG, "Using Time Delta of %lf", ext_delta);
+	  }
+	}
+	lifediff = edf_ss_open( "lifediff", 5 );
+	ss_set_column(lifediff, 0, "%14.11lt", "Time");
+	ss_set_column(lifediff, 1, "%5.1lf", "Gt2BDly");
+	ss_set_column(lifediff, 2, "%6.1lf", "OHLife");
+	ss_set_column(lifediff, 3, "%6.1lf", "LABLife");
+	ss_set_column(lifediff, 4, "%6.1lf", "N2Life");
+  }
+  void terminate(void) {
+	ss_close(lifediff);
+  }
+%}
+{
+  ss_insert_value( lifediff, Time_OOn+ext_delta, 2 );
+  ss_set(lifediff, 1, Gt2BDly_OOn);
+  ss_set(lifediff, 2, convert( OHLife));
+}
+{
+  ss_insert_value( lifediff, Time_LOn+ext_delta, 2 );
+  ss_set(lifediff, 1, Gt2BDly_LOn);
+  ss_set(lifediff, 3, convert( LABLife));
+}
+{
+  ss_insert_value( lifediff, Time_N+ext_delta, 2 );
+  ss_set(lifediff, 1, Gt2BDly_N);
+  ss_set(lifediff, 4, convert( N2Life));
+}
