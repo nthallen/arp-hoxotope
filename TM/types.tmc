@@ -142,11 +142,13 @@ TM typedef UINT AD12 {
 	65536, 10.0
   }
 
-TM typedef AD12 AD12_EtPos { convert EtnStep_d; text "%5d"; }
-  Calibration (AD12_EtPos, EtnStep_d) {
-    45875, 32188,
-    47841, 30020
+%{
+  EtnStep_d EtnStep_cvt( AD12 potval ) {
+    double potd = (double)potval;
+    return 70268. - 0.5369*potd - 6.3638e-6*potd*potd;
   }
+%}
+TM typedef AD12 AD12_EtPos { convert EtnStep_d EtnStep_cvt(); text "%5d"; }
 
 TM typedef signed short AD12_PSD {
   collect x = (sbwa(x.address) >> 4) & 0xFFF;

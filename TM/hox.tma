@@ -150,11 +150,10 @@ State scan  {
   +1  > topaz diode 2 temperature 28.0 C
   +1  Hold until valid (laser_diodes_on);
   +1  > drive etalon to 31000
-  +5  { double Pot_Step, Pot_Diff;
+  +5  { double Pot_Step;
 	Pot_Step = convert(EtPos);
 	if ( Pot_Step > 20000 && Pot_Step < 40000 ) {
-	  Pot_Diff = EtnPs - Pot_Step;
-	  if ( Pot_Diff > 500 || Pot_Diff < -500 ) {
+	  if ( EtnStep_delta > 500 || EtnStep_delta < -500 ) {
 	    ci_sendfcmd( 0, "Preset Etalon Position to %.0lf\n",
 	      Pot_Step );
 	    ci_sendcmd( "Set Etalon Online Position 30500\n", 0 );
@@ -200,6 +199,7 @@ state scan_failed {
 %{
   int n_etalon_resets = 0;
   char *et_dir;
+  int use_defaults;
 %}
 State reset_etalon {
       { Etalon_Scanmode_Requested = 0; }
@@ -207,6 +207,14 @@ State reset_etalon {
       > Peakup Off
   +3  > Stop Etalon
       { double etdelta;
+        if ( EtnStep_delta < -50 || EtnStep_delta > 50 ||
+	      EtnPs < 25000 || EtnPs > 35000 ) {
+	  msg( 2, "Will use etalon defaults" );
+	  use_defaults = 1;
+	} else use_defaults = 0;
+	if ( ++n_etalon_resets >= 5 )
+	  ci_sendcmd( "Set Etalon Speed 3200 Hz\n", 0 );
+
 	etdelta = 31000. - convert(EtPos);
 	if ( etdelta < 0 ) {
 	  et_dir = "Out";
@@ -220,33 +228,17 @@ State reset_etalon {
       }
   +2  Hold until ( (EtnSt & 8) == 0 ) or 30;
       { double etstep;
-	if ( ++n_etalon_resets >= 5 )
-	  ci_sendcmd( "Set Etalon Speed 3200 Hz\n", 0 );
         etstep = convert(EtPos);
-	if ( etstep > 20000 && etstep < 40000 ) {
-	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
-	    etstep );
-	} else {
+	if ( etstep < 20000 || etstep > 40000 ) {
 	  msg( 2, "EtPos out of range after reinit: %.0lf", etstep );
 	  Validate reset_etalon;
+	} else {
+	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
+	    etstep );
+	  if (use_defaults) Validate etalon_defaults;
+	  else Validate record;
 	}
       }
-
-# +1  > Drive etalon in 64000
-#     Hold until ( EtnSt & 1 ) or 30;
-#     > Drive etalon out 10000
-# +3  > Preset Etalon Position to 24000
-# +1  > Drive etalon to 31000
-# +1  Hold until ( EtnPs == 31000 ) or 10;
-#     { double etstep;
-#       etstep =  convert(EtPos);
-#	if ( etstep > 20000 && etstep < 40000 ) {
-#	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
-#	    etstep );
-#	} else msg( 2, "EtPos out of range: %.0lf", etstep );
-#     }
-
-  +2  Validate etalon_defaults;
 }
 
 State etalon_defaults {
@@ -258,6 +250,9 @@ State etalon_defaults {
 #----------------------------------------------------------------
 # Record mode.
 #----------------------------------------------------------------
+%{
+  int big_delta = 0;
+%}
 State record {
       depending on (ON_GROUND) { Validate shutdown; }
       depending on (1 Hz) {
@@ -270,8 +265,15 @@ State record {
 	  Validate reset_etalon;
 	}
       }
-      { if ( EtnStep_delta < -1000 || EtnStep_delta > 1000 ) {
-	  msg( 2, "Observed large etalon delta during record: %lf", EtnStep_delta );
+      { if ( EtnStep_delta < -50 || EtnStep_delta > 50 ) {
+	  if ( big_delta ) {
+	    msg( 2, "Observed large etalon delta during record: %lf", EtnStep_delta );
+	    Validate reset_etalon;
+	  } else big_delta = 1;
+	} else big_delta = 0;
+      }
+      { if ( EtnPs < 25000 || EtnPs > 35000 ) {
+	  msg( 2, "Etalon drifted outside standard range: %u\n", EtnPs );
 	  Validate reset_etalon;
 	}
       }
