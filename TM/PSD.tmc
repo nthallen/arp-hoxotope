@@ -6,6 +6,7 @@
 	 This operation will be based on the assumption that
 	 BmPsMux == 0 => XL, 1 => DL, but that can be changed here.
   */
+  #include <math.h> /* For floor() which is auto-generated */
 %}
 
 TM typedef double PSD_pos_t { text "%4d"; }
