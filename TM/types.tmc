@@ -22,14 +22,6 @@ TM typedef unsigned char AD8 {
 	256, 10
   }
 
-TM typedef signed short PSD_t { text "%3d"; }
-TM typedef unsigned char AD8_PSD {
-  collect x = sbba(x.address);
-  convert PSD_t;
-  text "%3u";
-}
-Calibration (AD8_PSD, PSD_t) { 0, 0, 256, 256 }
-
 TM typedef AD8 AD8_5V;
   calibration (AD8_5V, VOLTS) {
 	  0, 0,
@@ -148,6 +140,11 @@ TM typedef UINT AD12 {
 		0,    0,
 	65536, 10.0
   }
+
+TM typedef signed short AD12_PSD {
+  collect x = (sbwa(x.address) >> 4) & 0xFFF;
+  text "%4d";
+}
 
 TM typedef AD12 AD12_T10K { convert KELVIN; text "%5.1lf"; }
   Calibration (AD12_T10K, KELVIN) {
