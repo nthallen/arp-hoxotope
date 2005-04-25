@@ -14,7 +14,7 @@ spreadsheet ohcell 9
 	7 LABNG %5.0lf
 	8 Et_LW %6.4lf
 
-spreadsheet counts 14
+spreadsheet counts 15
 	1 SX1AG %5.0lf To_Double
 	2 SX1FG %5.0lf To_Double
 	3 SX1NG %6.0lf 
@@ -26,21 +26,21 @@ spreadsheet counts 14
 	11 UVMon %6.4lf 
 	12 SolSt %2.0X To_Double
 	13 RepRate1 %5.0lf
+	14 LABNG %6.0lf
 
 spreadsheet labstat 20
 	1 L12AV %6.4lf
 	2 L12BV %6.4lf
 	3 L12CV %6.4lf
-	4 A4SPt %4.0lf
-	5 A5SPt %4.0lf
-	6 A6SPt %4.0lf
+	4 UV_1V %6.4lf
+	5 UV_2V %6.4lf
+	6 Anemo %6.4lf
 	7 Lab_1 %4.0lf
 	8 Lab_2 %4.0lf
 	9 Lab_3 %4.0lf
 	10 SW_St %2.0X To_Double
 
-
-spreadsheet scanstat 22
+spreadsheet scanstat 25
 	1 EtnSt %2.0X To_Double
 	2 EtnFlg %2.0X To_Double
 	3 EtnPs %6.0lf
