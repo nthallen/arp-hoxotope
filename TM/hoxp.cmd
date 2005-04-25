@@ -95,6 +95,7 @@
 	: Altitude Land { $0 = SWS_LAND; }
 	: Scan Mode Always { $0 = SWS_SCAN_ALWAYS; }
 	: Scan Mode By Pressure { $0 = SWS_SCAN_BY_P; }
+	: Scan Mode Standby { $0 = SWS_STANDBY; }
 	: Diodes On { $0 = SWS_DIODES_ON; }
 	: Diodes Off { $0 = SWS_DIODES_OFF; }
 	: File Read { $0 = SWS_LAB_READ; }
