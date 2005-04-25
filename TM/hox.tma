@@ -63,7 +63,7 @@ State initialize {
   +1  > adjGate 2b delay set 0
   +1  > adjgate 2b width set 20
   +1  > power solenoids and steppers on
-  +1  Validate Pinch_Valve_Close;
+# +1  Validate Pinch_Valve_Close;
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
       > Drive etalon out 10000
@@ -156,14 +156,14 @@ State scan  {
   +1  Hold until valid (laser_diodes_on);
   +1  > drive etalon to 31000
   +5  { double Pot_Step;
-	Pot_Step = convert(EtPos);
-	if ( Pot_Step > 20000 && Pot_Step < 40000 ) {
-	  if ( EtnStep_delta > 500 || EtnStep_delta < -500 ) {
-	    ci_sendfcmd( 0, "Preset Etalon Position to %.0lf\n",
-	      Pot_Step );
-	    ci_sendcmd( "Set Etalon Online Position 30500\n", 0 );
-	  }
-	} msg( 2, "EtPos out of whack: %.0lf", Pot_Step );
+		Pot_Step = convert(EtPos);
+		if ( Pot_Step > 20000 && Pot_Step < 40000 ) {
+		  if ( EtnStep_delta > 500 || EtnStep_delta < -500 ) {
+			ci_sendfcmd( 0, "Preset Etalon Position to %.0lf\n",
+			  Pot_Step );
+			ci_sendcmd( "Set Etalon Online Position 30500\n", 0 );
+		  }
+		} else msg( 2, "EtPos out of whack: %.0lf", Pot_Step );
       }
   +1  > Drive etalon To 29500
   +1  > Peakup on
