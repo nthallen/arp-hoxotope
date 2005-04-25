@@ -1,6 +1,0 @@
-# signal_ng
-# calls signal_ng.inp which
-# accounts for wrapping of the
-# non-gated counters.
-where=/home/hox/anal
-snafu -b$where/signal_ng.inp .022 .05

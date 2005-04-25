@@ -1,6 +1,0 @@
-# Script to run mode 2 data anal
-rm calsig1.sps calsig2.sps junk?.sps
-snafu -b//35/home/hoxp/anal/signal_fg.inp 0.022 0.05
-snafu -b//35/home/hoxp/anal/jessediff2.inp
-sps2mat -b//35/home/hoxp/anal/jesse2mat2.inp
-
