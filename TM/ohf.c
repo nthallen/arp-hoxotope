@@ -1,5 +1,8 @@
 /* ohf.c OH filter functions
  * $Log$
+ * Revision 1.5  2005/01/07 23:44:22  nort
+ * New fit parameters for HOxotope.
+ *
  * Revision 1.4  2004/12/04 20:31:25  nort
  * Tweaks
  *
@@ -96,8 +99,10 @@ unsigned int high_limit = HIGH_SCAN_LIMIT;
    
    050107: Modifying spacing and relative size parameters for
    HOxotope.
+   
+   050509: Return 1 on success, 0 on error.
 */
-static void ohf_init_filter(void) {
+static int ohf_init_filter(void) {
   ohf.q12r = 0; /* We've already done 0 */
   ohf.q12c = ohf.q12r + (92 + ohf.rate/2) / ohf.rate;
   ohf.q12l = 2 * ohf.q12c - ohf.q12r;
@@ -105,10 +110,12 @@ static void ohf_init_filter(void) {
   ohf.q11r = (117 + ohf.rate/2) / ohf.rate; /* just the width for now */
   ohf.q11l = ohf.q11c + ohf.q11r;
   ohf.q11r = ohf.q11c - ohf.q11r;
+  if (ohf.q11c == 0) return 0;
   ohf.dd = new_dig_delay(ohf.q11c);
   ohf.rdd = new_ul_dig_delay(ohf.q11l+1);
   ohf.peak_filter = 0;
   ohf.n_points = 0;
+  return 1;
 }
 
 static void ohf_reset_filter(void) {
@@ -184,8 +191,9 @@ int ohf_point(unsigned short pos, unsigned long value) {
   if (ohf.n_points == 1) { /* Second Point */
 	ohf.rate = pos - ohf.min_pos;
 	if (ohf.rate > 0) {
-	  ohf_init_filter();
-	  ohf_process_point(ohf.min_pos, ohf.dlyd_fltr);
+	  if ( ohf_init_filter() )
+		ohf_process_point(ohf.min_pos, ohf.dlyd_fltr);
+	  else ohf.n_points = 0; /* discard first point */
 	} /* else scan hasn't begun */
   }
 

@@ -26,17 +26,15 @@ depending on (scanning_etn once) {
   }
 }
 
-depending on (peakup_ohcell) {
+depending on (scanning_etn) {
   if (ssp >= 0) {
-	store_seq_ss(EtnPs, CT_COL,  SOCFG);
-	store_seq_ss(EtnPs, UV_COL,  OClUV);
-  }
-}
-
-depending on (peakup_axis_2) {
-  if (ssp >= 0) {
-	store_seq_ss(EtnPs, CT_COL,  SX2FG);
-	store_seq_ss(EtnPs, UV_COL,  UVMon);
+    if ( peakup_ohcell ) {
+	  store_seq_ss(EtnPs, CT_COL,  SOCFG);
+	  store_seq_ss(EtnPs, UV_COL,  OClUV);
+	} else {
+	  store_seq_ss(EtnPs, CT_COL,  SX1FG);
+	  store_seq_ss(EtnPs, UV_COL,  UVMon);
+	}
   }
 }
 
@@ -51,7 +49,7 @@ depending on (filter_point) {
   }
 }
 
-depending on (not_peaking once) {
+depending on (not_scanning_etn once) {
   if (ssp >= 0) {
 	int seq_no;
 
