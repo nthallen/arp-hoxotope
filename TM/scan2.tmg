@@ -2,17 +2,40 @@
   #include "ssp.h"
 %}
 RTG_SCAN( scanning_etn, ScanRatio[2], EtnPs, Ratio );
+
+%{
+/* For line scans, report:
+   The Ratio vs Time
+   The Filter points vs Time OD_Filter
+   The Fit vs Time OD_Fit
+   The Peak vs Time OD_PkHeight
+%}
 RTG_REPORT( Ratio, dtime(), Ratio );
-depending on ( PkTime once, PkHeight once ) {
-  RTG_REPORT( PkHeight, PkTime, PkHeight );
+depending on ( OD_PkTime once, OD_PkHeight once ) {
+  RTG_REPORT( OD_PkHeight, OD_PkTime, OD_PkHeight );
 }
-depending on ( PkHeight once ) {
-  int i;
-  for ( i = 0; i < n_scan; i++ ) {
-	double x, y;
-	x = i;
-	y = A + B*x + C*x*x;
-	RTG_REPORT( PkFit, tdata[i], y );
-  }
-  RTG_REPORT( PkFit, tdata[n_scan-1]+.25, non_number );
+depending on ( od_filter_point ) {
+  double x, t, y;
+  while ( sc_filter_point( od_scan, &x, &t, &y ) )
+    RTG_REPORT( OD_Filter, t, y );
+}
+depending on ( OD_PkHeight once ) {
+  double x, t, y;
+  while ( sc_fit_point( od_scan, &x, &t, &y ) )
+    RTG_REPORT( OD_Fit, t, y );
+  RTG_REPORT( OD_Fit, t+.25, non_number );
+}
+depending on ( OH_PkTime once, OH_PkHeight once ) {
+  RTG_REPORT( OH_PkHeight, OH_PkTime, OH_PkHeight );
+}
+depending on ( oh_filter_point ) {
+  double x, t, y;
+  while ( sc_filter_point( oh_scan, &x, &t, &y ) )
+    RTG_REPORT( OH_Filter, t, y );
+}
+depending on ( OH_PkHeight once ) {
+  double x, t, y;
+  while ( sc_fit_point( oh_scan, &x, &t, &y ) )
+    RTG_REPORT( OH_Fit, t, y );
+  RTG_REPORT( OH_Fit, t+.25, non_number );
 }
