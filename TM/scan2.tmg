@@ -9,6 +9,7 @@ RTG_SCAN( scanning_etn, ScanRatio[2], EtnPs, Ratio );
    The Filter points vs Time OD_Filter
    The Fit vs Time OD_Fit
    The Peak vs Time OD_PkHeight
+*/
 %}
 RTG_REPORT( Ratio, dtime(), Ratio );
 depending on ( OD_PkTime once, OD_PkHeight once ) {

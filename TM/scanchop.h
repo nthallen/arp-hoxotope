@@ -1,3 +1,6 @@
+#ifndef SCANCHOP_H_INCLUDED
+#define SCANCHOP_H_INCLUDED
+#include <stdio.h>
 /* scanchop.h
    od_scan = sc_new();
    sc_reset( od_scan );
@@ -32,6 +35,7 @@ typedef struct {
   double crnt_fit_line_ctr; /* not normalized */
   double b[2], a[2];
   double sx, sy, sxy, sx2, sx2y, sx3, sx4, sfw;
+  double dtds;
 
   int crnt_scan_pts;
   
@@ -56,9 +60,17 @@ typedef struct {
   
   EtnPs_t first_EtnPs, last_EtnPs; /* not normalized */
   double last_time;
+  FILE *log_fp;
 } scanchop;
 
-extern scanchop *sc_new( int npts, double filter_period );
+#define PKQ_GOOD 0
+#define PKQ_POOR 1
+#define PKQ_AWFUL 2
+#define PKQ_INVALID 3
+#define FILTER_THRESHOLD (1e-3)
+
+extern scanchop *sc_new( int npts, double filter_period,
+  char *name );
 extern void sc_reset( scanchop *sc );
 extern void sc_point( scanchop *sc,
   unsigned short input_step, double input_time, double input_val );
@@ -67,3 +79,5 @@ extern int sc_filter_point( scanchop *sc,
 extern int sc_fit_point( scanchop *sc,
   double *fit_etn, double *fit_time, double *fit_val );
 extern void sc_endscan( scanchop *sc );
+
+#endif

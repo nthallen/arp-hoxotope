@@ -1,6 +1,8 @@
 #include <math.h>
+#include <string.h>
 #include "scanchop.h"
 #include "nortlib.h"
+#include "ssp.h"
 /* scanchop.c
    od_scan = sc_new();
    sc_reset( od_scan );
@@ -17,7 +19,7 @@
 */
 
 /* Creates and initializes a new scanchop object */
-scanchop *sc_new( int npts, double filter_period ) {
+scanchop *sc_new( int npts, double filter_period, char *name ) {
   scanchop *sc = new_memory( sizeof(scanchop) );
   sc->npts = npts;
   sc->filter_ratio = new_memory( npts * sizeof(double) );
@@ -31,13 +33,16 @@ scanchop *sc_new( int npts, double filter_period ) {
   } else {
     double pi = 3.14159265358979;
     double Wn = 2/filter_period;
-    double T = 1/2;
+    double T = .5;
     double RC = 1/(2*pi*Wn);
     sc->a[0] = 1 + 2*RC/T;
     sc->a[1] = (1 - 2*RC/T)/sc->a[0];
     sc->b[0] = sc->b[1] = 1/sc->a[0];
     sc->a[0] = 1;
   }
+  sc->log_fp = 0;
+  if ( name != 0 )
+	sc->log_fp = fopen( name, "w" );
   sc_reset(sc);
   return sc;
 }
@@ -57,7 +62,7 @@ static void sc_scan_reset( scanchop *sc ) {
 /* Clears all the weights in the specified scanchop object */
 void sc_reset( scanchop *sc ) {
   int i;
-  sc->PkQuality = SCPK_INVALID;
+  sc->PkQuality = PKQ_INVALID;
   sc->min_pos = USHRT_MAX;
   sc->max_non_zero = 0;
   sc->min_non_zero = 1;
@@ -95,9 +100,11 @@ static int check_step( scanchop *sc, EtnPs_t step, double weight ) {
 		nl_error( 4, "apparent overflow in right shift" );
 	  if ( sc->min_non_zero+shift+extra_shift >= sc->npts ) {
 		nl_error( 2, "shifting right over entire non-zero region" );
-		sc->sc_reset( sc );
+		sc_reset( sc );
 		sc->min_pos = step - sc->npts/2;
 		idx = step - sc->min_pos;
+		sc->min_non_zero = 1;
+		sc->max_non_zero = 0;
 		return idx;
 	  }
 	  nl_error( 2, "non-zero region exceeds filter size: discarding %u", extra_shift );
@@ -148,9 +155,11 @@ static int check_step( scanchop *sc, EtnPs_t step, double weight ) {
 		  nl_error( 4, "apparent overflow in left shift" );
 		if ( shift+extra_shift >= sc->max_non_zero ) {
 		  nl_error( 2, "shifting left over entire non-zero region" );
-		  sc->sc_reset( sc );
+		  sc_reset( sc );
 		  sc->min_pos = step - sc->npts/2;
 		  idx = step - sc->min_pos;
+		  sc->min_non_zero = 1;
+		  sc->max_non_zero = 0;
 		  return idx;
 		}
 		nl_error( 2, "non-zero region exceeds filter size: discarding %u", extra_shift );
@@ -202,7 +211,8 @@ static void apply_weight( scanchop *sc, EtnPs_t step, double time, double weight
 
   if ( idx < 0 ) return; /* out of range, but zero weight */
   fw = sc->filter_weight[idx] =
-	sc->b[0] * weight + sc->b[1]*prev_weight[idx] - sc->a[1]*sc->filter_weight[idx];
+	sc->b[0] * weight + sc->b[1]*sc->prev_weight[idx]
+	 - sc->a[1]*sc->filter_weight[idx];
   sc->prev_weight[idx] = weight;
   sc->filter_time[idx] = time;
   if ( fw > FILTER_THRESHOLD ) {
@@ -226,10 +236,16 @@ static void apply_weight( scanchop *sc, EtnPs_t step, double time, double weight
 	sc->sx3 += fw * x2 * x;
 	sc->sx4 += fw * x2 * x2;
 	sc->sfw += fw;
+	if ( sc->log_fp ) {
+	  fprintf( sc->log_fp, "%u: %.1lf, %.3lf\n", step, y, fw );
+	}
   } else if ( sc->min_non_zero < sc->max_non_zero ) {
 	if ( idx == sc->min_non_zero ) {
-	  ++sc->min_non_zero;
+	  while ( sc->filter_weight[++sc->min_non_zero] <
+				FILTER_THRESHOLD );
 	} else if ( idx == sc->max_non_zero ) {
+	  while ( sc->filter_weight[--sc->max_non_zero] <
+				FILTER_THRESHOLD );
 	  --sc->max_non_zero;
 	}
   } else if ( sc->min_non_zero == sc->max_non_zero && idx == sc->min_non_zero ) {
@@ -242,11 +258,12 @@ static void apply_weight( scanchop *sc, EtnPs_t step, double time, double weight
 
 static void apply_point( scanchop *sc, EtnPs_t step, double time, double val ) {
   int idx;
-  idx = check_step( sc, step );
+  idx = check_step( sc, step, 1. );
   sc->filter_ratio[idx] =
     (1-sc->filter_weight[idx]) * val +
     sc->filter_weight[idx] *
-	  (sc->b[0] * val + sc->b[1]*prev_ratio[idx] - sc->a[1]*sc->filter_ratio[idx]);
+	  (sc->b[0] * val + sc->b[1] * sc->prev_ratio[idx]
+	   - sc->a[1] * sc->filter_ratio[idx]);
   sc->prev_ratio[idx] = val;
   apply_weight( sc, step, time, 1. );
 }
@@ -261,6 +278,7 @@ void sc_point( scanchop *sc,
   if ( sc->crnt_scan_pts == 0 ) {
 	sc->first_EtnPs = input_step;
 	sc->prev_fit_line_ctr = -1;
+	sc->fit_step = input_step;
 	sc->report_direction = 0;
   } else if ( sc->crnt_scan_pts == 1 ) {
 	EtnPs_t step;
@@ -273,8 +291,8 @@ void sc_point( scanchop *sc,
 	  }
 	  sc->report_direction = -1;
 	  sc->report_step = sc->max_non_zero+sc->min_pos;
-	} else if ( input_step > sc->last_EntPs ) {
-	  dt = (input_time - sc->last_time)/(input_step - sc->last_EntPs);
+	} else if ( input_step > sc->last_EtnPs ) {
+	  dt = (input_time - sc->last_time)/(input_step - sc->last_EtnPs);
 	  T = sc->last_time;
 	  for ( step = sc->last_EtnPs-1; step >= sc->min_non_zero+sc->min_pos; --step ) {
 		T -= dt;
@@ -287,7 +305,6 @@ void sc_point( scanchop *sc,
 	  sc->last_time = input_time;
 	  return;
 	}
-	/* ### set starting point for reporting functions */
   }
   apply_point( sc, input_step, input_time, input_val );
   sc->crnt_scan_pts++;
@@ -295,15 +312,17 @@ void sc_point( scanchop *sc,
 	EtnPs_t step;
 	if ( input_step < sc->last_EtnPs ) {
 	  dt = (input_time-sc->last_time)/(sc->last_EtnPs - input_step);
+	  sc->dtds = dt;
 	  T = input_time;
-	  for ( step = input_step+1; step < last_EtnPs; ++step ) {
+	  for ( step = input_step+1; step < sc->last_EtnPs; ++step ) {
 		T -= dt;
 		apply_weight( sc, step, T, 0. );
 	  }
 	} else if ( input_step > sc->last_EtnPs ) {
 	  dt = (input_time-sc->last_time)/(input_step - sc->last_EtnPs);
+	  sc->dtds = dt;
 	  T = input_time;
-	  for ( step = input_step-1; step > last_EtnPs; --step ) {
+	  for ( step = input_step-1; step > sc->last_EtnPs; --step ) {
 		T -= dt;
 		apply_weight( sc, step, T, 0. );
 	  }
@@ -322,6 +341,22 @@ void sc_point( scanchop *sc,
 void sc_endscan( scanchop *sc ) {
   double k11, k12, k21, k22, R1, R2, D, C, B, A, pkx, x;
   double low_step, high_step;
+  
+  if ( sc->report_direction > 0 ) {
+	EtnPs_t step = sc->last_EtnPs + 1;
+	double T = sc->last_time;
+	for ( ; step <= sc->max_non_zero + sc->min_pos; step++ ) {
+	  T += sc->dtds;
+	  apply_weight( sc, step, T, 0. );
+	}
+  } else {
+	EtnPs_t step = sc->last_EtnPs - 1;
+	double T = sc->last_time;
+	for ( ; step >= sc->max_non_zero + sc->min_pos; step-- ) {
+	  T += sc->dtds;
+	  apply_weight( sc, step, T, 0. );
+	}
+  }
   k11 = sc->sfw*sc->sx2 - sc->sx*sc->sx;
   k12 = sc->sfw*sc->sx3 - sc->sx2*sc->sx;
   k21 = k12;
@@ -346,7 +381,7 @@ void sc_endscan( scanchop *sc ) {
 	 else if x is before midpoint of scan, take end of scan
 	 else take beginning of scan
   */
-  sc->PkQuality = 0; /* highest quality */
+  sc->PkQuality = PKQ_GOOD; /* highest quality */
   if ( sc->first_EtnPs < sc->last_EtnPs ) {
 	low_step = sc->first_EtnPs;
 	high_step = sc->last_EtnPs;
@@ -358,19 +393,24 @@ void sc_endscan( scanchop *sc ) {
 	pkx = sc->crnt_fit_line_ctr - B/(2*C);
 	if ( pkx < low_step ) {
 	  pkx = low_step;
-	  sc->PkQuality = 1;
+	  sc->PkQuality = PKQ_POOR;
 	} else if ( pkx > high_step ) {
 	  pkx = high_step;
-	  sc->PkQuality = 1;
+	  sc->PkQuality = PKQ_POOR;
 	}
   } else {
 	double ly, hy;
-	sc->PkQuality = 3; /* No peak */
+	sc->PkQuality = PKQ_AWFUL; /* No peak */
 	x = low_step - sc->crnt_fit_line_ctr;
 	ly = A + B*x + C*x*x;
 	x = high_step - sc->crnt_fit_line_ctr;
 	hy = A + B*x + C*x*x;
 	pkx = hy > ly ? high_step : low_step;
+  }
+  if ( sc->log_fp ) {
+	fprintf( sc->log_fp, "ABC = %lg %lg %lg\n", A, B, C );
+	fprintf( sc->log_fp, "x0 = %.1lf\n", sc->crnt_fit_line_ctr );
+	fflush(sc->log_fp);
   }
   x = pkx - sc->crnt_fit_line_ctr;
   sc->PkHeight = A + B*x + C*x*x;
@@ -388,8 +428,9 @@ void sc_endscan( scanchop *sc ) {
 	  } else if ( xhi != xlo+1 ) {
 		nl_error( 4, "Bad Math!" );
 	  } else {
-		sc->PkTime = sc->filter_time[xlo] +
-		  (pkx-xlo) * (sc->filter_time[xhi]-sc->filter_time[xlo]);
+		sc->PkTime = sc->filter_time[xlo-sc->min_pos] +
+		  (pkx-xlo) * (sc->filter_time[xhi-sc->min_pos]
+		   -sc->filter_time[xlo-sc->min_pos]);
 	  }
 	}
   }
@@ -418,43 +459,45 @@ int sc_filter_point( scanchop *sc,
 	double *filter_etn, double *filter_time, double *filter_val ) {
   int idx;
   if ( sc->report_direction == 0 ) return 0;
-  for ( idx = -1; idx < 0; ) {
+  for ( ;; ) {
 	if ( sc->report_step == sc->last_EtnPs ) return 0;
+	if ( ( sc->report_direction < 0 &&
+		  sc->report_step <	sc->last_EtnPs ) ||
+		 ( sc->report_direction > 0 &&
+		  sc->report_step >	sc->last_EtnPs ) ) {
+	  nl_error( 2, "sc_filter_point skipped out of scan" );
+	  return 0;
+	}
 	idx = check_step( sc, sc->report_step, 0. );
-	if ( idx >= 0 ) {
-	  *filter_etn = sc->report_step;
+	sc->report_step += sc->report_direction;
+	if ( idx >= 0 && sc->filter_weight[idx] > FILTER_THRESHOLD ) {
+	  *filter_etn = idx + sc->min_pos;
 	  *filter_time = sc->filter_time[idx];
 	  *filter_val = sc->filter_ratio[idx];
+	  return 1;
 	}
-	sc->report_step += sc->report_direction;
   }
-  return idx >= 0;
 }
 
 /* Same idea as sc_filter_point(), but the data is only valid after
    calling sc_endscan(). Will include logic to avoid reporting points
    outside the range of the input data
 */
-void sc_fit_point( scanchop *sc,
+int sc_fit_point( scanchop *sc,
     double *fit_etn, double *fit_time, double *fit_val ) {
-  double x, y;
+  double x;
   int idx;
   for ( idx = -1; sc->prev_fit_line_ctr >= 0 && idx < 0; ) {
 	idx = check_step( sc, sc->fit_step, 0. );
-	if ( idx >= 0 ) {
-	  *filter_etn = sc->fit_step;
-	  *filter_time = sc->filter_time[idx];
-	  *filter_val = sc->filter_ratio[idx];
-	}
 	if ( sc->fit_step == sc->last_EtnPs )
 	  sc->prev_fit_line_ctr = -1;
 	sc->fit_step += sc->report_direction;
   }
-  if ( idx >= 0 ) {
+  if ( idx >= 0 && sc->prev_fit_line_ctr >= 0 ) {
 	*fit_etn = idx + sc->min_pos;
-	*fit_time = sc->fitler_time[idx];
+	*fit_time = sc->filter_time[idx];
     x = idx + sc->min_pos - sc->prev_fit_line_ctr;
-    *fit_val = sc->A + sc->B * x + sc->B * x * x;
+    *fit_val = sc->A + sc->B * x + sc->C * x * x;
 	return 1;
   }
   return 0;

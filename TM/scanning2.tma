@@ -52,7 +52,6 @@ State not_scanning_etn {}
 { { depending on ( not_scanning_etn ) {
       if ( EtnFlg & IXFLAG_SCAN ) {
         which_line = EtnFlg & ~IXFLAG_SCAN;
-        line_start = EtnPs;
         if ((which_line == 0 || which_line == IXFLAG_ONLINE)
             && last_OHCLI >= 8) {
           if ( which_line == 0 )
@@ -117,7 +116,8 @@ State scanning_etn {
 
 State scanning_od {
   { if ( EtnFlg & IXFLAG_SCAN ) {
-      if ( od_scan == 0 ) od_scan = sc_new( 400, 4. );
+      if ( od_scan == 0 )
+		od_scan = sc_new( 400, 4., 0 );
       sc_point( od_scan, EtnPs, dtime(), Ratio );
       Validate od_filter_point;
     } else {
@@ -136,7 +136,7 @@ State scanning_od {
 
 State scanning_oh {
   { if ( EtnFlg & IXFLAG_SCAN ) {
-      if ( oh_scan == 0 ) oh_scan = sc_new( 400, 4. );
+      if ( oh_scan == 0 ) oh_scan = sc_new( 400, 4., 0 );
       sc_point( oh_scan, EtnPs, dtime(), Ratio );
       Validate oh_filter_point;
     } else {
