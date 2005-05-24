@@ -102,7 +102,7 @@ State scanning_etn {
         } else if (ohf_peak_pos() < ohf_min_pos() + 156) {
           msg(MSG_WARN, "Peak is Below Scan Region");
           ohf_another_scan(max(ohf_min_pos(), low_limit + 1500) -1500, 2000, 15);
-        } else if (ohf_peak_pos() > ohf_max_pos() - 710) {
+        } else if (ohf_peak_pos() > ohf_max_pos() - 350) {
           msg(MSG_WARN, "Peak is Above Scan Region");
           ohf_another_scan(min(ohf_peak_pos(), high_limit-2000) - 500, 2000, 15);
         } else if (ohf_rate() > 10) {
