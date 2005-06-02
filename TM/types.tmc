@@ -145,7 +145,8 @@ TM typedef UINT AD12 {
 %{
   EtnStep_d EtnStep_cvt( AD12 potval ) {
     double potd = (double)potval;
-    return 70268. - 0.5369*potd - 6.3638e-6*potd*potd;
+    /* return 70268. - 0.5369*potd - 6.3638e-6*potd*potd; */
+    return 74021. - 0.6914*potd - 4.7748e-6*potd*potd;
   }
 %}
 TM typedef AD12 AD12_EtPos { convert EtnStep_d EtnStep_cvt(); text "%5d"; }
