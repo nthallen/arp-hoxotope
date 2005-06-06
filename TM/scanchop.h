@@ -78,6 +78,6 @@ extern int sc_filter_point( scanchop *sc,
   double *filter_etn, double *filter_time, double *filter_val );
 extern int sc_fit_point( scanchop *sc,
   double *fit_etn, double *fit_time, double *fit_val );
-extern void sc_endscan( scanchop *sc );
+extern int sc_endscan( scanchop *sc );
 
 #endif

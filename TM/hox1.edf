@@ -10,7 +10,7 @@ spreadsheet ohcell 9
 	2 OClUV %4.2lf 
 	3 AtnPs %5.0lf To_Double
 	4 EtnPs %5.0lf To_Double
-	5 EtPos %6.4lf 
+	5 EtPos %6.4lf 1*
 	7 LABNG %5.0lf
 	8 Et_LW %6.4lf
 

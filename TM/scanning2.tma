@@ -121,15 +121,16 @@ State scanning_od {
       sc_point( od_scan, EtnPs, dtime(), Ratio );
       Validate od_filter_point;
     } else {
-      sc_endscan( od_scan );
-      ci_sendfcmd( 2, "Set Etalon Online Position %u\n",
-            od_scan->NewStart );
-      OD_PkTime = od_scan->PkTime; Validate OD_PkTime;
-      OD_PkHeight = od_scan->PkHeight; Validate OD_PkHeight;
-      OD_PkStd = od_scan->PkStd; Validate OD_PkStd;
-      OD_PkPos = od_scan->PkPos; Validate OD_PkPos;
-      OD_PkQuality = od_scan->PkQuality; Validate OD_PkQuality;
-      Validate not_scanning_etn;
+      if ( sc_endscan( od_scan ) ) {
+		ci_sendfcmd( 2, "Set Etalon Online Position %u\n",
+			  od_scan->NewStart );
+		OD_PkTime = od_scan->PkTime; Validate OD_PkTime;
+		OD_PkHeight = od_scan->PkHeight; Validate OD_PkHeight;
+		OD_PkStd = od_scan->PkStd; Validate OD_PkStd;
+		OD_PkPos = od_scan->PkPos; Validate OD_PkPos;
+		OD_PkQuality = od_scan->PkQuality; Validate OD_PkQuality;
+	  }
+	  Validate not_scanning_etn;
     }
   }
 }
@@ -141,16 +142,17 @@ State scanning_oh {
       sc_point( oh_scan, EtnPs, dtime(), Ratio );
       Validate oh_filter_point;
     } else {
-      sc_endscan( oh_scan );
-	  if ( lamps_on )
-		ci_sendfcmd( 2, "Set Etalon Online Position %u\n",
-            oh_scan->NewStart );
-      OH_PkTime = oh_scan->PkTime; Validate OH_PkTime;
-      OH_PkHeight = oh_scan->PkHeight; Validate OH_PkHeight;
-      OH_PkStd = oh_scan->PkStd; Validate OH_PkStd;
-      OH_PkPos = oh_scan->PkPos; Validate OH_PkPos;
-      OH_PkQuality = oh_scan->PkQuality; Validate OH_PkQuality;
-      Validate not_scanning_etn;
+      if ( sc_endscan( oh_scan ) ) {
+		if ( lamps_on )
+		  ci_sendfcmd( 2, "Set Etalon Altline Position %u\n",
+			  oh_scan->NewStart );
+		OH_PkTime = oh_scan->PkTime; Validate OH_PkTime;
+		OH_PkHeight = oh_scan->PkHeight; Validate OH_PkHeight;
+		OH_PkStd = oh_scan->PkStd; Validate OH_PkStd;
+		OH_PkPos = oh_scan->PkPos; Validate OH_PkPos;
+		OH_PkQuality = oh_scan->PkQuality; Validate OH_PkQuality;
+	  }
+	  Validate not_scanning_etn;
     }
   }
 }

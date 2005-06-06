@@ -77,7 +77,7 @@ State initialize {
           ubastep );
 	  
         etstep =  convert(EtPos);
-	if ( etstep > 30800 && etstep < 31200 ) {
+	if ( etstep > 30000 && etstep < 32000 ) {
 	  ci_sendfcmd(0,"Preset Etalon Position to %.0lf\n",
 	    etstep );
 	} else msg( 2, "EtPos out of range: %.0lf", etstep );
@@ -347,7 +347,7 @@ State Etalon_Scanmode NoLog {
 	> _Scan Etalon Out 75 by 5
 	> _Drive Etalon Online
     > _Scan Etalon In 75 by 5
-	> _Set Etalon Offline Delta -125 
+	> _Set Etalon Offline Delta -150 
     > _Drive Etalon Offline
 +10 > _Drive Etalon Altline
     > _Scan Etalon Out 75 by 5
@@ -355,7 +355,7 @@ State Etalon_Scanmode NoLog {
 	> _Scan Etalon In 75 by 5
 	> _Set Etalon Offline Delta 785
 	> _Drive Etalon Offline
-+10  Hold until (EtnFlg == 0);
++10  Hold until (EtnFlg == IXFLAG_OFFLINE);
 	Resume Lab_read;
     { if (Etalon_Scanmode_Requested) Validate Etalon_Scanmode;
       else Validate Etalon_Hold;
@@ -433,8 +433,8 @@ PARTITION
 %{ /* Bellows constants. Dye_P_Low/High are specified here as
         Volts times a conversion factor.
     */
-  AD12_uGg Dye_P_Low  = (AD12_uGg) (4.9 * .1 * 65536.);
-  AD12_uGg Dye_P_High = (AD12_uGg) (4.9 * .1 * 65536.);
+  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.07 * .1 * 65536.);
+  AD12_uGg Dye_P_High = (AD12_uGg) (5.07 * .1 * 65536.);
   IndxrPos Bellows_Drive_Low = 5000;
   IndxrPos Bellows_Drive_High = 61000;
 %}

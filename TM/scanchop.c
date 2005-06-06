@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include <errno.h>
 #include "scanchop.h"
 #include "nortlib.h"
 #include "ssp.h"
@@ -114,7 +115,7 @@ static int check_step( scanchop *sc, EtnPs_t step, double weight ) {
 	/* Now shift right by shift */
 	sc->min_pos -= shift;
 	npts_to_move = sc->max_non_zero - sc->min_non_zero + 1;
-	npts_to_zero = npts_to_move < shift ? npts_to_move : shift;
+	npts_to_zero = /* npts_to_move < shift ? npts_to_move : */ shift;
 	npts_to_move *= sizeof(double);
 	npts_to_zero *= sizeof(double);
 
@@ -142,7 +143,7 @@ static int check_step( scanchop *sc, EtnPs_t step, double weight ) {
 	sc->max_non_zero += shift;
 	if ( sc->max_non_zero >= sc->npts )
 	  nl_error( 4, "max_non_zero overflowed unexpectedly" );
-    idx = idx - sc->min_pos;
+    idx = step - sc->min_pos;
   } else {
 	idx = step - sc->min_pos;
 	if ( idx >= sc->npts ) {
@@ -169,7 +170,7 @@ static int check_step( scanchop *sc, EtnPs_t step, double weight ) {
 	  /* Now shift right by shift */
 	  sc->min_pos += shift;
 	  npts_to_move = sc->max_non_zero - sc->min_non_zero + 1;
-	  npts_to_zero = npts_to_move < shift ? npts_to_move : shift;
+	  npts_to_zero = /* npts_to_move < shift ? npts_to_move : */ shift;
 	  npts_to_move *= sizeof(double);
 	  npts_to_zero *= sizeof(double);
 
@@ -197,7 +198,7 @@ static int check_step( scanchop *sc, EtnPs_t step, double weight ) {
 	  sc->max_non_zero -= shift;
 	  if ( sc->min_non_zero >= sc->npts )
 		nl_error( 4, "min_non_zero overflowed unexpectedly" );
-	  idx = idx - sc->min_pos;
+	  idx = step - sc->min_pos;
 	}
   }
   return idx;
@@ -246,7 +247,6 @@ static void apply_weight( scanchop *sc, EtnPs_t step, double time, double weight
 	} else if ( idx == sc->max_non_zero ) {
 	  while ( sc->filter_weight[--sc->max_non_zero] <
 				FILTER_THRESHOLD );
-	  --sc->max_non_zero;
 	}
   } else if ( sc->min_non_zero == sc->max_non_zero && idx == sc->min_non_zero ) {
 	/* This should never happen */
@@ -338,7 +338,7 @@ void sc_point( scanchop *sc,
    Defines attributes PkPos, PkHeight, PkTime, PkStd and
    PkQuality.
 */
-void sc_endscan( scanchop *sc ) {
+int sc_endscan( scanchop *sc ) {
   double k11, k12, k21, k22, R1, R2, D, C, B, A, pkx, x;
   double low_step, high_step;
   
@@ -356,6 +356,11 @@ void sc_endscan( scanchop *sc ) {
 	  T += sc->dtds;
 	  apply_weight( sc, step, T, 0. );
 	}
+  }
+  if ( sc->sfw == 0 ) {
+	nl_error( 1, "NULL Scan: ignored" );
+	sc_scan_reset(sc);
+	return 0;
   }
   k11 = sc->sfw*sc->sx2 - sc->sx*sc->sx;
   k12 = sc->sfw*sc->sx3 - sc->sx2*sc->sx;
@@ -444,11 +449,20 @@ void sc_endscan( scanchop *sc ) {
 	  sx2 += sc->filter_weight[step]*y*y;
 	  sw += sc->filter_weight[step];
 	}
-	sc->PkStd = sqrt(sx2/sw);
+	if ( sw > 0 ) {
+	  sc->PkStd = sqrt(sx2/sw);
+	  if ( errno == EDOM ) {
+		nl_error( 2, "sqrt Domain error: sx2/sw = %lg/%lg", sx2, sw );
+	  }
+	} else {
+	  sc->PkStd = -1;
+	  nl_error( 1, "Useful stuff must have been shifted out" );
+	}
   }
   sc->NewStart = floor(pkx + ((double)sc->first_EtnPs - (double)sc->last_EtnPs+1)/2);
   sc->crnt_fit_line_ctr = pkx;
   sc_scan_reset(sc);
+  return 1;
 }
 
 /* Returns 1 while there are filter points to report. Fills
