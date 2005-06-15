@@ -42,12 +42,12 @@ State initialize {
   +1  > set etalon online position 30400
   +1  > set etalon online delta 10
   +1  > set etalon offline delta 450
-  +1  > set etalon altline delta 910
+  +1  > set etalon altline delta 1010
       # A is fixed, B is adjustable, so to speak.
   +1  > adjGate 1a delay set 75
   +1  > adjGate 1a width set 255
   +1  > adjGate 1b delay set 75
-  +1  > adjgate 1b width set 255
+  +1  > adjgate 1b width set 45
   +1  > adjGate 2a delay set 75
   +1  > adjGate 2a width set 255
   +1  > adjGate 2b delay set 0
@@ -239,7 +239,7 @@ State reset_etalon {
 
 State etalon_defaults {
       > set etalon online position 30500
-      > set etalon altline delta 910
+      > set etalon altline delta 1010
   +1  Validate record;
 }
 
@@ -276,9 +276,10 @@ State record {
       { if ((EtnFlg & IXFLAG_ALTLINE) == IXFLAG_ONLINE && last_altline != 0) {
 	  if (EtnPs > last_altline ||
 	      (last_altline - EtnPs) < 820 ||
-	      (last_altline - EtnPs) > 1020 ) {
+	      (last_altline - EtnPs) > 1220 ) { /* ### was 1020, but needed widening */
 	    ci_sendcmd( "Set Etalon Altline Delta 910\n", 0 );
 	    msg( 1, "Resetting Altline Delta" );
+	    last_altline = 0;
 	  }
 	}
       }
@@ -347,13 +348,13 @@ State Etalon_Scanmode NoLog {
 	> _Scan Etalon Out 75 by 5
 	> _Drive Etalon Online
     > _Scan Etalon In 75 by 5
-	> _Set Etalon Offline Delta -150 
+	> _Set Etalon Offline Delta -200 
     > _Drive Etalon Offline
 +10 > _Drive Etalon Altline
     > _Scan Etalon Out 75 by 5
 	> _Drive Etalon Online
 	> _Scan Etalon In 75 by 5
-	> _Set Etalon Offline Delta 785
+	> _Set Etalon Offline Delta 885
 	> _Drive Etalon Offline
 +10  Hold until (EtnFlg == IXFLAG_OFFLINE);
 	Resume Lab_read;

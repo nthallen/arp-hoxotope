@@ -136,7 +136,7 @@ State scanning_od {
 }
 
 State scanning_oh {
-  { if ( ! (EHV1S && EHV2S) ) lamps_on = 0; }
+  { if ( ! (EHV1S || EHV2S) ) lamps_on = 0; }
   { if ( EtnFlg & IXFLAG_SCAN ) {
       if ( oh_scan == 0 ) oh_scan = sc_new( 400, 4., 0 );
       sc_point( oh_scan, EtnPs, dtime(), Ratio );
