@@ -80,8 +80,8 @@ ROWS 18
 1/16 X2_HV PMT HV 2
 1/16 X1DAT PMT Temps 1D
 1/16 X1FAT PMT Temps 1F
-1/16 X2DAT PMT Temps 2D
-1/16 X2FAT PMT Temps 2F
+#1/16 X2DAT PMT Temps 2D
+#1/16 X2FAT PMT Temps 2F
 
 # OH Cell
 1/16 OClHV OHCell HV
@@ -130,6 +130,8 @@ ROWS 18
 1/16 SDP_T MiscTemps Thermistors
 1 Inl_T MiscTemps Thermistors
 1 PumpT MiscTemps Thermistors
+1 MotrT MiscTemps Thermistors
+1 FlowT MiscTemps Thermistors
 1 HtXT2 MiscTemps Mincos
 1 PhoT2 MiscTemps Mincos
 1 DetT2 MiscTemps Mincos
