@@ -44,7 +44,7 @@ spreadsheet jumbo 100
 	38 PVPos %5.1lf 
 ; Gas Addition System Diagnositcs (Temp. & Press.)
 	39 A_RgT %5.1lf 
-;	40 NOFlT %5.1lf 
+	40 FlowT %5.1lf 
 ;	41 NORgT %5.1lf 
 ;	42 SolDT %5.1lf 
 	43 AirHP %4.2lf 
@@ -68,9 +68,9 @@ spreadsheet jumbo 100
 	59 DLH_P %6.4lf 
 ; Detection Axes 1 & 2 Diagnostics
 	60 X1DAT %5.1lf 
-	61 X2DAT %5.1lf 
+;	61 X2DAT %5.1lf 
 	62 X1FAT %5.1lf 
-	63 X2FAT %5.1lf 
+	63 MotrT %5.1lf 
 	64 X1_HV %5.2lf 
 	65 X2_HV %5.2lf 
 	66 LMP_T %5.1lf 
