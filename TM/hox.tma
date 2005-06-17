@@ -151,20 +151,20 @@ State scan  {
       > Set Etalon Offline Delta 885
       > Drive Etalon Offline
   +1  > Pinch Valve Set Pressure Setpoint 20
-      "Measure Altline at 20 Torr
+      "Measure Altline at 20 Torr";
   +8  > Set Etalon Offline Delta -200
       > Drive Etalon Offline
-      "Measure Online at 20 Torr
+      "Measure Online at 20 Torr";
   +5  > Pinch Valve Set Pressure Setpoint 5
-      "Measure Online at 5 Torr
+      "Measure Online at 5 Torr";
   +8  > Set Etalon Offline Delta 885
       > Drive Etalon Offline
-      "Measure Altline at 5 Torr
+      "Measure Altline at 5 Torr";
   +5  > Pinch Valve Set Pressure Setpoint 10
-      "Measure Altline at 10 Torr
+      "Measure Altline at 10 Torr";
   +8  > Set Etalon Offline Delta -200
       > Drive Etalon Offline
-      "Measure Online at 10 Torr
+      "Measure Online at 10 Torr";
   +5  > Pinch Valve Set Pressure Setpoint 13.9
   
   +1  > drive etalon to 31000
@@ -415,7 +415,6 @@ State SW_Stat_Wait {
       case SWS_DIODES_OFF: diodes_on_requested = 0; break;
       case SWS_TIMEWARP: break;
       case SWS_PV_CLOSE: Validate Pinch_Valve_Close; break;
-      case SWS_PV_STEPS: Validate Pinch_Valve_Steps_Init; break;
       case SWS_PV_PI: Validate Pinch_Valve_PI_Init; break;
       case SWS_PV_SCAN: Validate Pinch_Valve_Scan; break;
       case SWS_STANDBY: Validate standby; break;
