@@ -6,12 +6,7 @@ ROWS 18
 # LaserTemps
 1/16 CIn_T Laser Temps In
 1/16 COutT Laser Temps Out
-1/16 LHx1T Laser Temps Hx1
-1/16 LHx2T Laser Temps Hx2
 1/16 LMP_T Laser Temps LMP
-1/4 LTE_I Laser Current
-1/4 LTETV Laser SetPoint
-1 LTEST Laser SetPoint
 1/16 NoseP Laser Pressure
 1 GrnP1 Laser Power
 
@@ -21,12 +16,19 @@ ROWS 18
 1/16 RLSD1ISP Diodes  Current SP1
 1/16 RLSD2ISP Diodes  Current SP2
 
-1 RLSD1T Diodes  DiodeTemps R1
-1 RLSD2T Diodes  DiodeTemps R2
-1 LSD1T Diodes  DiodeTemps 1
-1 LSD2T Diodes  DiodeTemps 2
-1/16 RLSD1TSP Diodes  DiodeTemps SP1
-1/16 RLSD2TSP Diodes  DiodeTemps SP2
+1 RLSD1T Diodes  Diode1 R1
+1/16 RLSD1TSP Diodes  Diode1 SP1
+1 LSD1T Diodes  Diode1 1
+1/16 LHx1T Diodes Diode1 Hx1
+1/16 LHx2T Diodes Diode1 Hx2
+1 RLSD2T Diodes  Diode2 R2
+1/16 RLSD2TSP Diodes  Diode2 SP2
+1 LSD2T Diodes  Diode2 2
+1/16 LHx1T Diodes Diode2 Hx1
+1/16 LHx2T Diodes Diode2 Hx2
+1/4 LTE_I Diodes Current
+1/4 LTETV Diodes SetPoint
+1 LTEST Diodes SetPoint
 1 On:RDiode_On:0 Diodes On
 
 # Other Topaz Stuff
@@ -40,13 +42,13 @@ ROWS 18
 # 1/2 RLHist0, RLHist1, RLHist2 Topaz 
 
 # Dye Laser
-1/4 DHx1T DyeLaser Temps Hx1
-1/4 DHx2T DyeLaser Temps Hx2
 1/16 DLH1T DyeLaser Temps H1
 1/16 DLH2T DyeLaser Temps H2
 1 DLooT DyeLaser Temps DLoop
 1/4 DRs_T DyeLaser Temps Drs
-1/4 DTE_I DyeLaser Current
+1/4 DHx1T DyeLaser Temps Hx1
+1/4 DHx2T DyeLaser Temps Hx2
+1/4 DTE_I DyeLaser TECCurrent
 1/4 DTETV DyeLaser SetPoint
 1 DTEST DyeLaser SetPoint
 1 DLH_P DyeLaser Pressure
@@ -69,6 +71,7 @@ ROWS 18
 1 UV_2V Excimer UV
 1/16 Lmp1T Excimer Temp
 1/16 Lmp2T Excimer Temp
+1 PAltP Excimer Pressure
 4 EHV1S:DStt1:1 Excimer Bits
 4 EHV2S:DStt0:3 Excimer Bits
 
@@ -149,6 +152,10 @@ ROWS 18
 1/16 Lngtd Nav Lngtd
 1/16 TASpd Nav TASpd
 1/16 TDrft Nav TDrft
+1/16 TPres Nav Pressure
+1/16 SPres Nav Pressure
+1/16 TTemp Nav Temperature
+1/16 STemp Nav Temperature
 
 1/4 BlwPs Bellows Step
 1/16 BAPos Bellows Pot
@@ -162,8 +169,8 @@ ROWS 18
 1/4 I:BlwSt:0 Bellows Bits
 4 Scan:IXStt:0 Bellows Bits
 
-4 EtnPs Etalon Step
-4 EtPos Etalon Step
+4 EtnPs Etalon Step Step
+4 EtPos Etalon Step Pot
 4 Et_LW Etalon LineWidth
 #4 C:EtnSt:7 Etalon Bits
 #4 Z:EtnSt:6 Etalon Bits
@@ -203,8 +210,9 @@ ROWS 18
 1 I:PVStat:0 Pinch Bits
 4 Scan:IXStt:7 Pinch Bits
 
-1 SD_P2 PControl Pressure
-1 PV_SetP PControl Pressure SetPoint
+1 SD__P PControl Pressure P
+1 SD_P2 PControl Pressure P2
+1 PV_SetP PControl Pressure Set
 1 PVStep PControl Step
 1 PV_Gp PControl Gains Gp
 1 PV_Gi PControl Gains Gi
