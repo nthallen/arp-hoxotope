@@ -12,7 +12,7 @@ PMTs {
   Title: >"PMTs"<
   Header: >KV<    >"øC"<;
   X1   (X1_HV,4) (X1DAT,5);
-  X2   (X2_HV,4) (X2DAT,5);
+  X2   (X2_HV,4);
   OCl  (OClHV,4);
 }
 TEC {
@@ -81,6 +81,8 @@ OtherT {
 # SolDT (SolDT,5);
   SDP_T (SDP_T,5);
   PumpT (PumpT,5);
+  MotrT (MotrT,5);
+  FlowT (FlowT,5);
   Lmp1T (Lmp1T,5);
   Lmp2T (Lmp2T,5);
 }

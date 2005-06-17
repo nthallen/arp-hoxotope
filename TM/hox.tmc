@@ -75,8 +75,8 @@ TM 1/16 Hz AD8_T30K   X1DAT; /* AXIS 1 PMT HOUSING TEMP */
 TM 1/16 Hz AD8_T30K   X1FAT; /* AXIS 1 HOUSING TEMP */
 TM 4    Hz AD12       X1Las; /* AXIS #1 X LAS(OH DETECT AXES) */
 TM 1/16 Hz AD8_KV     X2_HV; /* AXIS 2 PMT VOLTS HV MON */
-TM 1/16 Hz AD8_T30K   X2DAT; /* AXIS 2 PMT HOUSING TEMP */
-TM 1/16 Hz AD8_T30K   X2FAT; /* AXIS 2 HOUSING TEMP */
+TM 1/16 Hz AD8_T30K   PumpT; /* PumpT (X2DAT: AXIS 2 PMT HOUSING TEMP) */
+TM 1/16 Hz AD8_T30K   MotrT; /* (X2FAT: AXIS 2 HOUSING TEMP) */
 TM 4    Hz AD12       X2Las; /* AXIS #2 X LAS(OH DETECT AXES) */
 Address A_RgT  0xC25; /* AIR REGULATOR TEMP */
 Address AirHP  0xC29; /* AIR HIGH PRESSURE */
@@ -147,8 +147,8 @@ Address X1DAT  0xC1A; /* AXIS 1 PMT HOUSING TEMP */
 Address X1FAT  0xC1C; /* AXIS 1 HOUSING TEMP */
 Address X1Las  0xC84; /* AXIS #1 X LAS(OH DETECT AXES) */
 Address X2_HV  0xC1E; /* AXIS 2 PMT VOLTS HV MON */
-Address X2DAT  0xC16; /* AXIS 2 PMT HOUSING TEMP */
-Address X2FAT  0xC18; /* AXIS 2 HOUSING TEMP */
+Address PumpT  0xC16; /* AXIS 2 PMT HOUSING TEMP */
+Address MotrT  0xC18; /* Pump Motor Temp (X2FAT: AXIS 2 HOUSING TEMP) */
 Address X2Las  0xC86; /* AXIS #2 X LAS(OH DETECT AXES) */
 Address BmPsMux 0x833; /* Beam Position Mux Status */
 
@@ -175,7 +175,7 @@ TM 1 Hz AD12_PaltP PAltP; Address PAltP 0xCB0; /* (SAFF4 T10K) */
 TM 1/16 Hz AD8_T30K Lmp1T; Address Lmp1T 0xC46; /* (SolDT T30K) */
 TM 1/16 Hz AD8_T30K Lmp2T; Address Lmp2T 0xC2E; /* (NOFlT T30K) */
 TM 1 Hz AD8 HVPSP; Address HVPSP 0xC2B; /* High Voltage Power Supply Pressure (C3FCP) */
-TM 1 Hz AD8_T30K PumpT; Address PumpT 0xC48; /* Pump Temperature (C3F6T) */
+TM 1 Hz AD8_T30K FlowT; Address FlowT 0xC48; /* Flow Temp near Anemometer (was PumpT) (C3F6T) */
 TM 1 Hz AD12 PVPos; Address PVPos 0xCA8; /* Pinch Valve Pot Position (PAFF7 T30K) */
 TM 1 Hz PV_Gain_t PV_SetP;
 TM 1 Hz PV_Gain_t PV_Gi;

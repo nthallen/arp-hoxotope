@@ -31,7 +31,7 @@ State Pinch_Valve_Init {
   +1 > Set Pinch Valve Speed 1067 Hz
   +1 > Pinch Valve Set Gain Gp 8.0
   +1 > Pinch Valve Set Gain Gi 1.5
-  +1 > Pinch Valve Set Pressure SetPoint 17
+  +1 > Pinch Valve Set Pressure SetPoint 13.9
 }
 
 State Pinch_Valve_Close {
@@ -50,19 +50,15 @@ State Pinch_Valve_Close2 {
      else { msg( 2, "Pinch Valve step did not reset" ); }
      > Preset Pinch Valve Position to 0
      { if ( AC_S ) Validate Pinch_Valve_Closed; }
- +1  Hold until ( convert(PumpT) < 60 && convert(PumpT) >= 25 );
- +1  > Pump Close
+ +1  Hold until ( convert(PumpT) < 60 && convert(MotrT) < 60 );
  +2  > AC On
-     > Drive Pinch Valve out 80
  +60 depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Closed; }
      depending on (ABOVE_CLOUDS) { Validate Pinch_Valve_Closed; }
 }
 
 State Pinch_Valve_Closed {
-  > Drive Pinch Valve in 200
-  > Pump Open
   depending on (shutdown) { Validate Pinch_Valve_Shutdown; }
-  { if ( convert(PumpT) > 75 )
+  { if ( convert(PumpT) > 75 || convert(MotrT) > 75 )
       Validate Pinch_Valve_Pump_Overtemp;
   }
   depending on (ABOVE_CLOUDS) {
@@ -76,7 +72,7 @@ State Pinch_Valve_Closed {
 #---------------------------------------------------------------
 State Pinch_Valve_Failure {
   depending on (shutdown) { Validate Pinch_Valve_Shutdown; }
-  { if ( convert(PumpT) > 75 )
+  { if ( convert(PumpT) > 75 || convert(MotrT) > 75 )
       Validate Pinch_Valve_Pump_Overtemp;
   }
 
@@ -92,9 +88,9 @@ State Pinch_Valve_PI_Init {
 }
 
 State Pinch_Valve_PI NoLog {
-  depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Close; }
+  # depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Close; }
   depending on (ON_GROUND) { Validate Pinch_Valve_Close; }
-  { if ( convert(PumpT) > 75 )
+  { if ( convert(PumpT) > 75 || convert(MotrT) > 75 )
       Validate Pinch_Valve_Pump_Overtemp;
   }
   { double P, Gp, Gi, P_diff, dstep;
@@ -126,9 +122,9 @@ State Pinch_Valve_PI NoLog {
 }
 
 State Pinch_Valve_Scan {
-    depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Close; }
+    # depending on (BELOW_CLOUDS) { Validate Pinch_Valve_Close; }
     depending on (ON_GROUND) { Validate Pinch_Valve_Close; }
-    { if ( convert(PumpT) > 75 )
+    { if ( convert(PumpT) > 75 || convert(MotrT) > 75 )
 	Validate Pinch_Valve_Pump_Overtemp;
     }
 
@@ -151,61 +147,14 @@ State Pinch_Valve_Scan {
 
 State Pinch_Valve_Pump_Overtemp {
     { msg( 2, "Pump Over Temperature Shutoff" ); }
-    > AC Off
-    Validate Pinch_Valve_Close;
+ +1 > Enable HV1 Off
+ +1 > Enable HV2 Off
+ +1 > Drive Pinch Valve in 8000
+ +1 > AC Off
+    Validate Pinch_Valve_Close2;
 }
 
 State Pinch_Valve_Shutdown {
+    Hold Until ( PVStat & 1 ) or 2;
     > AC Off
-}
-
-%{
-  /* definitions for the old algo */
-  int n_p_rats = 0;
-  int n_p_set = 4;	
-  int n_steps = 3;
-  double est_steps = 0;
-  int est2_steps;
-  double P_avg = 0;
-%}
-
-
-#---------------------------------------------------------------
-# controls valve w/ proportional    
-# steps until close to target, then 
-# takes small, fixed steps          	
-#---------------------------------------------------------------
-State Pinch_Valve_Steps_Init {
-  { P_sum = n_p_rats = 0;
-    Validate Pinch_Valve_Steps;
-  }
-}
-
-State Pinch_Valve_Steps {
-  { n_p_rats++;
-    P_sum += convert(SD_P2);
-    n_p_set = A6SPt;
-    n_steps = A5SPt;
-    P_set = Convert(PV_SetP);
-
-    if (n_p_rats >= n_p_set) {
-      P_avg = P_sum/n_p_rats;
-      P_diff = P_avg - P_set;	  
-
-      /* proportional steps */
-      if ( fabs(P_diff) >= 0.2 ) {
-	est_steps = ( 240*(fabs(P_diff))/P_avg )*n_steps ;
-	est2_steps = (est_steps<300) ? floor(est_steps) : 300;
-	if (P_diff > 0)
-	  ci_sendfcmd(2,"Drive Pinch Valve In %u\n", est2_steps );
-	else ci_sendfcmd(2,"Drive Pinch Valve Out %u\n", est2_steps ); 
-      } else if ( (fabs(P_diff) < 0.2 ) && ( fabs(P_diff) > 0.05 ) ) {
-	/* tiny steps */
-	if (P_diff > 0)
-	  ci_sendfcmd( 2,"Drive Pinch Valve In %u\n", n_steps );
-	else ci_sendfcmd(2,"Drive Pinch Valve Out %u\n", n_steps); 
-      }
-      P_sum = n_p_rats = 0;
-    }
-  }
 }

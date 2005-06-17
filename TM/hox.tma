@@ -144,6 +144,29 @@ State scan  {
   +1  > topaz diode 2 temperature 28.0 C
   +1  > topaz diode 2 temperature 28.0 C
   +1  Hold until valid (laser_diodes_on);
+  
+      #----------------------------------------
+      # Pressure calibration
+      #----------------------------------------
+      > Set Etalon Offline Delta 885
+      > Drive Etalon Offline
+  +1  > Pinch Valve Set Pressure Setpoint 20
+      "Measure Altline at 20 Torr
+  +8  > Set Etalon Offline Delta -200
+      > Drive Etalon Offline
+      "Measure Online at 20 Torr
+  +5  > Pinch Valve Set Pressure Setpoint 5
+      "Measure Online at 5 Torr
+  +8  > Set Etalon Offline Delta 885
+      > Drive Etalon Offline
+      "Measure Altline at 5 Torr
+  +5  > Pinch Valve Set Pressure Setpoint 10
+      "Measure Altline at 10 Torr
+  +8  > Set Etalon Offline Delta -200
+      > Drive Etalon Offline
+      "Measure Online at 10 Torr
+  +5  > Pinch Valve Set Pressure Setpoint 13.9
+  
   +1  > drive etalon to 31000
   +5  { double Pot_Step;
 		Pot_Step = convert(EtPos);
@@ -406,7 +429,7 @@ State SW_Stat_Wait {
 State SW_Stat_Reset {
   > SW Status Value to 0
   Hold until (SW_St == 0) or 10;
-  Validate SW_Stat_wait;
+  Validate SW_Stat_Wait;
 }
 
 PARTITION
@@ -528,4 +551,31 @@ State ABOVE_CLOUDS {
           (!using_swp && convert(PaltP) > P_clouds_dn))
         Validate BELOW_CLOUDS;
     }
+}
+
+PARTITION
+#------------------------------------------------------------------
+# PARTITION 7: Valve supervisor
+#   Watch for ABOVE_CLOUDS -> BELOW_CLOUDS transition, and perform
+#   pressure scans by manipulating the pressure setpoint.
+#------------------------------------------------------------------
+
+State PVP_Init {
+  Hold until valid ( ABOVE_CLOUDS );
+  Hold until valid ( BELOW_CLOUDS );
+   +1 > Enable HV1 Off
+   +1 > Enable HV2 Off
+   +1 Validate PVP_Scan;
+}
+
+State PVP_Scan {
+      Hold until (EtnFlg == IXFLAG_OFFLINE);
+      > Pinch Valve Set Pressure Setpoint 5
+  +15 Hold until (EtnFlg == IXFLAG_OFFLINE);
+      > Pinch Valve Set Pressure Setpoint 10
+  +15 Hold until (EtnFlg == IXFLAG_OFFLINE);
+      > Pinch Valve Set Pressure Setpoint 15
+  +15 Hold until (EtnFlg == IXFLAG_OFFLINE);
+      > Pinch Valve Set Pressure Setpoint 20
+  +15 Validate PVP_Scan;
 }

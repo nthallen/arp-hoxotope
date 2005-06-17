@@ -5,7 +5,7 @@ DetAxes {
   Fixed: (SX1FG,5) (SX2FG,5) (LABFG,5);
   Adjst: (SX1AG,5) (SX2AG,5) (LABAG,5);
   Bkgnd: (SX1BG,6) (SX2BG,6) (LABBG,6);
-  "X*FAT:" (X1FAT,5) (X2FAT,5) >"øC";
+  "X*FAT:" (X1FAT,5) "" >"øC";
   "X*Las:" (XL_TP,5) (X2Las,6) >Std;
   HBox { "("; (XL_X,4); ","; (XL_Y,4); ") " };
 }
