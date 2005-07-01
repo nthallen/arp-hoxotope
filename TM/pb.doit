@@ -3,7 +3,7 @@ playback
 display hoxdisp hox hox1
 colorconfig hox.cfg
 memo
-algorithm hoxalgo -p
+algorithm hoxalgo -pll
 extraction hoxrtgext
 algorithm p2rtgext -p
 rtg /home/hoxp/pb.rtg

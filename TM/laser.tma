@@ -67,8 +67,8 @@ State laser_hx_init {
     +1  > Power 28V Switched Off
 	    "Waiting for LHX1T < 30";
 		Hold Until ( convert(LHX1T) < 30 );
-		{ lhx_overtemp = 0; }
-		> Power 28V Switched On
+	+1	{ lhx_overtemp = 0; }
+	+1	> Power 28V Switched On
 		Validate laser_hx_init2;
 }
 

@@ -30,7 +30,7 @@ PARTITION
 State Pinch_Valve_Init {
   +1 > Set Pinch Valve Speed 1067 Hz
   +1 > Pinch Valve Set Gain Gp 8.0
-  +1 > Pinch Valve Set Gain Gi 1.5
+  +1 > Pinch Valve Set Gain Gi 2.0
   +1 > Pinch Valve Set Pressure SetPoint 13.9
 }
 

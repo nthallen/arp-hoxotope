@@ -3,7 +3,8 @@ spreadsheet sd_pt 8
 	2 PAltP %6.4lf
 	3 DucT1 %5.1lf 
 	4 DucT2 %5.1lf 
-	5 SD_P2 %6.4lf 
+	5 SD_P2 %6.4lf
+	6 Anemo %6.4lf 
 
 spreadsheet ohcell 9
 	1 SOCFG %5.0lf To_Double
