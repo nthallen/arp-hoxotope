@@ -1,4 +1,0 @@
-extract $1 hox1ext hox2ext hox3ext hox4ext
-where=/home/strat/anal
-snafu -b$where/signal.inp 0.022 0.05
-# snafu -b$where/sigcorr.inp

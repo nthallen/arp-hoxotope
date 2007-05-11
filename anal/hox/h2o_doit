@@ -1,5 +1,0 @@
-# Script to run mode 2 data anal
-rm avg_h2o.sps
-snafu -b//35/home/hoxp/anal/h2o_merge.inp
-sps2mat -b//35/home/hoxp/anal/h2o2mat.inp
-
