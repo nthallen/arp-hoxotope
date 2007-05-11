@@ -26,6 +26,7 @@ hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma valve.tma
 hoxrtgext : rtgcorr.tmc PSD.tmc hox.tmg
 hox1ext : idxflag.tmc hox1.edf
 hox2ext : idxflag.tmc PSD.tmc hox2.edf
+hox3ext : hox3.edf
 hxengext : idxflag.tmc PSD.tmc hxeng.edf
 nortext : idxflag.tmc nort.edf
 lifeext : time.tmc rtgcorr.tmc life.cyc lifeavg.tmc lifeext.tmc

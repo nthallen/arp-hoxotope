@@ -52,8 +52,8 @@ State laser_eval {
 
 State laser_eval_on {
         { laser_on_requested = 1; }
-		# Assume 28V Switched has been on and OK
-    +1  > Power 28V Switched On
+		# Assume 28V switched has been on and OK
+	+1  > Power 28V Switched On
     +1  > Topaz Frequency 0
     +1  > Topaz KDP SetPoint 3000
         { if ( RLHist0 != 2 && RLHist0 != 4 )
@@ -342,5 +342,5 @@ State uv_check {
 State interlock_fail    {
             "FAILED";
             {msg(1, "interlock failure.");  }
-#   +1 Validate shutdown;
+   +1 Validate shutdown;
 }

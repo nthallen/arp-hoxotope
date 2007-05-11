@@ -4,14 +4,14 @@ spreadsheet nortIX 5
    3 EtnSt %5.0lf
    4 EtnFlg %5.0lf
 
-# spreadsheet nortBP 8
-# 	condition depending on (2Hz)
-# 	1 BmPsN %8.4lf
-# 	2 BmPsS %8.4lf
-# 	3 BmPsE %8.4lf
-# 	4 BmPsW %8.4lf
-# 	5 BmPsMux %5.0lf
-# 	6 UVMon  %8.4lf
+spreadsheet nortBP 8
+condition depending on (2Hz)
+ 	1 BmPsN %8.4lf
+ 	2 BmPsS %8.4lf
+ 	3 BmPsE %8.4lf
+ 	4 BmPsW %8.4lf
+ 	5 BmPsMux %5.0lf
+	6 UVMon  %8.4lf
 
 # spreadsheet test 4
 # 	condition depending on (2Hz)

@@ -53,7 +53,7 @@ State initialize {
   +1  > adjGate 2b delay set 0
   +1  > adjgate 2b width set 20
   +1  > power solenoids and steppers on
-  +1  Validate Pinch_Valve_Close;
+#  +1  Validate Pinch_Valve_Close;
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
       > Drive etalon out 10000
@@ -356,13 +356,13 @@ State Etalon_Scanmode NoLog {
 	> _Scan Etalon Out 75 by 5
 	> _Drive Etalon Online
     > _Scan Etalon In 75 by 5
-	> _Set Etalon Offline Delta -200 
+	> _Set Etalon Offline Delta -220 
     > _Drive Etalon Offline
 +10 > _Drive Etalon Altline
     > _Scan Etalon Out 75 by 5
 	> _Drive Etalon Online
 	> _Scan Etalon In 75 by 5
-	> _Set Etalon Offline Delta 885
+	> _Set Etalon Offline Delta 865
 	> _Drive Etalon Offline
 +10  Hold until (EtnFlg == IXFLAG_OFFLINE);
 	Resume Lab_read;
@@ -441,8 +441,8 @@ PARTITION
 %{ /* Bellows constants. Dye_P_Low/High are specified here as
         Volts times a conversion factor.
     */
-  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.1 * .1 * 65536.);
-  AD12_uGg Dye_P_High = (AD12_uGg) (5.1 * .1 * 65536.);
+  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.15 * .1 * 65536.);
+  AD12_uGg Dye_P_High = (AD12_uGg) (5.15 * .1 * 65536.);
   IndxrPos Bellows_Drive_Low = 5000;
   IndxrPos Bellows_Drive_High = 61000;
 %}
@@ -549,7 +549,7 @@ State PVP_Init {
   Hold until valid ( BELOW_CLOUDS );
    +1 > Enable HV1 Off
    +1 > Enable HV2 Off
-   +1 > Pinch Valve Set Gain Gi 1.0
+   +1 > Pinch Valve Set Gain Gi 0.8
    +1 Validate PVP_Scan;
 }
 
