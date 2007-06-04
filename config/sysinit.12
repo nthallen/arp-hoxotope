@@ -1,0 +1,20 @@
+export TZ=utc00
+rtc hw
+Dev &                
+Dev.con -n 4 &
+reopen
+echo Booting Node $NODE from file `/usr/bin/fullpath -t $0`
+Dev.ser &
+emu87 &
+Net &
+netmap -f
+Net.ether9000 -l2 &
+/usr/local/bin/subbus_104 &
+if [ -d //1/ ]; then
+  echo "Running nameloc -k1 -w"
+  nameloc -k1 -w
+elif [ -d //49/ ]; then
+  echo "Running nameloc -k49 -w"
+  nameloc -k49 -w
+fi
+tinit -T /dev/con[2-4] -c "login -f flight" -t /dev/con1 &

@@ -1,9 +1,0 @@
-# Hox GSE w/ algorithm w/ windows
-inetin
-display hoxdisp hox hox1
-colorconfig hox.cfg
-memo
-algorithm hoxalgo -p
-extraction hoxrtgext
-algorithm prtgext -p
-rtg /home/hoxp/pb.rtg

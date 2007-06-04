@@ -1,2 +1,0 @@
-double Time; invalidate Time;
-depending on (1 Hz) { Time = dtime(); Validate Time; }

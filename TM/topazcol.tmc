@@ -1,7 +1,0 @@
-%{
-  #include "topaz.h"
-  Paz_frame Paz_data;
-  #define Topaz(x,y) Convert_Topaz_Data( Paz_data.x, y )
-  pid_t PAZ_proxy = 0;
-  static unsigned char secs_since_hearing = 0;
-%}

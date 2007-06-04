@@ -1,9 +1,0 @@
-# Hox GSE w/ algorithm w/ windows
-playback
-display hoxdisp hox hox1
-colorconfig hox.cfg
-memo
-algorithm hoxalgo -p
-extraction hoxrtgext
-algorithm p2rtgext -p
-rtg /home/hoxp/pb.rtg
