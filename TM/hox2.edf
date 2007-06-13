@@ -37,7 +37,7 @@ spreadsheet jumbo 100
 	31 UV_2V %5.1lf 
 	32 DucT1 %5.1lf 
 	33 DucT2 %5.1lf 
-	34 HtXT2 %5.1lf 
+;	34 HtXT2 %5.1lf 
 	35 PhoT2 %5.1lf 
 	36 DetT2 %5.1lf 
 	37 PAltP %5.1lf 

@@ -46,7 +46,7 @@ State GreenPeak {
 		{ if ( SW_St == SWS_GRNPK_OFF ) Validate GreenPeak_Stop; }
 		{ if ( SW_St == SWS_GRNPK_SCAN ) Validate GreenPeak_Scan; }
 		{ GP_crnt_KDPTSP = convert( RKDPTSP ); }
-		/* depending on (1 Hz, DL_TP Once) */ {
+		{ /* depending on (1 Hz, DL_TP Once) */
 		  if ( GP_Delay < GP_DELAY_PTS ) GP_Delay++;
 		  else {
 			GP_Sum += GrnP1; /* DL_TP; */
@@ -115,7 +115,7 @@ State GreenPeakSeek {
 		{ ci_sendfcmd( 2, "Topaz KDP SetPoint %d\n", 
 									GP_MAX_KDPTSP ); }
 
-		/* depending on (1 Hz, DL_TP Once) */ {
+		{ /* depending on (1 Hz, DL_TP Once) */
 		  if ( GP_Delay < GP_DELAY_PTS ) GP_Delay++;
 		  else {
 			GP_Sum += GrnP1; /* DL_TP; */

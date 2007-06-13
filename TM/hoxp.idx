@@ -23,13 +23,13 @@ channel 2 Attenuator
   scan
   chop
   disable zeroref
-# channel 3 Gate Valve
-#   position 1/4 Hz GtVPs
-#   status   1/4 Hz GtVSt Diagram GtVStatus
-#   scanstat GtVFlg
-#   speed 1067 Hz
-#   disable zeroref
-#   scan
+channel 3 Primary Duct Valve
+   position 1 Hz PDVStep
+   status   1 Hz PDVStat Diagram PDVStatFlag
+   scanstat PDVScan
+   speed 1067 Hz
+   disable zeroref
+   scan
 channel 4 Pinch Valve
   position 1 Hz PVStep
   status   1 Hz PVStat Diagram PVStatFlag

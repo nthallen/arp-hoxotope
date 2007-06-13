@@ -55,6 +55,23 @@ AirFlow {
   Gp: (PV_Gp,5);
   Gi: (PV_Gi);
 }
+PDValve {
+  HBox { -; Title: Primary; - };
+  #VGlue 0+1;
+  >{(PDVStep,5)     (PDVPos,4);
+    (PDVStatFlag,5) (PDVScan,4);
+  }<;
+}
+
+Inlet {
+  PD__T (PD__T,5) C;
+  PDSkT (PDSkT,5) C;
+  WingT (WingT,5) C;
+  Elb_T (Elb_T,5) C;
+  PD__P (PD__P,5) T;
+  PD_DP (PD_DP,5) T;
+  Inl_DP (Inl_DP,5) T;
+}
 Laser {
   Title: >Laser<;
   Power (LaserS,3);
@@ -106,6 +123,7 @@ Table {
 		  [Housekeeping];
 		  [HBar];
 		  [PMTs];
+		  [PDValve];
 		};
 		+|+;
 		Table {
@@ -117,16 +135,18 @@ Table {
 		[AirFlow];
 		+|+;
 		Table {
+		  [Inlet];
 		  [Laser];
-		  VGlue 0+1;
-                  [Software];
+		  # VGlue 0+1;
+          # [Software];
 		  # [Status];
 		};
 		+|+;
 		Table {
 		  [OtherT];
 		  [HBar];
-		  { >(flttime,9);
+		  { SW:  (SW_St,3);
+		    >(flttime,9);
 		    MFCtr: (MFCtr,5) };
 		};
 		+|+;

@@ -21,7 +21,7 @@ spreadsheet hxeng_1 64
   17 FlowT %5.1lf
   18 GrnP1 %5.1lf
   19 HVPSP %5.1lf
-  20 HtXT2 %5.1lf
+; 20 HtXT2 %5.1lf
   21 Inl_T %5.1lf
   22 KDP_H %5.1lf
   23 L12AV %5.1lf
