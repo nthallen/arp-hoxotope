@@ -26,16 +26,16 @@ RTG_REPORT( Et_LW, dtime(), convert(Et_LW) );
 RTG_REPORT( SD__P, dtime(), convert(SD__P) );
 RTG_REPORT( SD_P2, dtime(), convert(SD_P2) );
 RTG_REPORT( A7SPt, dtime(), convert(A7SPt) );
-RTG_REPORT( BmPsN, dtime(), convert(BmPsN) );
-RTG_REPORT( BmPsS, dtime(), convert(BmPsS) );
-RTG_REPORT( BmPsE, dtime(), convert(BmPsE) );
-RTG_REPORT( BmPsW, dtime(), convert(BmPsW) );
-RTG_REPORT( DL_X, dtime(), DL_X );
-RTG_REPORT( DL_Y, dtime(), DL_Y );
-RTG_REPORT( DL_TP, dtime(), DL_TP );
-RTG_REPORT( XL_X, dtime(), XL_X );
-RTG_REPORT( XL_Y, dtime(), XL_Y );
-RTG_REPORT( XL_TP, dtime(), XL_TP );
+/* RTG_REPORT( BmPsN, dtime(), convert(BmPsN) ); */
+/* RTG_REPORT( BmPsS, dtime(), convert(BmPsS) ); */
+/* RTG_REPORT( BmPsE, dtime(), convert(BmPsE) ); */
+/* RTG_REPORT( BmPsW, dtime(), convert(BmPsW) ); */
+/* RTG_REPORT( DL_X, dtime(), DL_X ); */
+/* RTG_REPORT( DL_Y, dtime(), DL_Y ); */
+/* RTG_REPORT( DL_TP, dtime(), DL_TP ); */
+/* RTG_REPORT( XL_X, dtime(), XL_X ); */
+/* RTG_REPORT( XL_Y, dtime(), XL_Y ); */
+/* RTG_REPORT( XL_TP, dtime(), XL_TP ); */
 
 { double press, mult, uv;
   press = convert(SD__P) + 5.2;

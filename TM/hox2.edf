@@ -93,8 +93,8 @@ spreadsheet jumbo 100
 	81 LTE_I %4.1lf 
 	82 LTETV %4.2lf 
 ; Laser Operation 2
-;   83 GrnP1 %4.2lf
-	83 DL_TP %8.4lf 
+        83 GrnP1 %4.2lf
+;	83 DL_TP %8.4lf 
 	84 RLSD1T %6.2lf 
 	85 RLSD2T %6.2lf 
 	86 RLSD1TSP %6.2lf
@@ -109,8 +109,8 @@ spreadsheet jumbo 100
 	95 RepRate1 %5.0lf
 	96 TopazSecs %3lf
 ; Counts
-;	97 X1Las %6.4lf 
-	97 XL_TP %8.4lf
+	97 X1Las %6.4lf 
+;	97 XL_TP %8.4lf
 	98 X2Las %6.4lf 
 	99 UVMon %6.4lf 
 

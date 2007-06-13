@@ -4,11 +4,12 @@ TM 1/16 Hz AD8        AirLP; /* AIR LOW PRESSURE */
 TM 1/16 Hz NAV_Alttd  Alttd; /* NAV Altitude */
 TM 1/4  Hz AD8        AtPos; /* ATTENUATOR POSN POT */
 TM 1/16 Hz AD8        BAPos; /* BELLOWS ACTUATOR POSITION */
-TM 2    Hz AD12_PSD   BmPsN; /* Beam Pos (PAFF1) */
-TM 2    Hz AD12_PSD   BmPsS; /* Beam Pos (PAFF2) */
-TM 2    Hz AD12_PSD   BmPsE; /* Beam Pos (PAFF3) */
-TM 2    Hz AD12_PSD   BmPsW; /* Beam Pos (PAFF4) */
-TM 2    Hz DStat      BmPsMux; /* Beam Position Mux Status */
+TM 1    Hz AD12_DP    Inl_DP; /* Inlet Diff P (BmPsN/PAFF1) */
+TM 1    Hz AD12_PDP   PD__P; /* Primary Duct Pressure (BmPsS/PAFF2) */
+TM 1    Hz AD12_DP    PD_DP; /* Pri. Duct. Diff P (BmPsE/PAFF3) */
+TM 1    Hz AD12_T30K  WingT; /* Wing Temp (BmPsW/PAFF4) */
+TM 1 Hz AD12_T30K PDSkT; Address PDSkT 0xCA4; /* Pri Duct Skin Temp. (PAFF5) */
+TM 1 Hz AD12_T30K PD__T; Address PD__T 0xCA6; /* Pri Duct Temp (PAFF6) */
 TM 1/16 Hz AD8_T30K   CIn_T; /* TFR COOLANT TEMPERATURE IN */
 TM 1/16 Hz AD8_T30K   COutT; /* TFR COOLANT TEMPERATURE OUT */
 TM 1    Hz AD8        KDP_H; /* Doubler Temp from Laser Head */
@@ -56,6 +57,7 @@ TM 1/16 Hz AD8_T30K   OHC2T; /* OH CELL TEMP 2 */
 TM 1/16 Hz AD8_T30K   OHCHT; /* OH CELL HOUSING TEMP */
 TM 1/16 Hz AD8_5A     OHCLI; /* OH CELL LAMP CURRENT */
 TM 1/16 Hz AD8_T10K75 PC__T; /* PC TEMPERATURE */
+TM 1    Hz AD8        PDVPos; /* Pri Duct Valve Position */
 TM 1/16 Hz AD8_T30K   PMonT; /* 282nm DETECTOR TEMP */
 TM 1/16 Hz AD8_T30K   PS__T; /* MAIN POWER SUPPLY TEMP */
 TM 1    Hz AD12_DDTORR SD__P; /* SECONDARY DUCT PRS OUTPUT */
@@ -127,10 +129,11 @@ Address OClUV  0xC2C; /* OH CELL UV MONITOR */
 Address OHC2T  0xC30; /* OH CELL TEMP 2 */
 Address OHCHT  0xC26; /* OH CELL HOUSING TEMP */
 Address OHCLI  0xC28; /* OH CELL LAMP CURRENT */
-Address BmPsN  0xC9C; /* PRIMARY AIR FLOW FWD TEMP 1 */
-Address BmPsS  0xC9E; /* PRIMARY AIR FLOW FWD TEMP 2 */
-Address BmPsE  0xCA0; /* PRIMARY AIR FLOW FWD TEMP 3 */
-Address BmPsW  0xCA2; /* PRIMARY AIR FLOW FWD TEMP 4 */
+Address Inl_DP 0xC9C; /* BmPsN/PAFF1 */
+Address PD__P  0xC9E; /* BmPsS/PAFF2 */
+Address PD_DP  0xCA0; /* BmPsE/PAFF3 */
+Address PDVPos 0xC3D; /* Pri Duct Valve Position */
+Address WingT  0xCA2; /* BmPsW/PAFF4 */
 Address PC__T  0xC3C; /* PC TEMPERATURE */
 Address PMonT  0xC1D; /* 282nm DETECTOR TEMP */
 Address PS__T  0xC32; /* MAIN POWER SUPPLY TEMP */
@@ -150,20 +153,9 @@ Address X2_HV  0xC1E; /* AXIS 2 PMT VOLTS HV MON */
 Address PumpT  0xC16; /* AXIS 2 PMT HOUSING TEMP */
 Address MotrT  0xC18; /* Pump Motor Temp (X2FAT: AXIS 2 HOUSING TEMP) */
 Address X2Las  0xC86; /* AXIS #2 X LAS(OH DETECT AXES) */
-Address BmPsMux 0x833; /* Beam Position Mux Status */
-
-Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) {
-  BmPsMux = ( sbba(BmPsMux.address) & 0x10 ) ? 1 : 0;
-  BmPsN = (sbwa(BmPsN.address)>>4) & 0xFFF;
-  BmPsS = (sbwa(BmPsS.address)>>4) & 0xFFF;
-  BmPsE = (sbwa(BmPsE.address)>>4) & 0xFFF;
-  BmPsW = (sbwa(BmPsW.address)>>4) & 0xFFF;
-  DigSelect( 52, (1-BmPsMux)*0xFFFF ); 
-/*  DigSelect( 52, 0 * 0xFFFF ); */
-}
 
 TM 1 Hz AD12_T30K30KU Inl_T; Address Inl_T 0xCB2; /* Inlet Temperature (SAFB1 T10K) */
-TM 1 Hz AD12_T30K30KU HtXT2; Address HtXT2 0xCB4; /* (SAFB2 T10K) */
+TM 1 Hz AD12_T30K30KU Elb_T; Address Elb_T 0xCB4; /* (SAFB2 T10K) (HxXT2 T30K30KU) */
 TM 1 Hz AD12_T30K30KU PhoT2; Address PhoT2 0xCB6; /* (SAFB3 T10K) */
 TM 1 Hz AD12_T30K30KU DetT2; Address DetT2 0xCB8; /* (SAFB4 T10K) */
 TM 1 Hz AD12_DucT1 DucT1; Address DucT1 0xCBA; /* (SAFB5 T10K) */
@@ -194,7 +186,22 @@ TM 1/16 Hz NAV_Temp STemp;
 /* TM 2 Hz AD8_PSD BmPsS; Address BmPsS 0xC17; */ /* Beam Position Monitor S */
 /* TM 2 Hz AD8_PSD BmPsE; Address BmPsE 0xC15; */ /* Beam Position Monitor E */
 /* TM 2 Hz AD8_PSD BmPsW; Address BmPsW 0xC13; */ /* Beam Position Monitor W */
-/* TM 1 Hz AD12_T30K PAFF5; Address PAFF5 0xCA4; */ /* PRIMARY AIR FLOW FWD TEMP 5 */
-/* TM 1 Hz AD12_T30K PAFF6; Address PAFF6 0xCA6; */ /* PRIMARY AIR FLOW FWD TEMP 6 */
 /* TM 1 Hz AD12_T10K SAFB7; Address SAFB7 0xCBE; */ /* SECONDARY AIR FLOW B 7 */
 /* TM 1/4 Hz AD8 SVPos; Address SVPos  0xC3B; */ /* SECONDARY THROTTLE VALVE POSN */
+
+/* TM 2    Hz AD12_PSD   BmPsN; */ /* Beam Pos (PAFF1) */
+/* TM 2    Hz AD12_PSD   BmPsS; */ /* Beam Pos (PAFF2) */
+/* TM 2    Hz AD12_PSD   BmPsE; */ /* Beam Pos (PAFF3) */
+/* TM 2    Hz AD12_PSD   BmPsW; */ /* Beam Pos (PAFF4) */
+/* TM 2    Hz DStat      BmPsMux; */ /* Beam Position Mux Status */
+/* Address BmPsMux 0x833; */ /* Beam Position Mux Status */
+
+/* Group BmPos ( BmPsN, BmPsS, BmPsE, BmPsW, BmPsMux ) { */
+/*   BmPsMux = ( sbba(BmPsMux.address) & 0x10 ) ? 1 : 0; */
+/*   BmPsN = (sbwa(BmPsN.address)>>4) & 0xFFF; */
+/*   BmPsS = (sbwa(BmPsS.address)>>4) & 0xFFF; */
+/*   BmPsE = (sbwa(BmPsE.address)>>4) & 0xFFF; */
+/*   BmPsW = (sbwa(BmPsW.address)>>4) & 0xFFF; */
+/*   DigSelect( 52, (1-BmPsMux)*0xFFFF );  */
+/*  DigSelect( 52, 0 * 0xFFFF ); */
+/* } */

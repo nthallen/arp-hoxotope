@@ -19,22 +19,22 @@ TGTDIR = $(TGTNODE)/home/hoxp
 OBJ = hox2.cfg index.html
 
 hoxpcol : hoxcol.tmc nav.tmc navcol.tmc idxcol.tmc topaz.c topazcol.tmc
-hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc PSD.tmc flttime.tmc hox.tbl hox1.tbl topaztxt.c hox2.tbl
-hoxalgo : hoxpbits.tmc idxflag.tmc PSD.tmc hox.tma laser.tma valve.tma
+hoxdisp : BGcts.tmc hox.cfg idxflag.tmc hoxpbits.tmc flttime.tmc hox.tbl hox1.tbl topaztxt.c hox2.tbl
+hoxalgo : hoxpbits.tmc idxflag.tmc hox.tma laser.tma valve.tma
 # valvealgo : idxflag.tmc valve_only.tma valve.tma
 # laser.sft : hox.slp laser.sol
-hoxrtgext : rtgcorr.tmc PSD.tmc hox.tmg
+hoxrtgext : rtgcorr.tmc hox.tmg
 hox1ext : idxflag.tmc hox1.edf
-hox2ext : idxflag.tmc PSD.tmc hox2.edf
+hox2ext : idxflag.tmc hox2.edf
 hox3ext : hox3.edf
-hxengext : idxflag.tmc PSD.tmc hxeng.edf
+hxengext : idxflag.tmc hxeng.edf
 nortext : idxflag.tmc nort.edf
 lifeext : time.tmc rtgcorr.tmc life.cyc lifeavg.tmc lifeext.tmc
 # fastext : fast.edf
 scanext : ohf.c scanchop.c idxflag.tmc hoxpbits.tmc scanning2.tma scanext.tmc
-peakalgo : ohf.c idxflag.tmc chop.tmc PSD.tmc scanning.tma getscan.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
-peak2algo : ohf.c scanchop.c idxflag.tmc hoxpbits.tmc PSD.tmc scanning2.tma bellows.tmc peak.oui grnpw.tma
-peakext : ohf.c scanchop.c idxflag.tmc hoxpbits.tmc chop.tmc PSD.tmc scanning2.tma scan_ss.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
+peakalgo : ohf.c idxflag.tmc chop.tmc scanning.tma getscan.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
+peak2algo : ohf.c scanchop.c idxflag.tmc hoxpbits.tmc scanning2.tma bellows.tmc peak.oui grnpw.tma
+peakext : ohf.c scanchop.c idxflag.tmc hoxpbits.tmc chop.tmc scanning2.tma scan_ss.tmc dither.tmc bellows.tmc peak.oui grnpw.tma
 prtgext : ohf.c idxflag.tmc scanning.tma getscan.tmc scan.tmg chop.tmc dither.tmc bellows.tmc peak.oui
 p2rtgext : ohf.c scanchop.c idxflag.tmc hoxpbits.tmc scanning2.tma scan2.tmg peak.oui
 pdoit : hox.doit
