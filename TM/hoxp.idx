@@ -28,6 +28,7 @@ channel 3 Primary Duct Valve
    status   1 Hz PDVStat Diagram PDVStatFlag
    scanstat PDVScan
    speed 1067 Hz
+   invert direction
    disable zeroref
    scan
 channel 4 Pinch Valve
