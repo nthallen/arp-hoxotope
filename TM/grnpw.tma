@@ -8,7 +8,7 @@ Partition
 %{
   #include "CmdData.h"
   #define GP_SMALL_STEP 100
-  #define GP_SMALL_DP 50
+  #define GP_SMALL_DP 2 /* Was 50 when using DL_TP */
   #define GP_DELAY_PTS 20
   #define GP_AVERAGE_PTS 10
   #define GP_MAX_KDPTSP 4000
