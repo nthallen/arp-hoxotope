@@ -42,7 +42,7 @@ State initialize {
   +1  > set etalon online position 30600
   +1  > set etalon online delta 10
   +1  > set etalon offline delta 450
-  +1  > set etalon altline delta 1010
+  +1  > set etalon altline delta 925
       # A is fixed, B is adjustable, so to speak.
   +1  > adjGate 1a delay set 75
   +1  > adjGate 1a width set 255
@@ -148,7 +148,7 @@ State scan  {
       #----------------------------------------
       # Pressure calibration
       #----------------------------------------
-      > Set Etalon Offline Delta 885
+      > Set Etalon Offline Delta 725
       > Drive Etalon Offline
   +1  > Pinch Valve Set Pressure Setpoint 20
       "Measure Altline at 20 Torr";
@@ -157,7 +157,7 @@ State scan  {
       "Measure Online at 20 Torr";
   +5  > Pinch Valve Set Pressure Setpoint 5
       "Measure Online at 5 Torr";
-  +8  > Set Etalon Offline Delta 885
+  +8  > Set Etalon Offline Delta 725
       > Drive Etalon Offline
       "Measure Altline at 5 Torr";
   +5  > Pinch Valve Set Pressure Setpoint 10
@@ -180,7 +180,7 @@ State scan  {
       }
   +1  > Drive etalon To 30000
   +1  > Peakup on
-  +1  > Set etalon altline delta 1010
+  +1  > Set etalon altline delta 925
   +1  > Scan etalon out 2000 by 5
       Validate scanning;
 }
@@ -261,8 +261,8 @@ State reset_etalon {
 }
 
 State etalon_defaults {
-      > set etalon online position 30500
-      > set etalon altline delta 1010
+      > set etalon online position 30600
+      > set etalon altline delta 925
   +1  Validate record;
 }
 
@@ -298,9 +298,9 @@ State record {
       }
       { if ((EtnFlg & IXFLAG_ALTLINE) == IXFLAG_ONLINE && last_altline != 0) {
 	  if (EtnPs > last_altline ||
-	      (last_altline - EtnPs) < 820 ||
-	      (last_altline - EtnPs) > 1220 ) { /* ### was 1020, but needed widening */
-	    ci_sendcmd( "Set Etalon Altline Delta 910\n", 0 );
+	      (last_altline - EtnPs) < 720 ||
+	      (last_altline - EtnPs) > 1120 ) { /* ### was 1020, but needed widening */
+	    ci_sendcmd( "Set Etalon Altline Delta 925\n", 0 );
 	    msg( 1, "Resetting Altline Delta" );
 	    last_altline = 0;
 	  }
@@ -362,7 +362,7 @@ State Etalon_Scanmode NoLog {
     > _Scan Etalon Out 75 by 5
 	> _Drive Etalon Online
 	> _Scan Etalon In 75 by 5
-	> _Set Etalon Offline Delta 865
+	> _Set Etalon Offline Delta 725
 	> _Drive Etalon Offline
 +10  Hold until (EtnFlg == IXFLAG_OFFLINE);
 	Resume Lab_read;
@@ -441,8 +441,8 @@ PARTITION
 %{ /* Bellows constants. Dye_P_Low/High are specified here as
         Volts times a conversion factor.
     */
-  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.15 * .1 * 65536.);
-  AD12_uGg Dye_P_High = (AD12_uGg) (5.15 * .1 * 65536.);
+  AD12_uGg Dye_P_Low  = (AD12_uGg) (5.18 * .1 * 65536.);
+  AD12_uGg Dye_P_High = (AD12_uGg) (5.18 * .1 * 65536.);
   IndxrPos Bellows_Drive_Low = 5000;
   IndxrPos Bellows_Drive_High = 61000;
 %}
