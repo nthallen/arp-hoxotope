@@ -15,8 +15,8 @@ PARTITION
 
 %{
   double P_sum;
-  double P_diff;
-  double P_set;
+  /* double P_diff; */
+  /* double P_set; */
 
   #define US_CAST(x) ((unsigned short)(x))
   #define MAX_PINCH_STEPS 4000
@@ -93,7 +93,7 @@ State Pinch_Valve_PI NoLog {
   { if ( convert(PumpT) > 75 || convert(MotrT) > 75 )
       Validate Pinch_Valve_Pump_Overtemp;
   }
-  { double P, Gp, Gi, P_diff, dstep;
+  { double P, Gp, Gi, P_diff, P_set, dstep;
     unsigned short ustep;
     P = convert(SD_P2);
     P_set = convert(PV_SetP);

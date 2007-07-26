@@ -1,0 +1,121 @@
+PARTITION
+# PARTITION X: Primary Duct Valve
+#---------------------------------------------------------------
+# Summary:
+#   PD_Valve_Init - Startup. Does nothing
+#   PD_Valve_Close - Drives to in limit or complains
+#   PD_Valve_Closed - Where we go after closing valve.
+#   PD_Valve_Failure - Reports in limit failure and sits
+#   PD_Valve_PI_Init - How we get to PD_Valve_PI
+#   PD_Valve_PI - Diff Pressure control algo
+#   PD_Valve_Scan - Perform a scan, then go back to PI
+#---------------------------------------------------------------
+
+%{
+  double DP_sum;
+  double PDV_Gp = 8.0;
+  double PDV_Gi = 2.0;
+
+  #define MAX_PDV_STEPS 4000
+  #include <math.h> /* for fabs */
+%}
+
+#---------------------------------------------------------------
+# Initialization is triggered by the mainline, since we have
+# to wait for solenoids and steppers power.
+#---------------------------------------------------------------
+State PD_Valve_Init {
+  +1 > Set Primary Duct Valve Speed 1067 Hz
+  +1 > Primary Duct Valve Set Gain Gp 8.0
+  +1 > Primary Duct Valve Set Gain Gi 2.0
+# +1 > Primary Duct Valve Set Pressure SetPoint 13.9
+}
+
+State PD_Valve_Close {
+  depending on (shutdown) { Validate PD_Valve_Shutdown; }
+  +1 > Drive Primary Duct Valve in 8000
+     Hold Until ( PDVStat & 1 ) or 5
+     else Validate PD_Valve_Failure;
+     > Drive Primary Duct Valve out 0
+     Hold Until ( PDVStep == 0 ) or 2
+     else { msg( 2, "Primary Duct Valve step did not reset" ); }
+     > Preset Primary Duct Valve Position to 0
+     Validate PD_Valve_Closed;
+}
+
+State PD_Valve_Closed {
+  depending on (shutdown) { Validate PD_Valve_Shutdown; }
+  depending on (ABOVE_CLOUDS) {
+    Validate PD_Valve_PI_Init;
+  }
+}
+
+#---------------------------------------------------------------
+# In limit not observed: Retry periodically
+#---------------------------------------------------------------
+State PD_Valve_Failure {
+  depending on (shutdown) { Validate PD_Valve_Shutdown; }
+
+  { msg( 2, "Primary Duct Valve did not close" ); }
+  +1:00 Validate PD_Valve_Close;
+}
+
+State PD_Valve_PI_Init {
+    { DP_sum = 0; }
+    Validate PD_Valve_PI;
+}
+
+State PD_Valve_PI NoLog {
+  # depending on (BELOW_CLOUDS) { Validate PD_Valve_Close; }
+  depending on (ON_GROUND) { Validate PD_Valve_Close; }
+  { double DP, Gp, Gi, DP_diff, DP_set, dstep;
+    unsigned short ustep;
+    DP = convert(Inl_DP);
+    DP_set = 0.; /* convert(PDV_SetP); */
+    Gp = PDV_Gp; /* convert(PDV_Gp); */
+    Gi = PDV_Gi; /* convert(PDV_Gi); */
+    DP_diff = DP_set - DP;
+    DP_sum += DP_diff * Gi;
+    if ( DP_sum > MAX_PDV_STEPS )
+      DP_sum = MAX_PDV_STEPS;
+    else if ( DP_sum < -MAX_PDV_STEPS )
+      DP_sum = -MAX_PINCH_STEPS/Gi;
+
+    dstep = DP_diff * Gp + DP_sum;
+    if (dstep<0) dstep = 0;
+    else if (dstep > MAX_PDV_STEPS) dstep = MAX_PDV_STEPS;
+    ustep = US_CAST(dstep);
+    ci_sendfcmd(2, "Drive Primary Duct Valve To %u\n", ustep);
+  }
+
+  "Regulating";
+  Hold Until ( PDVStat & 1 );
+  "Saw PDV in limit: Make sure it comes off";
+  Hold Until ( ! (PDVStat & 1) ) or 30
+  else Validate PD_Valve_Close;
+  Validate PD_Valve_PI;
+}
+
+State PD_Valve_Scan {
+    # depending on (BELOW_CLOUDS) { Validate PD_Valve_Close; }
+    depending on (ON_GROUND) { Validate PD_Valve_Close; }
+
+    > Drive Primary Duct Valve In 8000
+    Hold Until ( PDVStat & 1 ) or 6
+    else Validate PD_Valve_Close;
+    # Hold Until ( convert(SD_P2) < 2. ) or 10;
+ +5 > Scan Primary Duct Valve Out 4000 By 10
+    Hold Until ( PDVScan != 0 ) or 1;
+    # Hold Until ( PDVScan == 0 || convert(SD_P2) > 25. ) or 30;
+    Hold Until ( PDVScan == 0 ) or 30;
+    > Stop Primary Duct Valve
+    Hold Until ( PDVScan == 0 ) or 3; 
+    > Scan Primary Duct Valve In 4000 By 10
+    Hold Until ( PDVScan != 0 ) or 2;
+    Hold Until ( PDVScan == 0 ) or 100;
+    > Drive Primary Duct Valve Out 0
+ +1 { if ( PDVStep != 0 ) Validate PD_Valve_Close; }
+    Validate PD_Valve_PI_Init;
+}
+
+State Pinch_Valve_Shutdown {}
