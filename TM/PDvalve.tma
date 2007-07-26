@@ -26,8 +26,8 @@ PARTITION
 #---------------------------------------------------------------
 State PD_Valve_Init {
   +1 > Set Primary Duct Valve Speed 1067 Hz
-  +1 > Primary Duct Valve Set Gain Gp 8.0
-  +1 > Primary Duct Valve Set Gain Gi 2.0
+# +1 > Primary Duct Valve Set Gain Gp 8.0
+# +1 > Primary Duct Valve Set Gain Gi 2.0
 # +1 > Primary Duct Valve Set Pressure SetPoint 13.9
 }
 
@@ -118,4 +118,4 @@ State PD_Valve_Scan {
     Validate PD_Valve_PI_Init;
 }
 
-State Pinch_Valve_Shutdown {}
+State PD_Valve_Shutdown {}
