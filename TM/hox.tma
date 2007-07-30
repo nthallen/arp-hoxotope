@@ -53,7 +53,7 @@ State initialize {
   +1  > adjGate 2b delay set 0
   +1  > adjgate 2b width set 20
   +1  > power solenoids and steppers on
-#  +1  Validate Pinch_Valve_Close;
+  +1  Validate Pinch_Valve_Close;
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
       > Drive etalon out 10000

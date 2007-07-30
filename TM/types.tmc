@@ -270,11 +270,23 @@ TM typedef AD12 AD12_DDTORR { convert TORR; text "%5.2lf"; }
     65536, 20.000
   }
 
-/* 4.6625 torr/volt 0-4 V range into a 0-10V input */
-TM typedef AD12 AD12_DP { convert TORR; text "%5.2lf"; }
-  Calibration (AD12_DP, TORR) {
-          0,     0,
-    26214.4, 18.65
+/* 4.6625 torr/volt 0-4 V range into a 0-10V input
+   Nominally 2V = 0 Torr, but the zero then reads
+   1.36 Torr, so the zero is at about 2.29V
+ */
+TM typedef AD12 Inl_DP_t { convert TORR; text "%5.2lf"; }
+  Calibration (Inl_DP_t, TORR) {
+          0, -10.685,
+    26214.4, 7.965
+  }
+
+/* 4.6625 torr/volt 0-4 V range into a 0-10V input
+   Same offset issue, but offset was 1.19 Torr
+ */
+TM typedef AD12 PD_DP_t { convert TORR; text "%5.2lf"; }
+  Calibration (PD_DP_t, TORR) {
+          0, -10.515,
+    26214.4, 8.135
   }
 
 /* 193.931 torr/volt 0-4V range into a 0-10V input */

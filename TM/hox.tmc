@@ -4,9 +4,9 @@ TM 1/16 Hz AD8        AirLP; /* AIR LOW PRESSURE */
 TM 1/16 Hz NAV_Alttd  Alttd; /* NAV Altitude */
 TM 1/4  Hz AD8        AtPos; /* ATTENUATOR POSN POT */
 TM 1/16 Hz AD8        BAPos; /* BELLOWS ACTUATOR POSITION */
-TM 1    Hz AD12_DP    Inl_DP; /* Inlet Diff P (BmPsN/PAFF1) */
+TM 1    Hz Inl_DP_t   Inl_DP; /* Inlet Diff P (BmPsN/PAFF1) */
 TM 1    Hz AD12_PDP   PD__P; /* Primary Duct Pressure (BmPsS/PAFF2) */
-TM 1    Hz AD12_DP    PD_DP; /* Pri. Duct. Diff P (BmPsE/PAFF3) */
+TM 1    Hz PD_DP_t    PD_DP; /* Pri. Duct. Diff P (BmPsE/PAFF3) */
 TM 1    Hz AD12_T30K  WingT; /* Wing Temp (BmPsW/PAFF4) */
 TM 1 Hz AD12_T30K PDSkT; Address PDSkT 0xCA4; /* Pri Duct Skin Temp. (PAFF5) */
 TM 1 Hz AD12_T30K PD__T; Address PD__T 0xCA6; /* Pri Duct Temp (PAFF6) */
