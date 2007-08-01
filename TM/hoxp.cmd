@@ -111,6 +111,7 @@
 	: Pinch Valve Regulate by Steps { $0 = SWS_PV_STEPS; }
 	: Pinch Valve Regulate by PI { $0 = SWS_PV_PI; }
 	: Pinch Valve Scan { $0 = SWS_PV_SCAN; }
+    : PD Valve Regulate { $0 = SWS_PDV_PI; }
 	: Shutoff { $0 = 255; }
 	;
 

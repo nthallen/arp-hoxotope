@@ -13,13 +13,16 @@ PARTITION
 
 %{
   double DP_sum;
-  double PDV_Gp = 8.0;
-  double PDV_Gi = 2.0;
+  double PDV_Gp = 16.0;
+  double PDV_Gi = 4.0;
   double PDV_SetP = 0.;
+  int scan_done = 0;
 
   #define MAX_PDV_STEPS 4000
   #include <math.h> /* for fabs */
 %}
+
+State PD_Valve_Startup {}
 
 #---------------------------------------------------------------
 # Initialization is triggered by the mainline, since we have
@@ -31,8 +34,8 @@ State PD_Valve_Init {
 # +1 > Primary Duct Valve Set Gain Gi 2.0
 # +1 > Primary Duct Valve Set Pressure SetPoint 0.
   +3 > Drive Primary Duct Valve in 8000
-  +3 > Drive Primary Duct Valve out 0
- +15 > Drive Primary Duct Valve out 500
+  +2 > Drive Primary Duct Valve out 0
+  +2 > Drive Primary Duct Valve out 2100
   depending on (ABOVE_CLOUDS) { Validate PD_Valve_PI_Init; }
 }
 
@@ -66,13 +69,19 @@ State PD_Valve_Failure {
 }
 
 State PD_Valve_PI_Init {
-    { DP_sum = 0; }
+    { DP_sum = 2100; }
     Validate PD_Valve_PI;
 }
 
 State PD_Valve_PI NoLog {
   # depending on (BELOW_CLOUDS) { Validate PD_Valve_Close; }
-  depending on (scanning) { Validate PD_Valve_Scan; }
+  depending on (scanning) {
+	if ( !scan_done ) {
+	  scan_done = 1;
+	  Validate PD_Valve_Scan;
+	}
+  }
+  depending on (record) { scan_done = 0; }
   # depending on (ON_GROUND) { Validate PD_Valve_Close; }
   { double DP, Gp, Gi, DP_diff, DP_set, dstep;
     unsigned short ustep;
@@ -80,7 +89,7 @@ State PD_Valve_PI NoLog {
     DP_set = PDV_SetP; /* convert(PDV_SetP); */
     Gp = PDV_Gp; /* convert(PDV_Gp); */
     Gi = PDV_Gi; /* convert(PDV_Gi); */
-    DP_diff = DP_set - DP;
+    DP_diff = DP - DP_set;
     DP_sum += DP_diff * Gi;
     if ( DP_sum > MAX_PDV_STEPS )
       DP_sum = MAX_PDV_STEPS;
@@ -107,14 +116,14 @@ State PD_Valve_Scan {
     # depending on (ON_GROUND) { Validate PD_Valve_Close; }
 
     > Drive Primary Duct Valve In 8000
-    Hold Until ( PDVStat & 1 ) or 6
-    else Validate PD_Valve_Close;
- +5 > Scan Primary Duct Valve Out 2000 By 40
+    Hold Until ( PDVStat & 1 ) or 6;
+    # else Validate PD_Valve_Close;
+ +5 > Scan Primary Duct Valve Out 4000 By 40
     Hold Until ( PDVScan != 0 ) or 1;
     Hold Until ( PDVScan == 0 ) or 30;
     > Stop Primary Duct Valve
     Hold Until ( PDVScan == 0 ) or 3; 
-    > Drive Primary Duct Valve To 500
+    > Drive Primary Duct Valve To 2100
  +2 Validate PD_Valve_PI_Init;
 }
 

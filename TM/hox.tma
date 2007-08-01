@@ -54,6 +54,7 @@ State initialize {
   +1  > adjgate 2b width set 20
   +1  > power solenoids and steppers on
   +1  Validate Pinch_Valve_Close;
+  +1  Validate PD_Valve_Init;
   +1  > Drive etalon in 64000
       Hold until ( EtnSt & 1 ) or 15;
       > Drive etalon out 10000
@@ -402,6 +403,7 @@ State SW_Stat_Wait {
       case SWS_PV_CLOSE: Validate Pinch_Valve_Close; break;
       case SWS_PV_PI: Validate Pinch_Valve_PI_Init; break;
       case SWS_PV_SCAN: Validate Pinch_Valve_Scan; break;
+      case SWS_PDV_PI: Validate PD_Valve_PI_Init; break;
       case SWS_STANDBY: Validate standby; break;
       case SWS_LAB_READ: Validate Lab_read; break;
       case SWS_SHUTDOWN: Validate shutdown; break;

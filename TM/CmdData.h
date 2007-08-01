@@ -33,6 +33,7 @@ typedef struct {
 #define SWS_PV_PI 32
 #define SWS_PV_SCAN 33
 #define SWS_STANDBY 34
+#define SWS_PDV_PI 35
 #define SWS_LAB_READ 200
 #define SWS_SHUTDOWN 255
 
