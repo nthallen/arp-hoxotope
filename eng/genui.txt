@@ -4,220 +4,255 @@ HOMEDIR HOx_Data_Dir
 ROWS 18
 
 # LaserTemps
-1/16 CIn_T Laser Temps In
-1/16 COutT Laser Temps Out
-1/16 LMP_T Laser Temps LMP
-1/16 NoseP Laser Pressure
-1 GrnP1 Laser Power
+  1/16 CIn_T Laser Temps In
+  1/16 COutT Laser Temps Out
+  1/16 LMP_T Laser Temps LMP
+  1/16 NoseP Laser Pressure
+  1 GrnP1 Laser Power
 
 # Diodes
-1 RLSD1I Diodes  Current 1
-1 RLSD2I Diodes  Current 2
-1/16 RLSD1ISP Diodes  Current SP1
-1/16 RLSD2ISP Diodes  Current SP2
+  1 RLSD1I Diodes  Current 1
+  1 RLSD2I Diodes  Current 2
+  1/16 RLSD1ISP Diodes  Current SP1
+  1/16 RLSD2ISP Diodes  Current SP2
 
-1 RLSD1T Diodes  Diode1 R1
-1/16 RLSD1TSP Diodes  Diode1 SP1
-1 LSD1T Diodes  Diode1 1
-1/16 LHx1T Diodes Diode1 Hx1
-1/16 LHx2T Diodes Diode1 Hx2
-1 RLSD2T Diodes  Diode2 R2
-1/16 RLSD2TSP Diodes  Diode2 SP2
-1 LSD2T Diodes  Diode2 2
-1/16 LHx1T Diodes Diode2 Hx1
-1/16 LHx2T Diodes Diode2 Hx2
-1/4 LTE_I Diodes Current
-1/4 LTETV Diodes SetPoint
-1 LTEST Diodes SetPoint
-1 On:RDiode_On:0 Diodes On
+  1 RLSD1T Diodes  Diode1 R1
+  1/16 RLSD1TSP Diodes  Diode1 SP1
+  1 LSD1T Diodes  Diode1 1
+  1/16 LHx1T Diodes Diode1 Hx1
+  1/16 LHx2T Diodes Diode1 Hx2
+
+  1 RLSD2T Diodes  Diode2 R2
+  1/16 RLSD2TSP Diodes  Diode2 SP2
+  1 LSD2T Diodes  Diode2 2
+  1/16 LHx1T Diodes Diode2 Hx1
+  1/16 LHx2T Diodes Diode2 Hx2
+
+  1/4 LTE_I Diodes Current
+  1/4 LTETV Diodes SetPoint
+  1 LTEST Diodes SetPoint
+  1 On:RDiode_On:0 Diodes On
 
 # Other Topaz Stuff
-1 KDP_H Topaz KDP
-1/4 RKDPTSP Topaz KDPSP
-1/16 RLSD1OpHours Topaz OpHrs 1 
-1/16 RLSD2OpHours Topaz OpHrs 2
-1/16 RepRtSP Topaz RepRate
-1 TopazSecs Topaz Stale
-1 On:RDiode_On:0 Topaz On
-# 1/2 RLHist0, RLHist1, RLHist2 Topaz 
+  1 KDP_H Topaz KDP
+  1/4 RKDPTSP Topaz KDPSP
+  1/16 RLSD1OpHours Topaz OpHrs 1 
+  1/16 RLSD2OpHours Topaz OpHrs 2
+  1/16 RepRtSP Topaz RepRate
+  1 TopazSecs Topaz Stale
+  1 On:RDiode_On:0 Topaz On
+  # 1/2 RLHist0, RLHist1, RLHist2 Topaz 
 
 # Dye Laser
-1/16 DLH1T DyeLaser Temps H1
-1/16 DLH2T DyeLaser Temps H2
-1 DLooT DyeLaser Temps DLoop
-1/4 DRs_T DyeLaser Temps Drs
-1/4 DHx1T DyeLaser Temps Hx1
-1/4 DHx2T DyeLaser Temps Hx2
-1/4 DTE_I DyeLaser TECCurrent
-1/4 DTETV DyeLaser SetPoint
-1 DTEST DyeLaser SetPoint
-1 DLH_P DyeLaser Pressure
-4 DL_Fl:DStt1:6 DyeLaser Bits
-1 DyePS:DStt2:5 DyeLaser Bits
-4 UVMon DyeLaser UVMon
+  1/16 DLH1T DyeLaser Temps H1
+  1/16 DLH2T DyeLaser Temps H2
+  1 DLooT DyeLaser Temps DLoop
+  1/4 DRs_T DyeLaser Temps Drs
+  1/4 DHx1T DyeLaser Temps Hx1
+  1/4 DHx2T DyeLaser Temps Hx2
+  1/4 DTE_I DyeLaser TECCurrent
+  1/4 DTETV DyeLaser SetPoint
+  1 DTEST DyeLaser SetPoint
+  1 DLH_P DyeLaser Pressure
+  4 DL_Fl:DStt1:6 DyeLaser Bits
+  1 DyePS:DStt2:5 DyeLaser Bits
+  4 UVMon DyeLaser UVMon
 
 # LaserAlignment
-4 X1Las Alignment XLas 1
-4 X2Las Alignment XLas 2
-1 XL_X Alignment XXY X
-1 XL_Y Alignment XXY Y
-1 XL_TP Alignment XTP
-1 DL_X Alignment DXY X
-1 DL_Y Alignment DXY Y
-1 DL_TP Alignment DTP
+  4 X1Las Alignment XLas 1
+  4 X2Las Alignment XLas 2
+  #1 XL_X Alignment XXY X
+  #1 XL_Y Alignment XXY Y
+  #1 XL_TP Alignment XTP
+  #1 DL_X Alignment DXY X
+  #1 DL_Y Alignment DXY Y
+  #1 DL_TP Alignment DTP
 
 # Excimer Lamps
-1 UV_1V Excimer UV
-1 UV_2V Excimer UV
-1/16 Lmp1T Excimer Temp
-1/16 Lmp2T Excimer Temp
-1 PAltP Excimer Pressure
-4 EHV1S:DStt1:1 Excimer Bits
-4 EHV2S:DStt0:3 Excimer Bits
+  1 UV_1V Excimer UV
+  1 UV_2V Excimer UV
+  1/16 Lmp1T Excimer Temp
+  1/16 Lmp2T Excimer Temp
+  1 PAltP Excimer Pressure
+  4 EHV1S:DStt1:1 Excimer Bits
+  4 EHV2S:DStt0:3 Excimer Bits
 
 # PMTs
-1/16 X1_HV PMT HV 1
-1/16 X2_HV PMT HV 2
-1/16 X1DAT PMT Temps 1D
-1/16 X1FAT PMT Temps 1F
-#1/16 X2DAT PMT Temps 2D
-#1/16 X2FAT PMT Temps 2F
+  1/16 X1_HV PMT HV 1
+  1/16 X2_HV PMT HV 2
+  1/16 X1DAT PMT Temps 1D
+  1/16 X1FAT PMT Temps 1F
+  #1/16 X2DAT PMT Temps 2D
+  #1/16 X2FAT PMT Temps 2F
 
 # OH Cell
-1/16 OClHV OHCell HV
-4 OClUV OHCell UV
-1/16 OHC2T OHCell Temps
-1/16 OHCHT OHCell Temps
-1/16 OHCLI OHCell Current
+  1/16 OClHV OHCell HV
+  4 OClUV OHCell UV
+  1/16 OHC2T OHCell Temps
+  1/16 OHCHT OHCell Temps
+  1/16 OHCLI OHCell Current
 
 # Flow
-4 AC_S:DStt1:0 Flow Command
-1 Anemo Flow Speed
-1 DucT1 Flow Temps
-1 DucT2 Flow Temps
+  4 AC_S:DStt1:0 Flow Command
+  1 Anemo Flow Speed
+  1 DucT1 Flow Temps
+  1 DucT2 Flow Temps
 
 # Gas Deck
-1/16 AirHP GasDeck Pressures
-1/16 AirLP GasDeck Pressures
-1/16 A_RgT GasDeck Temp
+  1/16 AirHP GasDeck Pressures
+  1/16 AirLP GasDeck Pressures
+  1/16 A_RgT GasDeck Temp
 
 # Data Systems
-1/16 HD__T DataSystem Temps
-1/16 ICC_T DataSystem Temps
-1/16 PC__T DataSystem Temps
-1/16 PS__T DataSystem Temps
-# 1/4 IOSwS; /* I/O and Cockpit Switches */
-# 1 SW_St; /* Software Status Byte */
+  1/16 HD__T DataSystem Temps
+  1/16 ICC_T DataSystem Temps
+  1/16 PC__T DataSystem Temps
+  1/16 PS__T DataSystem Temps
+  # 1/4 IOSwS; /* I/O and Cockpit Switches */
+  # 1 SW_St; /* Software Status Byte */
 
 # Lab Channels
-1 L12AV Lab Inputs 12A
-1 L12BV Lab Inputs 12B
-1 L12CV Lab Inputs 12C
-1 Lab_1 Lab Inputs 1
-1 Lab_2 Lab Inputs 2
-1 Lab_3 Lab Inputs 3
-1 Lab_6 Lab Inputs 6
-1 Lab_7 Lab Inputs 7
-1 Lab_8 Lab Inputs 8
-1 A0SPt Lab Outputs 0
-1 A1SPt Lab Outputs 1
-1 A2SPt Lab Outputs 2
-1 A5SPt Lab Outputs 5
-1 A6SPt Lab Outputs 6
+  1 L12AV Lab Inputs 12A
+  1 L12BV Lab Inputs 12B
+  1 L12CV Lab Inputs 12C
+  1 Lab_1 Lab Inputs 1
+  1 Lab_2 Lab Inputs 2
+  1 Lab_3 Lab Inputs 3
+  1 Lab_6 Lab Inputs 6
+  1 Lab_7 Lab Inputs 7
+  1 Lab_8 Lab Inputs 8
+  1 A0SPt Lab Outputs 0
+  1 A1SPt Lab Outputs 1
+  1 A2SPt Lab Outputs 2
+  1 A3SPt Lab Outputs 3
+  1 A4SPt Lab Outputs 4
+  1 A5SPt Lab Outputs 5
+  1 A6SPt Lab Outputs 6
+  1 A7SPt Lab Outputs 7
 
 # Misc. Temps
-1/16 PMonT MiscTemps Thermistors
-1/16 SDP_T MiscTemps Thermistors
-1 Inl_T MiscTemps Thermistors
-1 PumpT MiscTemps Thermistors
-1 MotrT MiscTemps Thermistors
-1 FlowT MiscTemps Thermistors
-1 HtXT2 MiscTemps Mincos
-1 PhoT2 MiscTemps Mincos
-1 DetT2 MiscTemps Mincos
+  1/16 PMonT MiscTemps Thermistors
+  1/16 SDP_T MiscTemps Thermistors
+  1    Inl_T MiscTemps Thermistors
+  1/16 PumpT MiscTemps Thermistors
+  1/16 MotrT MiscTemps Thermistors
+  1    FlowT MiscTemps Thermistors
+  1    PhoT2 MiscTemps Mincos
+  1    DetT2 MiscTemps Mincos
+  #1    HtXT2 MiscTemps Mincos
 
 # Pressures
-1 SD__P Pressures P
-1 SD_P2 Pressures P
-1 PAltP Pressures P
-1 HVPSP Pressures HVPS
+  1 SD__P Pressures P
+  1 SD_P2 Pressures P
+  1 PAltP Pressures P
+  1 HVPSP Pressures HVPS
 
 # Power
-1 V28_V Power Volts
-1 V28I1 Power 28V_Current
-1 V28I2 Power 28V_Current
-1 V300I Power 300V_Current
+  1 V28_V Power Volts
+  1 V28I1 Power 28V_Current
+  1 V28I2 Power 28V_Current
+  1 V300I Power 300V_Current
 
 # Nav
-1/16 Alttd Nav Alttd
-1/16 Lattd Nav Lattd
-1/16 Lngtd Nav Lngtd
-1/16 TASpd Nav TASpd
-1/16 TDrft Nav TDrft
-1/16 TPres Nav Pressure
-1/16 SPres Nav Pressure
-1/16 TTemp Nav Temperature
-1/16 STemp Nav Temperature
+  1/16 Alttd Nav Alttd
+  1/16 Lattd Nav Lattd
+  1/16 Lngtd Nav Lngtd
+  1/16 TASpd Nav TASpd
+  1/16 TDrft Nav TDrft
+  1/16 TPres Nav Pressure
+  1/16 SPres Nav Pressure
+  1/16 TTemp Nav Temperature
+  1/16 STemp Nav Temperature
 
-1/4 BlwPs Bellows Step
-1/16 BAPos Bellows Pot
-1/4 C:BlwSt:7 Bellows Bits
-#1/4 Z:BlwSt:6 Bellows Bits
-1/4 B:BlwSt:5 Bellows Bits
-1/4 A:BlwSt:4 Bellows Bits
-1/4 R:BlwSt:3 Bellows Bits
-1/4 D:BlwSt:2 Bellows Bits
-1/4 O:BlwSt:1 Bellows Bits
-1/4 I:BlwSt:0 Bellows Bits
-4 Scan:IXStt:0 Bellows Bits
+# Bellows
+  1/4 BlwPs Bellows Step
+  1/16 BAPos Bellows Pot
+  1/4 C:BlwSt:7 Bellows Bits
+  #1/4 Z:BlwSt:6 Bellows Bits
+  1/4 B:BlwSt:5 Bellows Bits
+  1/4 A:BlwSt:4 Bellows Bits
+  1/4 R:BlwSt:3 Bellows Bits
+  1/4 D:BlwSt:2 Bellows Bits
+  1/4 O:BlwSt:1 Bellows Bits
+  1/4 I:BlwSt:0 Bellows Bits
+  4 Scan:IXStt:0 Bellows Bits
 
-4 EtnPs Etalon Step Step
-4 EtPos Etalon Step Pot
-4 Et_LW Etalon LineWidth
-#4 C:EtnSt:7 Etalon Bits
-#4 Z:EtnSt:6 Etalon Bits
-#4 B:EtnSt:5 Etalon Bits
-#4 A:EtnSt:4 Etalon Bits
-4 R:EtnSt:3 Etalon Bits
-4 D:EtnSt:2 Etalon Bits
-4 O:EtnSt:1 Etalon Bits
-4 I:EtnSt:0 Etalon Bits
-4 Scan:IXStt:1 Etalon Bits
-4 On:IXStt:2 Etalon Bits
-4 Alt:IXStt:3 Etalon Bits
+# Etalon
+  4 EtnPs Etalon Step Step
+  4 EtPos Etalon Step Pot
+  4 Et_LW Etalon LineWidth
+  #4 C:EtnSt:7 Etalon Bits
+  #4 Z:EtnSt:6 Etalon Bits
+  #4 B:EtnSt:5 Etalon Bits
+  #4 A:EtnSt:4 Etalon Bits
+  4 R:EtnSt:3 Etalon Bits
+  4 D:EtnSt:2 Etalon Bits
+  4 O:EtnSt:1 Etalon Bits
+  4 I:EtnSt:0 Etalon Bits
+  4 Scan:IXStt:1 Etalon Bits
+  4 On:IXStt:2 Etalon Bits
+  4 Alt:IXStt:3 Etalon Bits
 
-4 AtnPs Attenuator Step
-1/4 AtPos Attenuator Pot
-4 C:AtnSt:7 Attenuator Bits
-#4 Z:AtnSt:6 Attenuator Bits
-4 B:AtnSt:5 Attenuator Bits
-4 A:AtnSt:4 Attenuator Bits
-4 R:AtnSt:3 Attenuator Bits
-4 D:AtnSt:2 Attenuator Bits
-4 O:AtnSt:1 Attenuator Bits
-4 I:AtnSt:0 Attenuator Bits
-4 Scan:IXStt:4 Attenuator Bits
-4 On:IXStt:5 Attenuator Bits
-4 Alt:IXStt:6 Attenuator Bits
+# Attenuator
+  4 AtnPs Attenuator Step
+  1/4 AtPos Attenuator Pot
+  4 C:AtnSt:7 Attenuator Bits
+  #4 Z:AtnSt:6 Attenuator Bits
+  4 B:AtnSt:5 Attenuator Bits
+  4 A:AtnSt:4 Attenuator Bits
+  4 R:AtnSt:3 Attenuator Bits
+  4 D:AtnSt:2 Attenuator Bits
+  4 O:AtnSt:1 Attenuator Bits
+  4 I:AtnSt:0 Attenuator Bits
+  4 Scan:IXStt:4 Attenuator Bits
+  4 On:IXStt:5 Attenuator Bits
+  4 Alt:IXStt:6 Attenuator Bits
 
-1 PVStep Pinch Step
-1 PVPos Pinch Pot
-#1 C:PVStat:7 Pinch Bits
-#1 Z:PVStat:6 Pinch Bits
-#1 B:PVStat:5 Pinch Bits
-#1 A:PVStat:4 Pinch Bits
-1 R:PVStat:3 Pinch Bits
-1 D:PVStat:2 Pinch Bits
-1 O:PVStat:1 Pinch Bits
-1 I:PVStat:0 Pinch Bits
-4 Scan:IXStt:7 Pinch Bits
+# Pinch Valve
+  1 PVStep Pinch Step
+  1 PVPos Pinch Pot
+  #1 C:PVStat:7 Pinch Bits
+  #1 Z:PVStat:6 Pinch Bits
+  #1 B:PVStat:5 Pinch Bits
+  #1 A:PVStat:4 Pinch Bits
+  1 R:PVStat:3 Pinch Bits
+  1 D:PVStat:2 Pinch Bits
+  1 O:PVStat:1 Pinch Bits
+  1 I:PVStat:0 Pinch Bits
+  4 Scan:IXStt:8 Pinch Bits
 
-1 SD__P PControl Pressure P
-1 SD_P2 PControl Pressure P2
-1 PV_SetP PControl Pressure Set
-1 PVStep PControl Step
-1 PV_Gp PControl Gains Gp
-1 PV_Gi PControl Gains Gi
+# Primary Duct Valve
+  1 PDVStep PDValve Step
+  1 PDVPos PDValve Pot
+  #1 C:PDVStat:7 PDValve Bits
+  #1 Z:PDVStat:6 PDValve Bits
+  #1 B:PDVStat:5 PDValve Bits
+  #1 A:PDVStat:4 PDValve Bits
+  1 R:PDVStat:3 PDValve Bits
+  1 D:PDVStat:2 PDValve Bits
+  1 O:PDVStat:1 PDValve Bits
+  1 I:PDVStat:0 PDValve Bits
+  4 Scan:IXStt:7 PDValve Bits
+
+# Pressure Control
+  1 SD__P PControl Pressure P
+  1 SD_P2 PControl Pressure P2
+  1 PV_SetP PControl Pressure Set
+  1 PVStep PControl Step
+  1 PV_Gp PControl Gains Gp
+  1 PV_Gi PControl Gains Gi
+
+# Inlet Flow
+  1 Elb_T Inlet Temps
+  1 Inl_T Inlet Temps
+  1 WingT Inlet Temps
+  1 PD__T Inlet Temps
+  1 PDSkT Inlet Temps
+  1 Inl_DP Inlet DP
+  1 PD_DP Inlet DP
+  1 PD__P Inlet Pressure
+  1 PDVStep Inlet Valve
+
 
 #4 DStt0; /* OH Status Byte 0 */
 #4 DStt1; /* OH Status Byte 1 */
